@@ -1,0 +1,19 @@
+/* @import "@shoelace-style/shoelace"; */
+@import "@shoelace-style/shoelace/dist/themes/light.css";
+@import "./reset.css";
+
+/* Top-level */
+body {
+  color: rgb(var(--sl-color-neutral-700));
+  font-family: var(--sl-font-sans);
+  background: rgb(var(--sl-color-neutral-50));
+  min-height: 100vh;
+}
+
+main {
+  padding: var(--sl-spacing-large);
+}
+
+h1 {
+  font-size: var(--sl-font-size-2x-large);
+}

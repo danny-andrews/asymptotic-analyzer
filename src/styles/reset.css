@@ -1,0 +1,19 @@
+/* stylelint-disable selector-max-type */
+html {
+  box-sizing: border-box;
+}
+
+* {
+  border: 0;
+  box-sizing: inherit;
+  color: inherit;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+ol,
+ul,
+li {
+  list-style: none;
+}
