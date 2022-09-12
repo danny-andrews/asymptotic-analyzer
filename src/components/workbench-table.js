@@ -53,11 +53,11 @@ class WorkbenchTable extends LitElement {
     }
 
     tr:nth-child(even) {
-      background: rgb(var(--sl-color-neutral-50));
+      background: var(--sl-color-neutral-50);
     }
 
     .heading {
-      background: rgb(var(--sl-color-neutral-50));
+      background: var(--sl-color-neutral-50);
       border-bottom: var(--border);
       border-top-left-radius: var(--border-radius);
       border-top-right-radius: var(--border-radius);
@@ -66,11 +66,11 @@ class WorkbenchTable extends LitElement {
 
   static properties = {
     subjects: { type: Array },
-    range: { type: Array },
+    domain: { type: Array },
   };
 
   render() {
-    const rangeStr = [R.head(this.range), R.last(this.range)]
+    const domainStr = [R.head(this.domain), R.last(this.domain)]
       .filter(Boolean)
       .map(formatNumber)
       .join(" - ");
@@ -87,7 +87,7 @@ class WorkbenchTable extends LitElement {
             <th>Functions</th>
             <td class="tag-cell">
               ${this.subjects.map(
-                ({ fn }) =>
+                (fn) =>
                   html`<sl-tag size="small" type="neutral">${fn.name}</sl-tag>`
               )}
             </td>
@@ -101,10 +101,10 @@ class WorkbenchTable extends LitElement {
             <td class="tag-cell">
               <sl-dropdown>
                 <sl-button size="small" slot="trigger" caret
-                  >${rangeStr}</sl-button
+                  >${domainStr}</sl-button
                 >
                 <sl-menu>
-                  ${this.range.map(
+                  ${this.domain.map(
                     (number) => html`
                       <sl-menu-item value=${number} disabled>
                         ${formatNumber(number)}

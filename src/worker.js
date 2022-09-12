@@ -1,10 +1,8 @@
 import * as R from "ramda";
 import { Observable } from "rxjs";
 import { asympoticBenchmarks } from "./benchmarking.js";
-import { getWorkbenches } from "../build/workbenches.js";
+import WORKBENCHES from "../build/workbenches.js";
 import { noop, wait, pipeline } from "./shared.js";
-
-const workbenches = getWorkbenches();
 
 const makeBenchmarkObservable = (generator) =>
   new Observable((observer) => {
@@ -30,7 +28,7 @@ const stopWorkbench = () => {
 
 const runWorkbench = (workbenchName) => {
   subscription = pipeline(
-    workbenches,
+    WORKBENCHES,
     R.find(({ name }) => workbenchName === name),
     asympoticBenchmarks,
     makeBenchmarkObservable

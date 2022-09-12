@@ -1,12 +1,12 @@
 /* @import "@shoelace-style/shoelace"; */
-@import "@shoelace-style/shoelace/dist/themes/light.css";
 @import "./reset.css";
+@import "@shoelace-style/shoelace/dist/themes/light.css";
 
 /* Top-level */
 body {
-  color: rgb(var(--sl-color-neutral-700));
+  color: var(--sl-color-neutral-700);
   font-family: var(--sl-font-sans);
-  background: rgb(var(--sl-color-neutral-50));
+  background: var(--sl-color-neutral-100);
   min-height: 100vh;
 }
 

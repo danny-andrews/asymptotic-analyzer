@@ -4,9 +4,6 @@ const SELECT_NAME = "workbench";
 
 class WorkbenchForm extends LitElement {
   static properties = {
-    workbenches: { type: Array },
-    subjects: { type: Array },
-    range: { type: Array },
     isRunning: { type: Boolean, reflect: true },
     workbenchName: { type: String, reflect: true },
     selectedWorkbench: { type: Object },
@@ -49,7 +46,6 @@ class WorkbenchForm extends LitElement {
     }
 
     .workbench-controls {
-      max-width: 500px;
       width: 100%;
     }
 
@@ -70,7 +66,8 @@ class WorkbenchForm extends LitElement {
     this.dispatchEvent(new CustomEvent(name, data ? { detail: data } : null));
   }
 
-  #handleSubmit = () => {
+  #handleSubmit = (e) => {
+    e.preventDefault();
     this.dispatch("start");
   };
 
@@ -86,7 +83,7 @@ class WorkbenchForm extends LitElement {
     const {
       name: workbenchName,
       subjects,
-      range,
+      domain,
     } = this.selectedWorkbench || { name: "" };
     const shouldShowWorkbenchTable = Boolean(this.selectedWorkbench);
 
@@ -105,7 +102,7 @@ class WorkbenchForm extends LitElement {
     `;
 
     return html`
-      <sl-form class="form" @sl-submit=${this.#handleSubmit}>
+      <form class="form" @submit=${this.#handleSubmit}>
         <sl-card class="workbench-controls">
           ${shouldShowWorkbenchTable
             ? html`
@@ -113,7 +110,7 @@ class WorkbenchForm extends LitElement {
                   ${header}
                   <div class="button-container">
                     <sl-button
-                      type="danger"
+                      variant="danger"
                       @click=${() => this.dispatch("stop")}
                       ?disabled=${!this.isRunning}
                     >
@@ -121,7 +118,8 @@ class WorkbenchForm extends LitElement {
                     </sl-button>
                     <sl-button
                       submit
-                      type="success"
+                      variant="success"
+                      type="submit"
                       ?loading=${this.isRunning}
                       ?disabled=${this.isRunning}
                     >
@@ -131,12 +129,12 @@ class WorkbenchForm extends LitElement {
                 </div>
                 <workbench-table
                   .subjects=${subjects}
-                  .range=${range}
+                  .domain=${domain}
                 ></workbench-table>
               `
             : header}
         </sl-card>
-      </sl-form>
+      </form>
     `;
   }
 }

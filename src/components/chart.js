@@ -41,7 +41,7 @@ const makeChartConfig = ({
       y: {
         title: {
           display: true,
-          text: "Runtime (ms)",
+          text: "Average Runtime (ms)",
         },
       },
     },

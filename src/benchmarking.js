@@ -37,7 +37,7 @@ export const normalizeStats = (stats) => {
 
 export const asympoticBenchmarks = ({
   subjects,
-  range,
+  domain,
   generator,
   iterations = 100,
 }) => {
@@ -46,11 +46,11 @@ export const asympoticBenchmarks = ({
     generators.map((generator) => generate(generator(n)));
 
   async function* benchmarkSets() {
-    for (let n of range) {
+    for (let n of domain) {
       yield subjects.map((subject) => ({
         name: capitalCase(subject.name),
         n,
-        duration: medianTime(() => subject.fn(...generateInput(n)), iterations),
+        duration: medianTime(() => subject(...generateInput(n)), iterations),
       }));
     }
   }

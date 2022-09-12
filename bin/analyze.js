@@ -20,13 +20,14 @@ if (!workbenchesFilepath) {
 }
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
+const root = path.join(dirname, "..");
 
 esbuild
   .build({
     bundle: true,
     entryPoints: [workbenchesFilepath],
     format: "esm",
-    outdir: "build",
+    outfile: path.join(root, "build", "workbenches.js"),
     logLevel: "silent",
   })
   .catch((e) => {
@@ -40,14 +41,32 @@ esbuild
     createServer({
       // any valid user config options, plus `mode` and `configFile`
       configFile: false,
-      root: path.join(dirname, ".."),
+      root,
+      plugins: [
+        {
+          name: "configure-response-headers",
+          configureServer: (server) => {
+            server.middlewares.use((_req, res, next) => {
+              res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+              res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+              next();
+            });
+          },
+        },
+      ],
       server: {
         port: 1337,
-        open: true,
+      },
+      optimizeDeps: {
+        force: true,
       },
     })
   )
   .then((server) => server.listen())
+  .then((instance) => {
+    const port = instance.httpServer.address().port;
+    console.log(`Hosting asymptotic analysis on http://localhost:${port}`);
+  })
   .catch((e) => {
     fail(stripIndent`
       Error starting dev server.
