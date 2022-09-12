@@ -94,15 +94,15 @@ class WorkbenchTable extends LitElement {
           </tr>
           <tr>
             <th>Iterations</th>
-            <td>1000</td>
+            <td>100</td>
           </tr>
           <tr>
             <th>n-Values</th>
             <td class="tag-cell">
               <sl-dropdown>
-                <sl-button size="small" slot="trigger" caret
-                  >${domainStr}</sl-button
-                >
+                <sl-button size="small" slot="trigger" caret>
+                  ${domainStr}
+                </sl-button>
                 <sl-menu>
                   ${this.domain.map(
                     (number) => html`

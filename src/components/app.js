@@ -83,13 +83,13 @@ class App extends LitElement {
     this.isRunning = false;
     this.selectedWorkbench = null;
     this.shouldShowGraph = false;
-    const newMarksObserver = fromWorkerEvent(this.worker, "NEW_MARKS");
+
+    // FIXME: Dispose of subscriptions on unmount.
+    fromWorkerEvent(this.worker, "NEW_MARKS").subscribe(this.#addMarksToChart);
     fromWorkerEvent(this.worker, "MARKSET_COMPLETE").subscribe(() => {
       // Render form for running asymptotic benchmarks
       this.isRunning = false;
     });
-
-    newMarksObserver.subscribe(this.#addMarksToChart);
   }
 
   get #chartEl() {
@@ -105,8 +105,7 @@ class App extends LitElement {
         .selectedWorkbench=${this.selectedWorkbench}
         .workbenches=${this.workbenches}
         ?isRunning=${this.isRunning}
-      >
-      </workbench-form>
+      ></workbench-form>
     `;
 
     const chart =
