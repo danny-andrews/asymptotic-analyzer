@@ -97,7 +97,7 @@ class WorkbenchTable extends LitElement {
             <td>100</td>
           </tr>
           <tr>
-            <th>n-Values</th>
+            <th>Domain</th>
             <td class="tag-cell">
               <sl-dropdown>
                 <sl-button size="small" slot="trigger" caret>

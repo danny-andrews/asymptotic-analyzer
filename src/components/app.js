@@ -30,7 +30,6 @@ class App extends LitElement {
     main {
       padding: var(--sl-spacing-small);
       display: flex;
-      justify-content: center;
     }
 
     header {
@@ -87,7 +86,6 @@ class App extends LitElement {
     // FIXME: Dispose of subscriptions on unmount.
     fromWorkerEvent(this.worker, "NEW_MARKS").subscribe(this.#addMarksToChart);
     fromWorkerEvent(this.worker, "MARKSET_COMPLETE").subscribe(() => {
-      // Render form for running asymptotic benchmarks
       this.isRunning = false;
     });
   }

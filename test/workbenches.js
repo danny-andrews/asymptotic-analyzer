@@ -24,6 +24,6 @@ export default [
     name: "Array Rotation",
     subjects: R.values(rotationSubjects),
     generator: [arrGenerator, (n) => fc.integer(0, n)],
-    domain: range(10, 1, 2000),
+    domain: range(15, 1, 2000),
   },
 ];
