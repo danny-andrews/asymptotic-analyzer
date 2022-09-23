@@ -4,7 +4,7 @@ import WORKBENCHES from "../build/workbenches.js";
 
 render(
   html`
-    <abm-app class="inner-spacing-small" .workbenches=${WORKBENCHES}> </abm-app>
+    <abm-app class="inner-spacing-small" .workbenches=${WORKBENCHES}></abm-app>
   `,
   document.body
 );

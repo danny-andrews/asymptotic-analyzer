@@ -30,12 +30,15 @@ class App extends LitElement {
     main {
       padding: var(--sl-spacing-small);
       display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     header {
       background: var(--sl-color-primary-200);
       padding: var(--sl-spacing-2x-small);
       color: var(--sl-color-neutral-600);
+      border-bottom: var(--border-width) var(--border-color);
     }
   `;
 
@@ -122,13 +125,11 @@ class App extends LitElement {
         <abm-h class="heading" as="3" level="1">Asymptotic Analysis</abm-h>
       </header>
       <main>
-        <sl-tab-group placement="start" class="action-tab-group">
+        <sl-tab-group class="action-tab-group">
           <sl-tab slot="nav" panel="race">Race</sl-tab>
-          <sl-tab slot="nav" panel="profile">Profile</sl-tab>
           <sl-tab slot="nav" panel="analyze">Analyze</sl-tab>
 
           <sl-tab-panel name="race">${racePanel}</sl-tab-panel>
-          <sl-tab-panel name="profile">[Profiling Form Here]</sl-tab-panel>
           <sl-tab-panel name="analyze">[Analysis Form Here]</sl-tab-panel>
         </sl-tab-group>
         ${chart}

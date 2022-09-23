@@ -18,7 +18,7 @@ class WorkbenchForm extends LitElement {
       text-align: center;
     }
 
-    .form > * + * {
+    .workbench-controls > * + * {
       margin-top: var(--sl-spacing-small);
     }
 
@@ -54,11 +54,6 @@ class WorkbenchForm extends LitElement {
       grid-template-columns: 1fr;
       grid-template-rows: 1fr auto;
       align-items: center;
-    }
-
-    .workbench-controls::part(header) {
-      padding: var(--sl-spacing-large);
-      border-bottom: dashed var(--border-width) var(--border-color);
     }
   `;
 
@@ -106,31 +101,29 @@ class WorkbenchForm extends LitElement {
         <sl-card class="workbench-controls">
           ${shouldShowWorkbenchTable
             ? html`
-                <div slot="header">
-                  ${header}
-                  <div class="button-container">
-                    <sl-button
-                      variant="danger"
-                      @click=${() => this.dispatch("stop")}
-                      ?disabled=${!this.isRunning}
-                    >
-                      Stop
-                    </sl-button>
-                    <sl-button
-                      submit
-                      variant="success"
-                      type="submit"
-                      ?loading=${this.isRunning}
-                      ?disabled=${this.isRunning}
-                    >
-                      Start
-                    </sl-button>
-                  </div>
-                </div>
+                ${header}
                 <workbench-table
                   .subjects=${subjects}
                   .domain=${domain}
                 ></workbench-table>
+                <div class="button-container">
+                  <sl-button
+                    variant="danger"
+                    @click=${() => this.dispatch("stop")}
+                    ?disabled=${!this.isRunning}
+                  >
+                    Stop
+                  </sl-button>
+                  <sl-button
+                    submit
+                    variant="success"
+                    type="submit"
+                    ?loading=${this.isRunning}
+                    ?disabled=${this.isRunning}
+                  >
+                    Start
+                  </sl-button>
+                </div>
               `
             : header}
         </sl-card>

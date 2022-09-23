@@ -1,6 +1,6 @@
-# Algorithms and Data Structures
+# Algorithm Analysis
 
-This repo contains a tool for visualizing the relative running times of algorithms for various input sizes.
+##
 
 ## TODO
 

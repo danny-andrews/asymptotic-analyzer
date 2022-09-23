@@ -77,11 +77,6 @@ class WorkbenchTable extends LitElement {
 
     return html`
       <table class="workbench-details">
-        <thead>
-          <tr>
-            <th class="heading" colspan="2">Workbench Details</th>
-          </tr>
-        </thead>
         <tbody>
           <tr>
             <th>Functions</th>
