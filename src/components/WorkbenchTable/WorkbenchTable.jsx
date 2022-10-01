@@ -1,7 +1,7 @@
 import { h } from "preact";
 import * as R from "ramda";
 import c from "./WorkbenchTable.module.css";
-import { formatNumber } from "../shared.js";
+import { formatNumber } from "../../shared.js";
 
 const WorkbenchTable = ({ domain, subjects }) => {
   const domainStr = [R.head(domain), R.last(domain)]

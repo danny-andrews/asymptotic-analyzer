@@ -1,5 +1,5 @@
 import { h, Fragment } from "preact";
-import WorkbenchTable from "./WorkbenchTable.jsx";
+import WorkbenchTable from "../WorkbenchTable/WorkbenchTable.jsx";
 import c from "./WorkbenchForm.module.css";
 
 const WorkbenchForm = ({

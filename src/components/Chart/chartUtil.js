@@ -1,4 +1,4 @@
-import { roundTo } from "../shared.js";
+const roundTo = (precision, num) => Number(num.toFixed(precision));
 
 export const makeChartConfig = ({ title = "" } = {}) => ({
   type: "scatter",

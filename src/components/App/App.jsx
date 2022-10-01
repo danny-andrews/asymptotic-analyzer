@@ -1,11 +1,11 @@
 import { h, Fragment } from "preact";
 import { useState, useRef, useEffect } from "preact/hooks";
-import workbenches from "../../build/workbenches.js";
-import { fromWorkerEvent } from "../shared.js";
+import workbenches from "../../../build/workbenches.js";
+import { fromWorkerEvent } from "../../shared.js";
 import c from "./App.module.css";
-import WorkbenchForm from "./WorkbenchForm.jsx";
-import H from "./H.jsx";
-import Chart from "./Chart.jsx";
+import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
+import H from "../H/H.jsx";
+import Chart from "../Chart/Chart.jsx";
 
 const markToDataPoint = ({ n, duration }) => ({ x: n, y: duration });
 
