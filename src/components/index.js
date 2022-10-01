@@ -1,9 +1,3 @@
-import "./app.js";
-import "./chart.js";
-import "./workbench-form.js";
-import "./workbench-table.js";
-import "./h.js";
-
 // Shoelace components
 import "@shoelace-style/shoelace/dist/components/card/card.js";
 import "@shoelace-style/shoelace/dist/components/select/select.js";

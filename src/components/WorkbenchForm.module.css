@@ -1,0 +1,44 @@
+.form {
+  display: block;
+}
+
+.heading {
+  text-align: center;
+}
+
+.workbench-controls > * + * {
+  margin-top: var(--sl-spacing-small);
+}
+
+.form::part(base) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  gap: var(--sl-spacing-x-small);
+  flex-wrap: wrap;
+}
+
+.button-container sl-button {
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .button-container {
+    flex-wrap: nowrap;
+  }
+}
+
+.workbench-controls {
+  width: 100%;
+}
+
+.workbench-controls::part(body) {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+}

@@ -1,7 +1,6 @@
 import fc from "fast-check";
 import prand from "pure-rand";
 import * as R from "ramda";
-import { capitalCase } from "change-case";
 import { pipeline } from "./shared.js";
 
 const { performance } = self;
@@ -48,7 +47,7 @@ export const asympoticBenchmarks = ({
   async function* benchmarkSets() {
     for (let n of domain) {
       yield subjects.map((subject) => ({
-        name: capitalCase(subject.name),
+        name: subject.name,
         n,
         duration: medianTime(() => subject(...generateInput(n)), iterations),
       }));

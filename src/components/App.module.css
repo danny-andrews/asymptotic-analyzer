@@ -1,0 +1,9 @@
+.full-width,
+.full-width::part(body) {
+  width: 100%;
+}
+
+.action-tab-group {
+  max-width: 500px;
+  width: 100%;
+}

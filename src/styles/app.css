@@ -1,4 +1,3 @@
-/* @import "@shoelace-style/shoelace"; */
 @import "./reset.css";
 @import "@shoelace-style/shoelace/dist/themes/light.css";
 
@@ -14,6 +13,17 @@ main {
   padding: var(--sl-spacing-large);
 }
 
-h1 {
-  font-size: var(--sl-font-size-2x-large);
+header {
+  text-align: center;
+  background: var(--sl-color-primary-200);
+  padding: var(--sl-spacing-2x-small);
+  color: var(--sl-color-neutral-600);
+  border-bottom: var(--border-width) var(--border-color);
+}
+
+main {
+  padding: var(--sl-spacing-small);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

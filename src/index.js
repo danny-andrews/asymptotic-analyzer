@@ -1,10 +1,5 @@
 import "./components/index.js";
-import { render, html } from "lit";
-import WORKBENCHES from "../build/workbenches.js";
+import App from "./components/App.jsx";
+import { render, h } from "preact";
 
-render(
-  html`
-    <abm-app class="inner-spacing-small" .workbenches=${WORKBENCHES}></abm-app>
-  `,
-  document.body
-);
+render(h(App), document.body);
