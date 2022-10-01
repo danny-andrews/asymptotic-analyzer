@@ -15,9 +15,9 @@ main {
 
 header {
   text-align: center;
-  background: var(--sl-color-primary-200);
+  background: var(--sl-color-primary-300);
   padding: var(--sl-spacing-2x-small);
-  color: var(--sl-color-neutral-600);
+  color: var(--sl-color-neutral-700);
   border-bottom: var(--border-width) var(--border-color);
 }
 

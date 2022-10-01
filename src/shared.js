@@ -6,8 +6,6 @@ export const range = (size, startAt = 0, step = 1) =>
 
 export const pipeline = (arg, ...fns) => fns.reduce((v, fn) => fn(v), arg);
 
-export const roundTo = (precision, num) => Number(num.toFixed(precision));
-
 export const noop = () => {};
 
 export const wait = (time) =>
@@ -15,12 +13,15 @@ export const wait = (time) =>
     setTimeout(() => resolve(time), time);
   });
 
-export const fromWorkerEvent = (worker, eventType) =>
+export const fromWorkerEvent = (worker, eventType, endEventType = null) =>
   new Observable((observer) => {
     const listener = (e) => {
       const { name, payload } = e.data;
       if (name === eventType) {
         observer.next(payload);
+      }
+      if (name === endEventType) {
+        observer.complete();
       }
     };
     worker.addEventListener("message", listener);

@@ -1,4 +1,47 @@
+import { curryN } from "ramda";
+
 const roundTo = (precision, num) => Number(num.toFixed(precision));
+
+const CHART_COLORS = [
+  "rgb(80, 227, 133)",
+  "rgb(102, 170, 255",
+  "rgb(254, 118, 118)",
+  "rgb(255, 209, 30)",
+  "rgb(197, 137, 255)",
+  "rgb(255, 151, 65)",
+];
+
+const createDataset = ({ num, label, data }) => ({
+  borderColor: CHART_COLORS[num],
+  backgroundColor: CHART_COLORS[num],
+  showLine: true,
+  label,
+  data,
+});
+
+export const clearChart = (chart) => {
+  if (!chart) return;
+  chart.data.datasets = [];
+  chart.update();
+};
+
+export const addDataToChart = curryN(2, (chart, { datapoint, label }) => {
+  const { datasets } = chart.data;
+  const dataset = createDataset({
+    num: datasets.length,
+    label,
+    data: [datapoint],
+  });
+
+  const existingDataset = datasets.find((dataset) => dataset.label === label);
+
+  if (existingDataset) {
+    existingDataset.data.push(datapoint);
+  } else {
+    datasets.push(dataset);
+  }
+  chart.update();
+});
 
 export const makeChartConfig = ({ title = "" } = {}) => ({
   type: "scatter",
