@@ -1,0 +1,10 @@
+.full-width,
+.full-width::part(body) {
+  width: 100%;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  width: 100%
+}
