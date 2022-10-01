@@ -1,3 +1,4 @@
+import { h, Fragment } from "preact";
 import { useState, useRef, useEffect } from "preact/hooks";
 import workbenches from "../../build/workbenches.js";
 import { fromWorkerEvent } from "../shared.js";

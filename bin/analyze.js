@@ -4,7 +4,6 @@ import { stripIndent } from "common-tags";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createServer } from "vite";
-import preact from "@preact/preset-vite";
 
 const fail = (msg) => {
   console.error(msg);
@@ -42,6 +41,8 @@ esbuild
     createServer({
       esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" },
+        jsxFactory: "h",
+        jsxFragment: "Fragment",
       },
       configFile: false,
       open: true,
@@ -57,7 +58,6 @@ esbuild
             });
           },
         },
-        preact(),
       ],
       server: {
         port: 1337,

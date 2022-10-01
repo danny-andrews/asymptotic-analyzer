@@ -1,3 +1,4 @@
+import { h, Fragment } from "preact";
 import WorkbenchTable from "./WorkbenchTable.jsx";
 import c from "./WorkbenchForm.module.css";
 
