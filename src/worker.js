@@ -26,10 +26,12 @@ const stopWorkbench = () => {
   subscription.unsubscribe();
 };
 
-const runWorkbench = (workbenchName) => {
+const runWorkbench = ({ workbenchName, iterations = 200 }) => {
+  console.log("kd", iterations);
   subscription = pipeline(
     WORKBENCHES,
     R.find(({ name }) => workbenchName === name),
+    (benchmark) => ({ ...benchmark, iterations }),
     asympoticBenchmarks,
     makeBenchmarkObservable
   ).subscribe({

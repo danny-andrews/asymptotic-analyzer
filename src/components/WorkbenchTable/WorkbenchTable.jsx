@@ -3,6 +3,7 @@ import { useRef } from "preact/hooks";
 import * as R from "ramda";
 import c from "./WorkbenchTable.module.css";
 import { formatNumber } from "../../shared.js";
+import { iterations } from "../../signals";
 
 const Subject = ({ fn }) => {
   const dialogRef = useRef(null);
@@ -24,11 +25,17 @@ const Subject = ({ fn }) => {
   );
 };
 
-const WorkbenchTable = ({ domain, subjects }) => {
+const WorkbenchTable = ({ domain, subjects, onIterationsChanged }) => {
   const domainStr = [R.head(domain), R.last(domain)]
     .filter(Boolean)
     .map(formatNumber)
     .join(" - ");
+
+  const handleIterationsChanged = (event) => {
+    const numIterations = Number(event.target.value);
+    iterations.value = numIterations;
+    console.log(iterations.value, "changed");
+  };
 
   return (
     <table class={c["workbench-details"]}>
@@ -43,7 +50,14 @@ const WorkbenchTable = ({ domain, subjects }) => {
         </tr>
         <tr>
           <th>Iterations</th>
-          <td>100</td>
+          <td>
+            <sl-input
+              size="small"
+              type="number"
+              value={iterations}
+              onInput={handleIterationsChanged}
+            />
+          </td>
         </tr>
         <tr>
           <th>Domain</th>

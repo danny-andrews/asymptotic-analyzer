@@ -5,6 +5,7 @@ import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { noop } from "../../shared.js";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
+import { iterations } from "../../signals";
 
 const addMarksToChart = (chart, marks) =>
   marks
@@ -24,7 +25,6 @@ const Race = ({ workbenches, runner }) => {
 
   useEffect(
     () => () => {
-      console.log("onmounting");
       subscription.unsubscribe();
     },
     []
@@ -39,14 +39,16 @@ const Race = ({ workbenches, runner }) => {
 
   const handleStart = () => {
     clearChart(chartRef.current);
-    const sub = runner.runWorkbench(selectedWorkbench.name).subscribe({
-      next: (marks) => {
-        addMarksToChart(chartRef.current, marks);
-      },
-      complete: () => {
-        setIsRunning(false);
-      },
-    });
+    const sub = runner
+      .runWorkbench(selectedWorkbench.name, iterations.value)
+      .subscribe({
+        next: (marks) => {
+          addMarksToChart(chartRef.current, marks);
+        },
+        complete: () => {
+          setIsRunning(false);
+        },
+      });
     setSubscription(sub);
     setShouldShowGraph(true);
     setIsRunning(true);

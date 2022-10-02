@@ -12,8 +12,8 @@ const Runner = () => {
   };
 
   return {
-    runWorkbench: (workbenchName) => {
-      postMessage("RUN_WORKBENCH", workbenchName);
+    runWorkbench: (workbenchName, iterations) => {
+      postMessage("RUN_WORKBENCH", { workbenchName, iterations });
 
       return fromWorkerEvent(worker, "NEW_MARKS", "MARKSET_COMPLETE");
     },
