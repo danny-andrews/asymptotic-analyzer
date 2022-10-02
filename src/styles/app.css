@@ -1,5 +1,6 @@
 @import "./reset.css";
 @import "@shoelace-style/shoelace/dist/themes/dark.css";
+@import "highlight.js/styles/github.css";
 
 /* Top-level */
 body {

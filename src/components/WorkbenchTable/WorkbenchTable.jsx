@@ -1,6 +1,7 @@
 import { h, Fragment } from "preact";
-import { useRef } from "preact/hooks";
+import { useRef, useEffect } from "preact/hooks";
 import * as R from "ramda";
+import hljs from "highlight.js/lib/core";
 import c from "./WorkbenchTable.module.css";
 import { formatNumber } from "../../shared.js";
 import { iterations } from "../../signals";
@@ -10,13 +11,16 @@ const Subject = ({ fn }) => {
   const showDialog = () => {
     dialogRef.current.show();
   };
+  useEffect(() => {
+    hljs.highlightElement(dialogRef.current.querySelector("pre code"));
+  }, []);
 
   return (
     <>
       <sl-dialog ref={dialogRef} label="Source Code">
-        <code>
-          <pre>{fn.toString()}</pre>
-        </code>
+        <pre>
+          <code>{fn.toString()}</code>
+        </pre>
       </sl-dialog>
       <sl-button size="small" type="neutral" onClick={showDialog}>
         {fn.name}
@@ -34,7 +38,6 @@ const WorkbenchTable = ({ domain, subjects, onIterationsChanged }) => {
   const handleIterationsChanged = (event) => {
     const numIterations = Number(event.target.value);
     iterations.value = numIterations;
-    console.log(iterations.value, "changed");
   };
 
   return (

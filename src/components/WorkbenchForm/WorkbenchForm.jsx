@@ -31,6 +31,7 @@ const WorkbenchForm = ({
     <form class={c.form} onsubmit={handleSubmit}>
       <sl-card class={c["workbench-controls"]}>
         <sl-select
+          size="small"
           onsl-change={handleWorkbenchChange}
           value={workbenchName || "---"}
           name="workbench"
