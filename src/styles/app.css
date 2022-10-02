@@ -1,24 +1,12 @@
 @import "./reset.css";
-@import "@shoelace-style/shoelace/dist/themes/light.css";
+@import "@shoelace-style/shoelace/dist/themes/dark.css";
 
 /* Top-level */
 body {
   color: var(--sl-color-neutral-700);
   font-family: var(--sl-font-sans);
-  background: var(--sl-color-neutral-100);
+  background: var(--sl-color-neutral-50);
   min-height: 100vh;
-}
-
-main {
-  padding: var(--sl-spacing-large);
-}
-
-header {
-  text-align: center;
-  background: var(--sl-color-primary-300);
-  padding: var(--sl-spacing-2x-small);
-  color: var(--sl-color-neutral-700);
-  border-bottom: var(--border-width) var(--border-color);
 }
 
 main {

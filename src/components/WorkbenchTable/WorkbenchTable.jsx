@@ -1,7 +1,28 @@
-import { h } from "preact";
+import { h, Fragment } from "preact";
+import { useRef } from "preact/hooks";
 import * as R from "ramda";
 import c from "./WorkbenchTable.module.css";
 import { formatNumber } from "../../shared.js";
+
+const Subject = ({ fn }) => {
+  const dialogRef = useRef(null);
+  const showDialog = () => {
+    dialogRef.current.show();
+  };
+
+  return (
+    <>
+      <sl-dialog ref={dialogRef} label="Source Code">
+        <code>
+          <pre>{fn.toString()}</pre>
+        </code>
+      </sl-dialog>
+      <sl-button size="small" type="neutral" onClick={showDialog}>
+        {fn.name}
+      </sl-button>
+    </>
+  );
+};
 
 const WorkbenchTable = ({ domain, subjects }) => {
   const domainStr = [R.head(domain), R.last(domain)]
@@ -16,9 +37,7 @@ const WorkbenchTable = ({ domain, subjects }) => {
           <th>Functions</th>
           <td class={c["tag-cell"]}>
             {subjects.map((fn) => (
-              <sl-tag size="small" type="neutral">
-                {fn.name}
-              </sl-tag>
+              <Subject fn={fn} />
             ))}
           </td>
         </tr>

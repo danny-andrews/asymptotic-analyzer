@@ -32,7 +32,11 @@ const Chart = ({ title, chartRef }) => {
     updateAspectRatio();
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return (
+    <div>
+      <canvas ref={canvasRef} />
+    </div>
+  );
 };
 
 export default Chart;

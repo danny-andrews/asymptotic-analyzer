@@ -22,7 +22,13 @@ const Race = ({ workbenches, runner }) => {
   const [shouldShowGraph, setShouldShowGraph] = useState(false);
   const [subscription, setSubscription] = useState({ unsubscribe: noop });
 
-  useEffect(() => () => subscription.unsubscribe(), []);
+  useEffect(
+    () => () => {
+      console.log("onmounting");
+      subscription.unsubscribe();
+    },
+    []
+  );
 
   const handleWorkbenchChange = (workbenchName) => {
     setShouldShowGraph(false);
@@ -49,30 +55,36 @@ const Race = ({ workbenches, runner }) => {
   const handleStop = () => {
     clearChart(chartRef.current);
     runner.stopWorkbench();
-    setShouldShowGraph(false);
     setIsRunning(false);
   };
+  const tutorial = (
+    <>
+      <p>How to use:</p>
+      <ol>
+        <li>1. Select a workbench to get started.</li>
+        <li>2. Hit Start to run subjects (i.e. functions) in the workbench.</li>
+      </ol>
+    </>
+  );
 
   return (
-    <>
-      <div class={c["form-container"]}>
-        <WorkbenchForm
-          onStart={handleStart}
-          onStop={handleStop}
-          onWorkbenchChange={handleWorkbenchChange}
-          selectedWorkbench={selectedWorkbench}
-          workbenches={workbenches}
-          isRunning={isRunning}
-        />
-      </div>
-      {selectedWorkbench && shouldShowGraph && (
-        <sl-card class={c["full-width"]}>
-          <div>
-            <Chart chartRef={chartRef} title={selectedWorkbench.name} />
-          </div>
-        </sl-card>
-      )}
-    </>
+    <div class={c["race-root"]}>
+      <WorkbenchForm
+        onStart={handleStart}
+        onStop={handleStop}
+        onWorkbenchChange={handleWorkbenchChange}
+        selectedWorkbench={selectedWorkbench}
+        workbenches={workbenches}
+        isRunning={isRunning}
+      />
+      <sl-card class={c["graph-card"]}>
+        {shouldShowGraph ? (
+          <Chart chartRef={chartRef} title={selectedWorkbench.name} />
+        ) : (
+          tutorial
+        )}
+      </sl-card>
+    </div>
   );
 };
 

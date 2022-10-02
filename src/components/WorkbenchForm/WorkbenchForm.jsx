@@ -27,24 +27,20 @@ const WorkbenchForm = ({
     onWorkbenchChange(event.target.value);
   };
 
-  const header = (
-    <sl-select
-      onsl-change={handleWorkbenchChange}
-      value={workbenchName || "---"}
-      name="workbench"
-      label="Select a workbench"
-      disabled={isRunning}
-    >
-      {options.map((name) => (
-        <sl-menu-item value={name}>{name}</sl-menu-item>
-      ))}
-    </sl-select>
-  );
-
   return (
     <form class={c.form} onsubmit={handleSubmit}>
       <sl-card class={c["workbench-controls"]}>
-        {header}
+        <sl-select
+          onsl-change={handleWorkbenchChange}
+          value={workbenchName || "---"}
+          name="workbench"
+          label="Select a workbench"
+          disabled={isRunning}
+        >
+          {options.map((name) => (
+            <sl-menu-item value={name}>{name}</sl-menu-item>
+          ))}
+        </sl-select>
         {shouldShowWorkbenchTable && (
           <>
             <WorkbenchTable

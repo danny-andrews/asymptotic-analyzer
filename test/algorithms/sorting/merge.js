@@ -1,14 +1,29 @@
-const merge = (left, right) => {
-  let arr = [];
-  while (left.length && right.length) {
-    if (left[0] < right[0]) {
-      arr.push(left.shift());
+const merge = (arr1, arr2) => {
+  const result = [];
+  let i = 0;
+  let j = 0;
+
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] < arr2[j]) {
+      result.push(arr1[i]);
+      i++;
     } else {
-      arr.push(right.shift());
+      result.push(arr2[j]);
+      j++;
     }
   }
 
-  return [...arr, ...left, ...right];
+  while (i < arr1.length) {
+    result.push(arr1[i]);
+    i++;
+  }
+
+  while (j < arr2.length) {
+    result.push(arr1[j]);
+    j++;
+  }
+
+  return result;
 };
 
 const mergeSort = (array) => {

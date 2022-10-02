@@ -27,28 +27,21 @@ const App = () => {
   const runner = Runner();
 
   return (
-    <>
-      <header>
-        <H class={c.heading} as="3" level="1">
-          Asymptotic Analysis
-        </H>
-      </header>
-      <main>
-        <sl-tab-group class={c["action-tab-group"]}>
-          <sl-tab slot="nav" panel="race">
-            Race
-          </sl-tab>
-          <sl-tab slot="nav" panel="analyze">
-            Analyze
-          </sl-tab>
+    <main>
+      <sl-tab-group class={c["action-tab-group"]}>
+        <sl-tab slot="nav" panel="race">
+          Race
+        </sl-tab>
+        <sl-tab slot="nav" panel="analyze">
+          Analyze
+        </sl-tab>
 
-          <sl-tab-panel name="race">
-            <Race workbenches={workbenches} runner={runner} />
-          </sl-tab-panel>
-          <sl-tab-panel name="analyze">[Analysis Form Here]</sl-tab-panel>
-        </sl-tab-group>
-      </main>
-    </>
+        <sl-tab-panel name="race">
+          <Race workbenches={workbenches} runner={runner} />
+        </sl-tab-panel>
+        <sl-tab-panel name="analyze">[Analysis Form Here]</sl-tab-panel>
+      </sl-tab-group>
+    </main>
   );
 };
 
