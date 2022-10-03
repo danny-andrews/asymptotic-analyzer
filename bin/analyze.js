@@ -15,7 +15,7 @@ if (!workbenchesFilepath) {
   fail(stripIndent`
     Path to workbenches file required!
 
-    Example: $ analyze ./src/workbenches.js
+    Example: $ benchmark ./src/workbenches.js
   `);
 }
 

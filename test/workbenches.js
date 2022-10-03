@@ -6,21 +6,26 @@ import * as reverseSubjects from "./algorithms/reverse.js";
 import * as rotationSubjects from "./algorithms/rotate.js";
 import { generate } from "../src/benchmarking.js";
 
+// Fancy generator via fast-check.
 const arrGenerator = (n) =>
   generate(fc.array(fc.nat(n), { minLength: n, maxLength: n }));
+
+// Regular function generator.
+const arrForN = (n) =>
+  [...Array(n)].map(() => Math.floor(Math.random() * 1000));
 
 export default [
   {
     name: "Sorting",
     subjects: R.values(sortingSubjects),
     generator: arrGenerator,
-    domain: [1, ...range(10, 1, 500)],
+    domain: [1, ...range(1, 10, 500)],
   },
   {
     name: "Array Reverse",
     subjects: R.values(reverseSubjects),
-    generator: arrGenerator,
-    domain: range(10, 1, 2000),
+    generator: arrForN,
+    domain: range(1, 10, 2000),
   },
   {
     name: "Array Rotation",

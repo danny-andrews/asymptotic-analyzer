@@ -1,7 +1,7 @@
 import * as R from "ramda";
 import { Observable } from "rxjs";
 
-export const range = (size, startAt = 0, step = 1) =>
+export const range = (startAt, size, step = 1) =>
   R.range(startAt, startAt + size).map((n) => n * step);
 
 export const pipeline = (arg, ...fns) => fns.reduce((v, fn) => fn(v), arg);
