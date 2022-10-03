@@ -1,21 +1,20 @@
 {
-  "name": "@danny.andrews/asymptotic-analyzer",
+  "name": "asymptotic-analyzer",
   "version": "0.0.1",
-  "main": "./src/util.js",
+  "main": "src/util.js",
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "./bin/analyze.js test/workbenches.js"
+    "start": "bin/analyze.js test/workbenches.js"
   },
   "bin": {
-    "@danny.andrews/analyze": "./bin/analyze.js"
+    "analyze": "bin/analyze.js"
   },
-  "files": ["/bin/", "/src/", "index.html"],
+  "files": ["bin/", "src/", "index.html"],
   "dependencies": {
     "@preact/signals": "^1.1.1",
     "@shoelace-style/shoelace": "^2.0.0-beta.52",
     "ajv": "^8.11.0",
-    "avj": "^0.0.0",
     "chart.js": "^3.5.1",
     "common-tags": "^1.8.2",
     "esbuild": "^0.15.7",
