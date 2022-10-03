@@ -1,5 +1,6 @@
 {
   "name": "asymptotic-benchmarker",
+  "main": "./src/benchmarking.js",
   "type": "module",
   "license": "MIT",
   "scripts": {

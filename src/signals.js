@@ -1,3 +1,3 @@
 import { signal } from "@preact/signals";
 
-export const iterations = signal(500);
+export const iterations = signal(100);

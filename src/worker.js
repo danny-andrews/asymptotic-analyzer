@@ -26,8 +26,7 @@ const stopWorkbench = () => {
   subscription.unsubscribe();
 };
 
-const runWorkbench = ({ workbenchName, iterations = 200 }) => {
-  console.log("kd", iterations);
+const runWorkbench = ({ workbenchName, iterations }) => {
   subscription = pipeline(
     WORKBENCHES,
     R.find(({ name }) => workbenchName === name),

@@ -3,6 +3,7 @@ import { useState, useEffect } from "preact/hooks";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
+import H from "../H/H.jsx";
 import { noop } from "../../shared.js";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
 import { iterations } from "../../signals";
@@ -55,17 +56,48 @@ const Race = ({ workbenches, runner }) => {
   };
 
   const handleStop = () => {
-    clearChart(chartRef.current);
     runner.stopWorkbench();
     setIsRunning(false);
   };
+
   const tutorial = (
     <>
-      <p>How to use:</p>
+      <H level="2" as="3">
+        Race
+      </H>
+      <br />
+      <p>
+        Race different implementations against each other and analyze their
+        performance for various <code>n</code> values.
+      </p>
+      <br />
+      <H level="3" as="4">
+        How to Use
+      </H>
+      <br />
       <ol>
-        <li>1. Select a workbench to get started.</li>
-        <li>2. Hit Start to run subjects (i.e. functions) in the workbench.</li>
+        <li>- Select a workbench.</li>
+        <li>- Hit Start to benchmark all functions in the workbench.</li>
       </ol>
+      <br />
+      <H level="3" as="4">
+        Tips
+      </H>
+      <br />
+      <p>
+        <strong>View Source</strong>: Click on a Function to view its source
+        code.
+      </p>
+      <br />
+      <p>
+        <strong>Setting Iterations</strong>: Iterations is the number of times a
+        particular test case will be run against each function for a given{" "}
+        <code>n</code> value. Running a function several times and taking a
+        median helps to reduce the impact of outlier values. Aim for something
+        around 10-100 and adjust as needed for optimal results. Jagged,
+        non-monotonically increasing graphs mean your iterations value is too
+        low. Aim for monotonically-increasing, smooth lines.
+      </p>
     </>
   );
 

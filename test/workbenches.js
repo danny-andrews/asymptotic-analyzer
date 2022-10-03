@@ -4,8 +4,10 @@ import { range } from "../src/shared.js";
 import * as sortingSubjects from "./algorithms/sorting/index.js";
 import * as reverseSubjects from "./algorithms/reverse.js";
 import * as rotationSubjects from "./algorithms/rotate.js";
+import { generate } from "../src/benchmarking.js";
 
-const arrGenerator = (n) => fc.array(fc.nat(n), { minLength: n, maxLength: n });
+const arrGenerator = (n) =>
+  generate(fc.array(fc.nat(n), { minLength: n, maxLength: n }));
 
 export default [
   {
@@ -23,7 +25,7 @@ export default [
   {
     name: "Array Rotation",
     subjects: R.values(rotationSubjects),
-    generator: [arrGenerator, (n) => fc.integer(0, n)],
-    domain: range(15, 1, 2000),
+    generator: [arrGenerator, (n) => generate(fc.integer(0, n))],
+    domain: range(10, 1, 2000),
   },
 ];

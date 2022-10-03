@@ -22,9 +22,11 @@ const Subject = ({ fn }) => {
           <code>{fn.toString()}</code>
         </pre>
       </sl-dialog>
-      <sl-button size="small" type="neutral" onClick={showDialog}>
-        {fn.name}
-      </sl-button>
+      <sl-tooltip content="View source code">
+        <sl-button size="small" type="neutral" onClick={showDialog}>
+          {fn.name}
+        </sl-button>
+      </sl-tooltip>
     </>
   );
 };

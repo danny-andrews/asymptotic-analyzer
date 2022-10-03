@@ -41,8 +41,7 @@ export const asympoticBenchmarks = ({
   iterations = 100,
 }) => {
   const generators = [].concat(generator);
-  const generateInput = (n) =>
-    generators.map((generator) => generate(generator(n)));
+  const generateInput = (n) => generators.map((generator) => generator(n));
 
   async function* benchmarkSets() {
     for (let n of domain) {
