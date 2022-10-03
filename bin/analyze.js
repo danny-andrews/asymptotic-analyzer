@@ -28,11 +28,11 @@ esbuild
     entryPoints: [workbenchesFilepath],
     format: "esm",
     outfile: path.join(root, "build", "workbenches.js"),
-    logLevel: "silent",
+    // logLevel: "silent",
   })
   .catch((e) => {
     fail(stripIndent`
-      Build error. This is usually caused by an invalid workbench filepath.
+      Build error. This is usually caused by a syntax error in your workbench filepath.
 
       ${e.errors[0].text}.
     `);
@@ -68,7 +68,7 @@ esbuild
   .then((server) => server.listen())
   .then((instance) => {
     const port = instance.httpServer.address().port;
-    console.log(`Hosting asymptotic analysis on http://localhost:${port}`);
+    console.log(`Hosting asymptotic analysis on http://localhost:${port}.`);
   })
   .catch((e) => {
     fail(stripIndent`

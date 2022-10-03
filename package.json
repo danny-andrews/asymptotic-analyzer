@@ -1,6 +1,7 @@
 {
   "name": "asymptotic-analyzer",
-  "main": "./src/benchmarking.js",
+  "version": "0.0.1",
+  "main": "./src/util.js",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -9,9 +10,12 @@
   "bin": {
     "benchmark": "./bin/analyze.js"
   },
+  "files": ["/bin/", "/src/"],
   "dependencies": {
     "@preact/signals": "^1.1.1",
     "@shoelace-style/shoelace": "^2.0.0-beta.52",
+    "ajv": "^8.11.0",
+    "avj": "^0.0.0",
     "chart.js": "^3.5.1",
     "common-tags": "^1.8.2",
     "esbuild": "^0.15.7",
