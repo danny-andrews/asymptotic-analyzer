@@ -1,6 +1,6 @@
 {
   "name": "asymptotic-analyzer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "src/util.js",
   "type": "module",
   "license": "MIT",
