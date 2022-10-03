@@ -1,5 +1,5 @@
 {
-  "name": "asymptotic-analyzer",
+  "name": "@danny.andrews/asymptotic-analyzer",
   "version": "0.0.1",
   "main": "./src/util.js",
   "type": "module",
@@ -8,9 +8,9 @@
     "start": "./bin/analyze.js test/workbenches.js"
   },
   "bin": {
-    "benchmark": "./bin/analyze.js"
+    "@danny.andrews/analyze": "./bin/analyze.js"
   },
-  "files": ["/bin/", "/src/"],
+  "files": ["/bin/", "/src/", "index.html"],
   "dependencies": {
     "@preact/signals": "^1.1.1",
     "@shoelace-style/shoelace": "^2.0.0-beta.52",
