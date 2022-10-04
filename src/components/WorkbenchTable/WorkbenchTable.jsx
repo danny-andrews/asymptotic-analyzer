@@ -31,7 +31,7 @@ const Subject = ({ fn }) => {
   );
 };
 
-const WorkbenchTable = ({ domain, subjects, onIterationsChanged }) => {
+const WorkbenchTable = ({ domain, subjects }) => {
   const domainStr = [R.head(domain), R.last(domain)]
     .filter(Boolean)
     .map(formatNumber)
@@ -49,7 +49,7 @@ const WorkbenchTable = ({ domain, subjects, onIterationsChanged }) => {
           <th>Functions</th>
           <td class={c["tag-cell"]}>
             {subjects.map((fn) => (
-              <Subject fn={fn} />
+              <Subject key={fn.toString()} fn={fn} />
             ))}
           </td>
         </tr>
