@@ -3,7 +3,7 @@ import fc from "fast-check";
 import * as sortingSubjects from "./algorithms/sorting/index.js";
 import * as reverseSubjects from "./algorithms/reverse.js";
 import * as rotationSubjects from "./algorithms/rotate.js";
-import { generate } from "../src/util.js";
+import { generate } from "../index.js";
 
 export const range = (startAt, size, step = 1) =>
   R.range(startAt, startAt + size).map((n) => n * step);

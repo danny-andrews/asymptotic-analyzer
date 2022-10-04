@@ -1,7 +1,7 @@
 {
   "name": "asymptotic-analyzer",
   "version": "0.0.3",
-  "main": "src/util.js",
+  "main": "index.js",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -13,10 +13,9 @@
     "analyze": "bin/analyze.js"
   },
   "files": [
+    "index.js",
     "bin/",
-    "src/",
-    "dist/",
-    "index.html"
+    "dist/"
   ],
   "dependencies": {
     "common-tags": "^1.8.2",
