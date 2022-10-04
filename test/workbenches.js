@@ -27,12 +27,12 @@ export default [
     name: "Array Reverse",
     subjects: R.values(reverseSubjects),
     generator: [arrForN],
-    domain: range(1, 10, 2000),
+    domain: range(1, 10, 8000),
   },
   {
     name: "Array Rotation",
     subjects: R.values(rotationSubjects),
     generator: [arrGenerator, (n) => generate(fc.integer(0, n))],
-    domain: range(10, 1, 2000),
+    domain: range(1, 10, 2000),
   },
 ];

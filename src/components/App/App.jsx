@@ -1,14 +1,15 @@
 import { h, Fragment } from "preact";
 import c from "./App.module.css";
 import Race from "../Race/Race.jsx";
-import {
-  fromWorkerEvent,
-  workbenches,
-  validateWorkbenches,
-} from "../../shared.js";
+import { fromWorkerEvent, validateWorkbenches } from "../../shared.js";
+
+const { default: workbenches } = await import("/workbenches.js");
+
+const worker = new Worker(new URL("../../worker.js", import.meta.url), {
+  type: "module",
+});
 
 const Runner = () => {
-  const worker = new Worker("src/worker.js", { type: "module" });
   const postMessage = (name, payload) => {
     worker.postMessage({ name, payload });
   };

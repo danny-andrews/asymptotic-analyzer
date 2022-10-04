@@ -5,12 +5,18 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "bin/analyze.js test/workbenches.js"
+    "start": "npm run build; bin/analyze.js test/workbenches.js",
+    "build": "vite build"
   },
   "bin": {
     "analyze": "bin/analyze.js"
   },
-  "files": ["bin/", "src/", "index.html"],
+  "files": [
+    "bin/",
+    "src/",
+    "dist/",
+    "index.html"
+  ],
   "dependencies": {
     "@preact/signals": "^1.1.1",
     "@shoelace-style/shoelace": "^2.0.0-beta.52",
@@ -18,12 +24,15 @@
     "chart.js": "^3.5.1",
     "common-tags": "^1.8.2",
     "esbuild": "^0.15.7",
+    "express": "^4.18.1",
     "fast-check": "^2.17.0",
     "highlight.js": "^11.6.0",
     "preact": "^10.11.0",
     "pure-rand": "^5.0.0",
     "ramda": "^0.27.1",
-    "rxjs": "^7.3.0",
+    "rxjs": "^7.3.0"
+  },
+  "devDependencies": {
     "vite": "^3.1.0"
   }
 }

@@ -1,7 +1,9 @@
 import * as R from "ramda";
 import { Observable } from "rxjs";
 import { asympoticBenchmarks } from "./benchmarking.js";
-import { noop, wait, pipeline, workbenches } from "./shared.js";
+import { noop, wait, pipeline } from "./shared.js";
+
+const { default: workbenches } = await import("/workbenches.js");
 
 const makeBenchmarkObservable = (generator) =>
   new Observable((observer) => {

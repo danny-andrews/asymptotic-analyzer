@@ -1,5 +1,4 @@
 import { Observable } from "rxjs";
-import workbenches from "../build/workbenches.js";
 import Ajv from "ajv";
 import { stripIndent } from "common-tags";
 
@@ -72,5 +71,3 @@ export const validateWorkbenches = (workbenches) => {
     }
   }
 };
-
-export { workbenches };
