@@ -2,13 +2,13 @@ export default {
   worker: {
     format: "es",
     rollupOptions: {
-      external: ["/workbenches.js"],
+      external: ["/test/workbenches.js"],
     },
   },
   build: {
     target: "esnext",
     rollupOptions: {
-      external: ["/workbenches.js"],
+      external: ["/test/workbenches.js"],
     },
   },
   esbuild: {

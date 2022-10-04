@@ -28,7 +28,7 @@ if (!workbenchesFilepath) {
 
 server.use(express.static(path.join(root, "dist")));
 
-server.get("/workbenches.js", (req, res) => {
+server.get("/test/workbenches.js", (req, res) => {
   esbuild
     .build({
       bundle: true,

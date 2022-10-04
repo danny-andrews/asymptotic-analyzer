@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run build; bin/analyze.js test/workbenches.js",
-    "build": "vite build"
+    "build": "vite build",
+    "dev": "vite"
   },
   "bin": {
     "analyze": "bin/analyze.js"

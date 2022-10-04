@@ -3,7 +3,7 @@ import c from "./App.module.css";
 import Race from "../Race/Race.jsx";
 import { fromWorkerEvent, validateWorkbenches } from "../../shared.js";
 
-const { default: workbenches } = await import("/workbenches.js");
+const { default: workbenches } = await import("/test/workbenches.js");
 
 const worker = new Worker(new URL("../../worker.js", import.meta.url), {
   type: "module",
