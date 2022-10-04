@@ -37,10 +37,11 @@ export const asympoticBenchmarks = ({
 
   async function* benchmarkSets() {
     for (let n of domain) {
+      const input = generateInput(n);
       yield subjects.map((subject) => ({
         name: subject.name,
         n,
-        duration: medianTime(() => subject(...generateInput(n)), iterations),
+        duration: medianTime(() => subject(...input), iterations),
       }));
     }
   }

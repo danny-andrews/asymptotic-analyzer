@@ -21,7 +21,7 @@ export default [
     name: "Sorting",
     subjects: R.values(sortingSubjects),
     generator: [arrGenerator],
-    domain: [1, ...range(1, 10, 500)],
+    domain: [1, ...range(1, 10, 100)],
   },
   {
     name: "Array Reverse",
@@ -32,7 +32,10 @@ export default [
   {
     name: "Array Rotation",
     subjects: R.values(rotationSubjects),
-    generator: [arrGenerator, (n) => generate(fc.integer(0, n))],
+    generator: [
+      arrGenerator,
+      (n) => generate(fc.integer({ min: n / 2, max: n / 2 })),
+    ],
     domain: range(1, 10, 2000),
   },
 ];
