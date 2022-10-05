@@ -5,5 +5,5 @@
 
 .race-root {
   display: flex;
-  gap: var(--sl-spacing-small)
+  gap: var(--sl-spacing-medium)
 }
