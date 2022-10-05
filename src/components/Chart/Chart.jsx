@@ -11,7 +11,7 @@ const useResize = (fn) => {
   };
 };
 
-const Chart = ({ title, chartRef }) => {
+const Chart = ({ title, chartSig, hide }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -20,8 +20,7 @@ const Chart = ({ title, chartRef }) => {
       makeChartConfig({ title })
     );
 
-    // FIXME: THIS IS GROSS.
-    chartRef.current = chart;
+    chartSig.value = chart;
 
     const updateAspectRatio = () => {
       chart.options.aspectRatio = window.innerWidth / window.innerHeight;
@@ -31,10 +30,11 @@ const Chart = ({ title, chartRef }) => {
     useResize(updateAspectRatio);
     updateAspectRatio();
   }, []);
+  const style = hide ? { display: "none" } : {};
 
   return (
     <div>
-      <canvas ref={canvasRef} />
+      <canvas style={style} ref={canvasRef} />
     </div>
   );
 };

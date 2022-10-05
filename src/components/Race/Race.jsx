@@ -1,4 +1,5 @@
 import { h, Fragment } from "preact";
+import { signal, effect } from "@preact/signals";
 import { useState, useEffect } from "preact/hooks";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
@@ -16,7 +17,7 @@ const addMarksToChart = (chart, marks) =>
     }))
     .forEach(addDataToChart(chart));
 
-let chartRef = { current: null };
+let chart = signal(null);
 
 const Race = ({ workbenches, runner }) => {
   const [isRunning, setIsRunning] = useState(false);
@@ -39,12 +40,12 @@ const Race = ({ workbenches, runner }) => {
   };
 
   const handleStart = () => {
-    clearChart(chartRef.current);
+    clearChart(chart.value);
     const sub = runner
       .runWorkbench(selectedWorkbench.name, iterations.value)
       .subscribe({
         next: (marks) => {
-          addMarksToChart(chartRef.current, marks);
+          addMarksToChart(chart.value, marks);
         },
         complete: () => {
           setIsRunning(false);
@@ -112,11 +113,12 @@ const Race = ({ workbenches, runner }) => {
         isRunning={isRunning}
       />
       <sl-card class={c["graph-card"]}>
-        {shouldShowGraph ? (
-          <Chart chartRef={chartRef} title={selectedWorkbench.name} />
-        ) : (
-          tutorial
-        )}
+        <Chart
+          chartSig={chart}
+          hide={!shouldShowGraph}
+          title={selectedWorkbench && selectedWorkbench.name}
+        />
+        {!shouldShowGraph && tutorial}
       </sl-card>
     </div>
   );
