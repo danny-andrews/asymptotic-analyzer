@@ -36,6 +36,6 @@ export default [
       arrGenerator,
       (n) => generate(fc.integer({ min: n / 2, max: n / 2 })),
     ],
-    domain: range(1, 10, 2000),
+    domain: range(1, 10, 10000),
   },
 ];
