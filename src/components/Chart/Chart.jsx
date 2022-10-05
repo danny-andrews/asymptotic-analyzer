@@ -13,6 +13,12 @@ const useResize = (fn) => {
 
 const Chart = ({ title, chartSig, hide }) => {
   const canvasRef = useRef(null);
+  useEffect(() => {
+    if (chartSig.value) {
+      chartSig.value.options.plugins.title.text = title;
+      chartSig.value.update();
+    }
+  }, [title]);
 
   useEffect(() => {
     const chart = new ChartJS(
