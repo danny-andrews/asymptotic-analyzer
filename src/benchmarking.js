@@ -8,7 +8,7 @@ const time = (fn) => {
 };
 
 export const medianTime = (fn, iterations) =>
-  R.median(R.times(() => time(fn), iterations));
+  R.mean(R.times(() => time(fn), iterations));
 
 export const normalizeStats = (stats) => {
   const iterationTime = pipeline(
@@ -33,15 +33,17 @@ export const asympoticBenchmarks = ({
   iterations = 100,
 }) => {
   const generators = [].concat(generator);
-  const generateInput = (n) => generators.map((generator) => generator(n));
+  const generateInputs = (n) => generators.map((generator) => generator(n));
 
   async function* benchmarkSets() {
     for (let n of domain) {
-      const input = generateInput(n);
+      const inputs = generateInputs(n);
       yield subjects.map((subject) => ({
         name: subject.name,
         n,
-        duration: medianTime(() => subject(...input), iterations),
+        duration: medianTime(() => {
+          subject(...inputs.map((input) => structuredClone(input)));
+        }, iterations),
       }));
     }
   }
