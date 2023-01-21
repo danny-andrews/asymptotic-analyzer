@@ -8,12 +8,14 @@ import { iterations } from "../../signals";
 
 const Subject = ({ fn }) => {
   const dialogRef = useRef(null);
-  const showDialog = () => {
-    dialogRef.current.show();
-  };
+
   useEffect(() => {
     hljs.highlightElement(dialogRef.current.querySelector("pre code"));
   }, []);
+
+  const showDialog = () => {
+    dialogRef.current.show();
+  };
 
   return (
     <>
@@ -32,7 +34,7 @@ const Subject = ({ fn }) => {
 };
 
 const WorkbenchTable = ({ domain, subjects }) => {
-  const domainStr = [R.head(domain), R.last(domain)]
+  const domainDisplay = [R.head(domain), R.last(domain)]
     .filter(Boolean)
     .map(formatNumber)
     .join(" - ");
@@ -69,7 +71,7 @@ const WorkbenchTable = ({ domain, subjects }) => {
           <td class={c["tag-cell"]}>
             <sl-dropdown>
               <sl-button size="small" slot="trigger" caret>
-                {domainStr}
+                {domainDisplay}
               </sl-button>
               <sl-menu>
                 {domain.map((number) => (
