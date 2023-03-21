@@ -30,7 +30,7 @@ const stopWorkbench = () => {
 const runWorkbench = ({ workbenchName, iterations }) => {
   subscription = pipeline(
     workbenches,
-    R.find(({ name }) => workbenchName === name),
+    (benches) => benches.find(({ name }) => workbenchName === name),
     (benchmark) => ({ ...benchmark, iterations }),
     asympoticBenchmarks,
     makeBenchmarkObservable

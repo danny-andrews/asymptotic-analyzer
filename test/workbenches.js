@@ -1,4 +1,3 @@
-import * as R from "ramda";
 import fc from "fast-check";
 import * as sortingSubjects from "./algorithms/sorting/index.js";
 import * as reverseSubjects from "./algorithms/reverse.js";
@@ -6,7 +5,7 @@ import * as rotationSubjects from "./algorithms/rotate.js";
 import { generate } from "../index.js";
 
 export const range = (startAt, size, step = 1) =>
-  R.range(startAt, startAt + size).map((n) => n * step);
+  [...Array(size).keys()].map((num) => (num + startAt) * step);
 
 // Fancy generator via fast-check.
 const arrGenerator = (n) =>
@@ -19,19 +18,19 @@ const arrForN = (n) =>
 export default [
   {
     name: "Sorting",
-    subjects: R.values(sortingSubjects),
+    subjects: Object.values(sortingSubjects),
     generator: [arrGenerator],
     domain: [1, ...range(1, 10, 100)],
   },
   {
     name: "Array Reverse",
-    subjects: R.values(reverseSubjects),
+    subjects: Object.values(reverseSubjects),
     generator: [arrForN],
     domain: range(1, 10, 8000),
   },
   {
     name: "Array Rotation",
-    subjects: R.values(rotationSubjects),
+    subjects: Object.values(rotationSubjects),
     generator: [
       arrGenerator,
       (n) => generate(fc.integer({ min: n / 2, max: n / 2 })),

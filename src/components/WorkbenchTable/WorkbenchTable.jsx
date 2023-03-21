@@ -1,6 +1,5 @@
 import { h, Fragment } from "preact";
 import { useRef, useEffect } from "preact/hooks";
-import * as R from "ramda";
 import hljs from "highlight.js/lib/core";
 import c from "./WorkbenchTable.module.css";
 import { formatNumber } from "../../shared.js";
@@ -34,7 +33,7 @@ const Subject = ({ fn }) => {
 };
 
 const WorkbenchTable = ({ domain, subjects }) => {
-  const domainDisplay = [R.head(domain), R.last(domain)]
+  const domainDisplay = [domain.at(0), domain.at(-1)]
     .filter(Boolean)
     .map(formatNumber)
     .join(" - ");
