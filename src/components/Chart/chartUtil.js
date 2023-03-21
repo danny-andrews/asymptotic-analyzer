@@ -49,6 +49,9 @@ export const makeChartConfig = ({ title = "" } = {}) => ({
     datasets: [],
   },
   options: {
+    layout: {
+      padding: 40,
+    },
     plugins: {
       title: {
         display: true,
@@ -59,6 +62,11 @@ export const makeChartConfig = ({ title = "" } = {}) => ({
           label: ({ dataset, parsed }) => {
             return `${dataset.label}: (${parsed.x}, ${roundTo(3, parsed.y)})`;
           },
+        },
+      },
+      legend: {
+        labels: {
+          padding: 16,
         },
       },
     },
