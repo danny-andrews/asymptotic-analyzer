@@ -1,4 +1,3 @@
-import * as R from "ramda";
 import { Observable } from "rxjs";
 import { asympoticBenchmarks } from "./benchmarking.js";
 import { noop, wait, pipeline } from "./shared.js";

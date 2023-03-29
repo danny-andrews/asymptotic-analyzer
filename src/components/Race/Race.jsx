@@ -15,7 +15,7 @@ const addMarksToChart = (chart, marks) =>
       datapoint: { x: n, y: duration },
       label: name,
     }))
-    .forEach(addDataToChart(chart));
+    .forEach((data) => addDataToChart(chart, data));
 
 let chart = signal(null);
 

@@ -1,5 +1,3 @@
-import { curryN } from "ramda";
-
 const roundTo = (precision, num) => Number(num.toFixed(precision));
 
 const CHART_COLORS = [
@@ -25,7 +23,7 @@ export const clearChart = (chart) => {
   chart.update();
 };
 
-export const addDataToChart = curryN(2, (chart, { datapoint, label }) => {
+export const addDataToChart = (chart, { datapoint, label }) => {
   const { datasets } = chart.data;
   const dataset = createDataset({
     num: datasets.length,
@@ -41,7 +39,7 @@ export const addDataToChart = curryN(2, (chart, { datapoint, label }) => {
     datasets.push(dataset);
   }
   chart.update();
-});
+};
 
 export const makeChartConfig = ({ title = "" } = {}) => ({
   type: "scatter",
