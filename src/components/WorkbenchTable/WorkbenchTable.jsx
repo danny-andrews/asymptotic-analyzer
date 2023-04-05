@@ -2,7 +2,6 @@ import { h, Fragment } from "preact";
 import { useRef, useEffect } from "preact/hooks";
 import hljs from "highlight.js/lib/core";
 import c from "./WorkbenchTable.module.css";
-import { formatNumber } from "../../shared.js";
 import { iterations } from "../../signals";
 
 const Subject = ({ fn }) => {
@@ -32,12 +31,7 @@ const Subject = ({ fn }) => {
   );
 };
 
-const WorkbenchTable = ({ domain, subjects }) => {
-  const domainDisplay = [domain.at(0), domain.at(-1)]
-    .filter(Boolean)
-    .map(formatNumber)
-    .join(" - ");
-
+const WorkbenchTable = ({ subjects }) => {
   const handleIterationsChanged = (event) => {
     const numIterations = Number(event.target.value);
     iterations.value = numIterations;
@@ -63,23 +57,6 @@ const WorkbenchTable = ({ domain, subjects }) => {
               value={iterations}
               onInput={handleIterationsChanged}
             />
-          </td>
-        </tr>
-        <tr>
-          <th>Domain</th>
-          <td class={c["tag-cell"]}>
-            <sl-dropdown>
-              <sl-button size="small" slot="trigger" caret>
-                {domainDisplay}
-              </sl-button>
-              <sl-menu>
-                {domain.map((number) => (
-                  <sl-menu-item value={number} disabled>
-                    {formatNumber(number)}
-                  </sl-menu-item>
-                ))}
-              </sl-menu>
-            </sl-dropdown>
           </td>
         </tr>
       </tbody>

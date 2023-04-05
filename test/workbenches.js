@@ -1,11 +1,13 @@
 import fc from "fast-check";
 import * as sortingSubjects from "./algorithms/sorting/index.js";
 import * as reverseSubjects from "./algorithms/reverse.js";
-import * as rotationSubjects from "./algorithms/rotate.js";
+import * as rangeSubjects from "./algorithms/range.js";
 import { generate } from "../index.js";
 
-export const range = (startAt, size, step = 1) =>
-  [...Array(size).keys()].map((num) => (num + startAt) * step);
+export const range = ({ start, length, step = 1 }) =>
+  Array(length)
+    .fill()
+    .map((_, num) => (num + start) * step);
 
 // Fancy generator via fast-check.
 const arrGenerator = (n) =>
@@ -13,28 +15,36 @@ const arrGenerator = (n) =>
 
 // Regular function generator.
 const arrForN = (n) =>
-  [...Array(n)].map(() => Math.floor(Math.random() * 1000));
+  Array(n)
+    .fill()
+    .map(() => Math.floor(Math.random() * 1_000));
 
 export default [
   {
     name: "Sorting",
     subjects: Object.values(sortingSubjects),
-    generator: [arrGenerator],
-    domain: [1, ...range(1, 10, 100)],
+    generator: function* () {
+      for (let n of range({ start: 0, length: 10, step: 10 })) {
+        yield { n, inputs: [arrForN(n)] };
+      }
+    },
   },
   {
     name: "Array Reverse",
     subjects: Object.values(reverseSubjects),
-    generator: [arrForN],
-    domain: range(1, 10, 8000),
+    generator: function* () {
+      for (let n of range({ start: 0, length: 10, step: 1_000 })) {
+        yield { n, inputs: [arrGenerator(n)] };
+      }
+    },
   },
   {
-    name: "Array Rotation",
-    subjects: Object.values(rotationSubjects),
-    generator: [
-      arrGenerator,
-      (n) => generate(fc.integer({ min: n / 2, max: n / 2 })),
-    ],
-    domain: range(1, 8, 2000),
+    name: "Range",
+    subjects: Object.values(rangeSubjects),
+    generator: function* () {
+      for (let n of range({ start: 0, length: 10, step: 1_000 })) {
+        yield { n, inputs: [0, n] };
+      }
+    },
   },
 ];

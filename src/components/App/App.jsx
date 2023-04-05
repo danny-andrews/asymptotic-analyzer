@@ -1,7 +1,7 @@
 import { h, Fragment } from "preact";
 import c from "./App.module.css";
 import Race from "../Race/Race.jsx";
-import { fromWorkerEvent, validateWorkbenches } from "../../shared.js";
+import { fromWorkerEvent } from "../../shared.js";
 
 const { default: workbenches } = await import("/test/workbenches.js");
 
@@ -28,11 +28,6 @@ const Runner = () => {
 
 const App = () => {
   const runner = Runner();
-  try {
-    validateWorkbenches(workbenches);
-  } catch (e) {
-    return <p>{e.message}</p>;
-  }
 
   return (
     <main>
