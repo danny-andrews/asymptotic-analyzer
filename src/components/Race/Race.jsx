@@ -11,10 +11,12 @@ import { iterations } from "../../signals";
 
 const addMarksToChart = (chart, marks) =>
   marks
-    .map(({ name, n, duration }) => ({
-      datapoint: { x: n, y: duration },
-      label: name,
-    }))
+    .map(({ name, n, stats }) => {
+      return {
+        datapoint: { x: n, y: stats.mean, sem: stats.sem },
+        label: name,
+      };
+    })
     .forEach((data) => addDataToChart(chart, data));
 
 let chart = signal(null);

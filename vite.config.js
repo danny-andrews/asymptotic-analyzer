@@ -16,8 +16,4 @@ export default {
     jsxFactory: "h",
     jsxFragment: "Fragment",
   },
-  server: {
-    port: 1337,
-    open: true,
-  },
 };

@@ -24,7 +24,7 @@ export default [
     name: "Sorting",
     subjects: Object.values(sortingSubjects),
     generator: function* () {
-      for (let n of range({ start: 0, length: 10, step: 10 })) {
+      for (let n of range({ start: 0, length: 10, step: 1_000 })) {
         yield { n, inputs: [arrForN(n)] };
       }
     },
