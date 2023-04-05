@@ -1,49 +1,35 @@
-import { Observable } from "rxjs";
-import { asympoticBenchmarks } from "./benchmarking.js";
-import { noop, wait, pipeline } from "./shared.js";
+import { asymptoticBenchmarks } from "./benchmarking.js";
+import { wait } from "./shared.js";
 
 const { default: workbenches } = await import("/test/workbenches.js");
 
-const makeBenchmarkObservable = (generator) =>
-  new Observable((observer) => {
-    (async () => {
-      for await (const marks of generator()) {
-        if (observer.closed) {
-          break;
-        }
-
-        await wait();
-        observer.next(marks);
-        await wait();
-      }
-      observer.complete();
-    })();
-  });
-
-let subscription = { unsubscribe: noop };
-
 const stopWorkbench = () => {
-  subscription.unsubscribe();
+  stopReceived = true;
 };
 
-const runWorkbench = ({ workbenchName, iterations }) => {
-  subscription = pipeline(
-    workbenches,
-    (benches) => benches.find(({ name }) => workbenchName === name),
-    (benchmark) => ({ ...benchmark, iterations }),
-    asympoticBenchmarks,
-    makeBenchmarkObservable
-  ).subscribe({
-    next: (marks) => {
-      postMessage({
-        name: "NEW_MARKS",
-        payload: marks,
-      });
-    },
-    complete: () => {
-      postMessage({ name: "MARKSET_COMPLETE" });
-    },
+let stopReceived = false;
+
+const runWorkbench = async ({ workbenchName, iterations }) => {
+  const { subjects, generator } = workbenches.find(
+    ({ name }) => workbenchName === name
+  );
+  const benchmarkGenerator = asymptoticBenchmarks({
+    subjects,
+    generator,
+    iterations,
   });
+
+  for await (const marks of benchmarkGenerator) {
+    if (stopReceived) {
+      return;
+    }
+
+    await wait();
+    postMessage({ name: "NEW_MARKS", payload: marks });
+    await wait();
+  }
+
+  postMessage({ name: "MARKSET_COMPLETE" });
 };
 
 onmessage = (message) => {

@@ -10,22 +10,24 @@ export const meanTime = (fn, iterations) => {
   return total / iterations;
 };
 
-export const asympoticBenchmarks = ({ subjects, generator, iterations }) => {
-  async function* benchmarkSets() {
-    for (let { n, inputs } of generator()) {
-      const inputSets = Array.from({ length: subjects.length }).map(() =>
-        Array.from({ length: iterations }).map(() => structuredClone(inputs))
+export async function* asymptoticBenchmarks({
+  subjects,
+  generator,
+  iterations,
+}) {
+  for (let { n, inputs } of generator()) {
+    yield subjects.map((subject) => {
+      const inputSets = Array.from({ length: iterations }).map(() =>
+        structuredClone(inputs)
       );
 
-      yield subjects.map((subject, subjectIndex) => ({
+      return {
         name: subject.name,
         n,
         duration: meanTime((iteration) => {
-          subject(...inputSets[subjectIndex][iteration - 1]);
+          subject(...inputSets[iteration - 1]);
         }, iterations),
-      }));
-    }
+      };
+    });
   }
-
-  return benchmarkSets;
-};
+}
