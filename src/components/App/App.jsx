@@ -1,5 +1,4 @@
 import { h, Fragment } from "preact";
-import c from "./App.module.css";
 import Race from "../Race/Race.jsx";
 import { fromWorkerEvent } from "../../shared.js";
 
@@ -31,19 +30,7 @@ const App = () => {
 
   return (
     <main>
-      <sl-tab-group class={c["action-tab-group"]}>
-        <sl-tab slot="nav" panel="race">
-          Race
-        </sl-tab>
-        <sl-tab slot="nav" panel="analyze">
-          Analyze
-        </sl-tab>
-
-        <sl-tab-panel name="race">
-          <Race workbenches={workbenches} runner={runner} />
-        </sl-tab-panel>
-        <sl-tab-panel name="analyze">[Analysis Form Here]</sl-tab-panel>
-      </sl-tab-group>
+      <Race workbenches={workbenches} runner={runner} />
     </main>
   );
 };

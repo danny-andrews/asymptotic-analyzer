@@ -12,11 +12,6 @@ h2 {
   width: 1px;
 }
 
-sl-tag::part(base) {
-  line-height: 1;
-  user-select: auto;
-}
-
 .tag-cell {
   display: flex;
   gap: var(--sl-spacing-2x-small);

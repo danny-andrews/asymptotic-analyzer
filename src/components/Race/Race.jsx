@@ -63,10 +63,6 @@ const Race = ({ workbenches, runner }) => {
 
   const tutorial = (
     <>
-      <H level="2" as="3">
-        Race
-      </H>
-      <br />
       <p>
         Race different implementations against each other and analyze their
         performance for various <code>n</code> values.
