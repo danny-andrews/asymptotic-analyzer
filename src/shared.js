@@ -9,10 +9,10 @@ export const wait = (time) =>
     setTimeout(() => resolve(time), time);
   });
 
-export const fromWorkerEvent = (worker, eventType, endEventType = null) =>
+export const fromSocketEvent = (socket, eventType, endEventType = null) =>
   new Observable((observer) => {
-    const listener = (e) => {
-      const { name, payload } = e.data;
+    const listener = (event) => {
+      const { name, payload } = JSON.parse(event.data);
       if (name === eventType) {
         observer.next(payload);
       }
@@ -20,5 +20,6 @@ export const fromWorkerEvent = (worker, eventType, endEventType = null) =>
         observer.complete();
       }
     };
-    worker.addEventListener("message", listener);
+
+    socket.addEventListener("message", listener);
   });

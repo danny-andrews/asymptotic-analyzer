@@ -2,8 +2,11 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { stripIndent } from "common-tags";
+import { createServer } from "http";
 import express from "express";
 import esbuild from "esbuild";
+import { WebSocketServer } from "ws";
+import { asymptoticBenchmarks } from "../src/benchmarking.js";
 
 const PORT = 3000;
 
@@ -12,7 +15,12 @@ const fail = (msg) => {
   process.exit(1);
 };
 
-const server = express();
+const wait = (time) =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(time), time);
+  });
+
+const app = express();
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 const root = path.join(dirname, "..");
@@ -26,9 +34,9 @@ if (!workbenchesFilepath) {
   `);
 }
 
-server.use(express.static(path.join(root, "dist")));
+app.use(express.static(path.join(root, "dist")));
 
-server.get("/test/workbenches.js", (req, res) => {
+app.get("/test/workbenches.js", (req, res) => {
   esbuild
     .build({
       bundle: true,
@@ -49,6 +57,55 @@ server.get("/test/workbenches.js", (req, res) => {
     });
 });
 
+const server = createServer(app);
+
 server.listen(PORT, () => {
   console.log(`Hosting asymptotic analysis on http://localhost:${PORT}.`);
+});
+
+const { default: workbenches } = await import(workbenchesFilepath);
+
+const stopWorkbench = () => {
+  stopReceived = true;
+};
+
+let stopReceived = false;
+
+const wsServer = new WebSocketServer({ server });
+
+wsServer.on("connection", (ws) => {
+  const send = (name, payload = null) =>
+    ws.send(JSON.stringify({ name, payload }));
+
+  const runWorkbench = async ({ workbenchName, iterations }) => {
+    const { subjects, generator } = workbenches.find(
+      ({ name }) => workbenchName === name
+    );
+    const benchmarkGenerator = asymptoticBenchmarks({
+      subjects,
+      generator,
+      iterations,
+    });
+
+    for await (const marks of benchmarkGenerator) {
+      if (stopReceived) {
+        return;
+      }
+
+      await wait();
+      send("NEW_MARKS", marks);
+      await wait();
+    }
+
+    send("MARKSET_COMPLETE");
+  };
+
+  ws.on("message", (data) => {
+    const { name, payload } = JSON.parse(data.toString());
+    if (name === "RUN_WORKBENCH") {
+      runWorkbench(payload);
+    } else if (name === "STOP_WORKBENCH") {
+      stopWorkbench();
+    }
+  });
 });

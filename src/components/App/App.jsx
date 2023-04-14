@@ -1,26 +1,24 @@
 import { h, Fragment } from "preact";
 import Race from "../Race/Race.jsx";
-import { fromWorkerEvent } from "../../shared.js";
+import { fromSocketEvent } from "../../shared.js";
 
 const { default: workbenches } = await import("/test/workbenches.js");
 
-const worker = new Worker(new URL("../../worker.js", import.meta.url), {
-  type: "module",
-});
-
 const Runner = () => {
-  const postMessage = (name, payload) => {
-    worker.postMessage({ name, payload });
+  let socket = new WebSocket("ws://localhost:3000");
+
+  const send = (name, payload = null) => {
+    socket.send(JSON.stringify({ name, payload }));
   };
 
   return {
     runWorkbench: (workbenchName, iterations) => {
-      postMessage("RUN_WORKBENCH", { workbenchName, iterations });
+      send("RUN_WORKBENCH", { workbenchName, iterations });
 
-      return fromWorkerEvent(worker, "NEW_MARKS", "MARKSET_COMPLETE");
+      return fromSocketEvent(socket, "NEW_MARKS", "MARKSET_COMPLETE");
     },
     stopWorkbench: () => {
-      postMessage("STOP_WORKBENCH");
+      send("STOP_WORKBENCH");
     },
   };
 };

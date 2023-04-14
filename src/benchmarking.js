@@ -1,4 +1,5 @@
 const median = (nums) => {
+  nums.sort((a, b) => a - b);
   const n = nums.length;
   if (n === 1) return nums[0];
 
@@ -19,7 +20,7 @@ const standardDeviation = (nums) => {
 const standardError = (nums) =>
   standardDeviation(nums) / Math.sqrt(nums.length);
 
-export const meanTime = (fn, iterations) => {
+export const getStats = (fn, iterations) => {
   let durations = [];
 
   for (let i = 1; i <= iterations; i++) {
@@ -49,7 +50,7 @@ export async function* asymptoticBenchmarks({
       return {
         name: subject.name,
         n,
-        stats: meanTime((iteration) => {
+        stats: getStats((iteration) => {
           subject(...inputSets[iteration - 1]);
         }, iterations),
       };

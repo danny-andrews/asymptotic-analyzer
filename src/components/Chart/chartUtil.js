@@ -58,7 +58,7 @@ export const makeChartConfig = ({ title = "" } = {}) => ({
       tooltip: {
         callbacks: {
           label: ({ dataset, parsed }) =>
-            `${dataset.label}: (${parsed.x}, ${roundTo(3, parsed.y)}`,
+            `${dataset.label}: (${parsed.x}, ${roundTo(3, parsed.y)})`,
         },
       },
       legend: {

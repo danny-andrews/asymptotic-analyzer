@@ -13,7 +13,7 @@ const addMarksToChart = (chart, marks) =>
   marks
     .map(({ name, n, stats }) => {
       return {
-        datapoint: { x: n, y: stats.mean, sem: stats.sem },
+        datapoint: { x: n, y: stats.median, sem: stats.sem },
         label: name,
       };
     })
@@ -27,12 +27,11 @@ const Race = ({ workbenches, runner }) => {
   const [shouldShowGraph, setShouldShowGraph] = useState(false);
   const [subscription, setSubscription] = useState({ unsubscribe: noop });
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    return () => {
       subscription.unsubscribe();
-    },
-    []
-  );
+    };
+  }, []);
 
   const handleWorkbenchChange = (workbenchName) => {
     setShouldShowGraph(false);
