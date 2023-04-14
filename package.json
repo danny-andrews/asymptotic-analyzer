@@ -5,7 +5,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "npm run build; cd bin; ./analyze.js ../test/workbenches.js",
+    "start": "vite build && cd bin && ./analyze.js ../test/workbenches.js",
     "build": "vite build",
     "dev": "vite"
   },

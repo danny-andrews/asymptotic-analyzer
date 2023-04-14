@@ -1,10 +1,19 @@
-export default {
-  worker: {
-    format: "es",
-    rollupOptions: {
-      external: ["/test/workbenches.js"],
-    },
+import WebsocketServer from "./src/websocket.js";
+import { createServer } from "http";
+
+const addWebSocketServer = () => ({
+  name: "add-web-socket-server",
+  configureServer() {
+    const httpServer = createServer();
+
+    httpServer.listen(3000);
+
+    WebsocketServer("./test/workbenches.js", httpServer);
   },
+});
+
+export default {
+  plugins: [addWebSocketServer()],
   build: {
     target: "esnext",
     rollupOptions: {
