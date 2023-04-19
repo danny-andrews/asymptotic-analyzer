@@ -33,7 +33,7 @@ export default [
     name: "Array Reverse",
     subjects: Object.values(reverseSubjects),
     generator: function* () {
-      for (let n of range({ start: 0, length: 10, step: 1_000 })) {
+      for (let n of range({ start: 0, length: 10, step: 10_000 })) {
         yield { n, inputs: [arrGenerator(n)] };
       }
     },
