@@ -11,9 +11,7 @@ const reverseInPlace = (arr) => {
   let n = arr.length;
   for (let i = 0; i < (n - 1) / 2; i++) {
     const j = n - i - 1;
-    const temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
 
   return arr;
