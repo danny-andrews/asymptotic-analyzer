@@ -5,7 +5,7 @@ import { stripIndent } from "common-tags";
 import { createServer } from "http";
 import express from "express";
 import esbuild from "esbuild";
-import WebsocketServer from "../src/websocket.js";
+import WebsocketServer from "./websocket.js";
 
 const PORT = 3000;
 
