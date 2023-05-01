@@ -57,4 +57,4 @@ server.listen(PORT, () => {
   console.log(`Hosting asymptotic analysis on http://localhost:${PORT}.`);
 });
 
-WebsocketServer(workbenchesFilepath, server);
+WebsocketServer(path.join(process.cwd(), workbenchesFilepath), server);
