@@ -2,7 +2,7 @@ export const keysMap = (start, length, step = 1) =>
   [...Array(length).keys()].map((num) => (num + start) * step);
 
 export const spreadMap = (start, length, step = 1) =>
-  [...Array(length)].map((num) => (num + start) * step);
+  [...Array(length)].map((_, num) => (num + start) * step);
 
 export const fillMap = (start, length, step = 1) =>
   Array(length)
