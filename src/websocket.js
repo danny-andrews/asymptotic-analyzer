@@ -1,5 +1,5 @@
 import { WebSocketServer } from "ws";
-import { asymptoticBenchmarks } from "../src/benchmarking.js";
+import { asymptoticBenchmarks } from "./benchmarking.js";
 
 const wait = (time) =>
   new Promise((resolve) => {

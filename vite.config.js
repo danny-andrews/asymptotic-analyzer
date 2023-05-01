@@ -1,4 +1,4 @@
-import WebsocketServer from "./bin/websocket.js";
+import WebsocketServer from "./src/websocket.js";
 import { createServer } from "http";
 
 const addWebSocketServer = () => ({
