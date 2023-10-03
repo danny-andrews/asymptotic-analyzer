@@ -21,18 +21,14 @@ const standardError = (nums) =>
   standardDeviation(nums) / Math.sqrt(nums.length);
 
 export const getStats = (fn, iterations) => {
-  let durations = [];
-
+  const start = performance.now();
   for (let i = 1; i <= iterations; i++) {
-    const start = performance.now();
     fn(i);
-    durations.push(performance.now() - start);
   }
+  const duration = performance.now() - start;
 
   return {
-    mean: mean(durations),
-    median: median(durations),
-    sem: standardError(durations),
+    mean: duration / iterations,
   };
 };
 

@@ -13,7 +13,7 @@ const addMarksToChart = (chart, marks) =>
   marks
     .map(({ name, n, stats }) => {
       return {
-        datapoint: { x: n, y: stats.median, sem: stats.sem },
+        datapoint: { x: n, y: stats.mean },
         label: name,
       };
     })

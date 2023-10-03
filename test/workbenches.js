@@ -2,12 +2,20 @@ import fc from "fast-check";
 import * as sortingSubjects from "./algorithms/sorting/index.js";
 import * as reverseSubjects from "./algorithms/reverse.js";
 import * as rangeSubjects from "./algorithms/range.js";
+import * as searchSubjects from "./algorithms/search.js";
 import { generate } from "../index.js";
 
 export const range = ({ start, length, step = 1 }) =>
   Array(length)
     .fill()
     .map((_, num) => (num + start) * step);
+
+function* exponential(n, multiplier = 1000) {
+  yield 1;
+  for (let i = 0; i <= n; i++) {
+    yield 2 ** i * multiplier;
+  }
+}
 
 // Fancy generator via fast-check.
 const arrGenerator = (n) =>
@@ -44,6 +52,15 @@ export default [
     generator: function* () {
       for (let n of range({ start: 0, length: 10, step: 1_000 })) {
         yield { n, inputs: [0, n] };
+      }
+    },
+  },
+  {
+    name: "Search",
+    subjects: Object.values(searchSubjects),
+    generator: function* () {
+      for (let n of exponential(6, 4000)) {
+        yield { n, inputs: [arrForN(n), "N/A"] };
       }
     },
   },
