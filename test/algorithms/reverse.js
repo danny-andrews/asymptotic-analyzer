@@ -17,4 +17,6 @@ const reverseInPlace = (arr) => {
   return arr;
 };
 
-export { reverse, reverseInPlace };
+const reverseBuiltIn = (arr) => Array.prototype.reverse.call(arr);
+
+export { reverse, reverseInPlace, reverseBuiltIn };
