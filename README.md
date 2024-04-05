@@ -12,25 +12,25 @@ Command-line tool for analyzing the asymptotic behavior of algorithm implementat
 
 ## Defining a Workbenches File
 
-Next, you'll need to create a file which exports the sets of functions you are interested in analyzing, along with functions for generating valid inputs for those functions. Take a look at `./test/workbenches.js` for an example.
+You need to create a file which exports the sets of functions you are interested in analyzing, along with functions for generating valid inputs for those functions. Take a look at `./test/workbenches.js` for an example.
 
 The default export in this file must match the following `Workbenches` type:
 
 ```ts
-type Workbenches = Array<Workbench>;
+type Workbenches = Workbench[];
 
 type Workbench = {
   // The name of the workbench to display in the UI. Must be unique.
   name: string;
   // The functions to analyze.
-  subjects: Array<Subject>;
+  subjects: Subject[];
   // A function for generating the next input set.
   generator: Generator<InputSet>;
 };
 
-type Subject = (...args: Array<any>) => any;
+type Subject = (...args: any[]) => any;
 
-type InputSet = { n: Number, inputs: Array<any> };
+type InputSet = { n: Number, inputs: any[] };
 ```
 
 Here's a simple example:
@@ -47,7 +47,7 @@ const copyWithForLoop = (arr) => {
 
 const copyWithSpread = (arr) => [...arr];
 
-// Helper for generating a size-n array filled with random values from 0-999
+// Helper for generating a size-n array filled with random values from 0-999.
 const generateArray = (n) =>
   Array(n)
     .fill()
