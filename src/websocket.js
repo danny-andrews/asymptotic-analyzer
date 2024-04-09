@@ -22,6 +22,7 @@ export default async (workbenchesFilepath, server) => {
       ws.send(JSON.stringify({ name, payload }));
 
     const runWorkbench = async ({ workbenchName, iterations }) => {
+      stopReceived = false;
       const { subjects, generator } = workbenches.find(
         ({ name }) => workbenchName === name
       );
