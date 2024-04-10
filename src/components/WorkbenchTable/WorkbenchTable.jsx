@@ -41,7 +41,7 @@ const WorkbenchTable = ({ subjects }) => {
     <table class={c["workbench-details"]}>
       <tbody>
         <tr>
-          <th>Functions</th>
+          <th>Subjects</th>
           <td class={c["tag-cell"]}>
             {subjects.map((fn) => (
               <Subject key={fn.toString()} fn={fn} />
@@ -55,6 +55,9 @@ const WorkbenchTable = ({ subjects }) => {
               size="small"
               type="number"
               value={iterations}
+              // noSpinButtons
+              // required
+              // min={10}
               onInput={handleIterationsChanged}
             />
           </td>
