@@ -12,9 +12,6 @@ body {
 
 main {
   padding: var(--sl-spacing-small);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 th {

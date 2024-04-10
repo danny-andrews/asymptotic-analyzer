@@ -46,14 +46,27 @@ export const makeChartConfig = ({ title = "" } = {}) => ({
   data: {
     datasets: [],
   },
-  options: {
-    layout: {
-      padding: 40,
+  plugins: [
+    {
+      beforeInit: function (chart) {
+        const original = chart.legend.fit.bind(chart.legend);
+        chart.legend.fit = function () {
+          original();
+          this.height += 8;
+        };
+      },
     },
+  ],
+  options: {
+    responsive: false,
     plugins: {
       title: {
         display: true,
         text: title,
+        padding: {
+          top: 0,
+          bottom: 4,
+        },
       },
       tooltip: {
         callbacks: {

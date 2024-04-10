@@ -1,24 +1,55 @@
 import { h } from "preact";
 import ChartJS from "./init.js";
 import { makeChartConfig } from "./chartUtil";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
+import { throttle } from "../../shared.js";
 
-const useResize = (fn) => {
-  window.addEventListener("resize", fn);
+export function useWindowSize() {
+  const [size, setSize] = useState({
+    width: null,
+    height: null,
+  });
 
-  return () => {
-    window.removeEventListener("resize", fn);
-  };
-};
+  useEffect(() => {
+    const handleResize = () => {
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return size;
+}
 
 const Chart = ({ title, chartSig, hide }) => {
   const canvasRef = useRef(null);
+  const windowSize = useWindowSize();
+
   useEffect(() => {
     if (chartSig.value) {
       chartSig.value.options.plugins.title.text = title;
       chartSig.value.update();
     }
   }, [title]);
+
+  useEffect(
+    throttle(() => {
+      if (chartSig.value) {
+        chartSig.value.options.aspectRatio =
+          windowSize.width / windowSize.height;
+        chartSig.value.resize();
+      }
+    }, 200),
+    [windowSize]
+  );
 
   useEffect(() => {
     const chart = new ChartJS(
@@ -27,15 +58,8 @@ const Chart = ({ title, chartSig, hide }) => {
     );
 
     chartSig.value = chart;
-
-    const updateAspectRatio = () => {
-      chart.options.aspectRatio = window.innerWidth / window.innerHeight;
-      chart.update();
-    };
-
-    useResize(updateAspectRatio);
-    updateAspectRatio();
   }, []);
+
   const style = hide ? { display: "none" } : {};
 
   return (

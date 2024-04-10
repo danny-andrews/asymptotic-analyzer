@@ -23,3 +23,17 @@ export const fromSocketEvent = (socket, eventType, endEventType = null) =>
 
     socket.addEventListener("message", listener);
   });
+
+export const throttle = (cb, delay) => {
+  let wait = false;
+
+  return (...args) => {
+    if (wait) return;
+
+    cb(...args);
+    wait = true;
+    setTimeout(() => {
+      wait = false;
+    }, delay);
+  };
+};
