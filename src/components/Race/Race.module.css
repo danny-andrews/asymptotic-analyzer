@@ -4,7 +4,7 @@
   overflow: hidden;
 }
 
-.race-root {
+.root {
   width: 100%;
   display: flex;
   gap: var(--sl-spacing-medium);
@@ -13,7 +13,7 @@
 }
 
 @media (min-width: 1200px) {
-  .race-root {
+  .root {
     flex-direction: row;
     align-items: flex-start;
   }
