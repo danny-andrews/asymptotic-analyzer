@@ -36,7 +36,7 @@ const Race = ({ workbenches, runner }) => {
   const handleWorkbenchChange = (workbenchName) => {
     setShouldShowGraph(false);
     setSelectedWorkbench(
-      workbenches.find(({ name }) => workbenchName === name)
+      workbenches.find(({ name }) => workbenchName === name.replaceAll(" ", ""))
     );
   };
 
@@ -100,7 +100,7 @@ const Race = ({ workbenches, runner }) => {
   );
 
   return (
-    <div class={c["race-root"]}>
+    <div class={c.root}>
       <WorkbenchForm
         onStart={handleStart}
         onStop={handleStop}
