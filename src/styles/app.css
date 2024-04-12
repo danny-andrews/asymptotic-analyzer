@@ -3,6 +3,10 @@
 @import "highlight.js/styles/github-dark.css";
 
 /* Top-level */
+:root {
+  --border-color: var(--sl-color-neutral-200);
+}
+
 body {
   color: var(--sl-color-neutral-700);
   font-family: var(--sl-font-sans);
@@ -14,6 +18,12 @@ main {
   padding: var(--sl-spacing-small);
 }
 
+/* Shoelace Component Overrides */
 sl-tab-panel::part(base) {
   padding: 0;
+}
+
+sl-tab-group {
+  border: 1px solid var(--border-color);
+  border-radius: var(--sl-border-radius-small);
 }

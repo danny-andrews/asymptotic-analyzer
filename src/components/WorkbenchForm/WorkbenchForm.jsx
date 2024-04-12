@@ -1,8 +1,8 @@
 import { h, Fragment } from "preact";
 import c from "./WorkbenchForm.module.css";
-import { useRef } from "preact/hooks";
 import { iterations } from "../../signals";
 import Subjects from "../Subjects/Subjects.jsx";
+import cn from "classnames";
 
 const WorkbenchForm = ({
   isRunning,
@@ -14,7 +14,6 @@ const WorkbenchForm = ({
 }) => {
   const { name: workbenchName, subjects } = selectedWorkbench || { name: "" };
   const shouldShowWorkbenchTable = Boolean(selectedWorkbench);
-  const formRef = useRef(null);
 
   const handleIterationsChanged = (event) => {
     const numIterations = Number(event.target.value);
@@ -34,15 +33,17 @@ const WorkbenchForm = ({
 
   return (
     <div class={c.root}>
-      <form ref={formRef} class={c.form} onsubmit={handleSubmit}>
+      <form class={c.form} onsubmit={handleSubmit}>
         <sl-select
           size="small"
+          class={cn(c["workbench-select"], {
+            [c["is-empty"]]: !shouldShowWorkbenchTable,
+          })}
           onsl-change={handleWorkbenchChange}
           placeholder="Select a workbench"
           value={workbenchName.replaceAll(" ", "")}
           name="workbench"
           disabled={isRunning}
-          clearable
         >
           {workbenches.map(({ name }) => (
             <sl-option value={name.replaceAll(" ", "")}>{name}</sl-option>

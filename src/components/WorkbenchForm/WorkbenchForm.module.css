@@ -36,7 +36,14 @@
 
 .fieldset {
   padding: var(--sl-spacing-small);
-  border: 1px solid var(--sl-color-neutral-200);
+  border: 1px solid var(--border-color);
   border-radius: var(--sl-border-radius-small);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   border-top: 0;
+}
+
+.workbench-select:not(.is-empty)::part(combobox) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
