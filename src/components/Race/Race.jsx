@@ -1,10 +1,10 @@
 import { h, Fragment } from "preact";
 import { signal, effect } from "@preact/signals";
 import { useState, useEffect } from "preact/hooks";
+import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
-import H from "../H/H.jsx";
 import { noop } from "../../shared.js";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
 import { iterations } from "../../signals";
@@ -22,6 +22,7 @@ const addMarksToChart = (chart, marks) =>
 let chart = signal(null);
 
 const Race = ({ workbenches, runner }) => {
+  // TODO: Could I use an enum here?
   const [isRunning, setIsRunning] = useState(false);
   const [selectedWorkbench, setSelectedWorkbench] = useState(null);
   const [shouldShowGraph, setShouldShowGraph] = useState(false);
@@ -62,43 +63,6 @@ const Race = ({ workbenches, runner }) => {
     setIsRunning(false);
   };
 
-  const tutorial = (
-    <>
-      <p>
-        Race different implementations against each other and analyze their
-        performance for various <code>n</code> values.
-      </p>
-      <br />
-      <H level="3" as="4">
-        How to Use
-      </H>
-      <br />
-      <ol>
-        <li>- Select a workbench.</li>
-        <li>- Hit Start to benchmark all functions in the workbench.</li>
-      </ol>
-      <br />
-      <H level="3" as="4">
-        Tips
-      </H>
-      <br />
-      <p>
-        <strong>View Source</strong>: Click on a Function to view its source
-        code.
-      </p>
-      <br />
-      <p>
-        <strong>Setting Iterations</strong>: Iterations is the number of times a
-        particular test case will be run against each function for a given{" "}
-        <code>n</code> value. Running a function several times and taking a
-        median helps to reduce the impact of outlier values. Aim for something
-        around 10-100 and adjust as needed for optimal results. Jagged,
-        non-monotonically increasing graphs mean your iterations value is too
-        low. Aim for monotonically-increasing, smooth lines.
-      </p>
-    </>
-  );
-
   return (
     <div class={c.root}>
       <WorkbenchForm
@@ -109,13 +73,12 @@ const Race = ({ workbenches, runner }) => {
         workbenches={workbenches}
         isRunning={isRunning}
       />
-      <sl-card class={c["graph-card"]}>
+      <sl-card class={cn(c["graph-card"], { [c.hidden]: !shouldShowGraph })}>
         <Chart
           chartSig={chart}
           hide={!shouldShowGraph}
           title={selectedWorkbench && selectedWorkbench.name}
         />
-        {!shouldShowGraph && tutorial}
       </sl-card>
     </div>
   );
