@@ -1,4 +1,3 @@
-import { h, Fragment } from "preact";
 import { memo } from "preact/compat";
 import { useRef, useEffect } from "preact/hooks";
 import hljs from "highlight.js/lib/core";
@@ -16,7 +15,7 @@ const Subjects = memo(({ subjects }) => {
   return (
     <sl-tab-group ref={rootRef}>
       {subjects.map((subject) => (
-        <sl-tab key={subject.name} slot="nav" panel={subject.name} selected>
+        <sl-tab key={subject.name} slot="nav" panel={subject.name}>
           {subject.name}
         </sl-tab>
       ))}

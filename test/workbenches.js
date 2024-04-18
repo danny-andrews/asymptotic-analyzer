@@ -17,7 +17,7 @@ const arrGenerator = (n) =>
 const arrForN = (n) =>
   Array(n)
     .fill()
-    .map(() => Math.floor(Math.random() * 1_000));
+    .map(() => Math.floor(Math.random() * 100_000));
 
 export default [
   {

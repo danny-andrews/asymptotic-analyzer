@@ -1,4 +1,3 @@
-import { h, Fragment } from "preact";
 import c from "./WorkbenchForm.module.css";
 import { iterations } from "../../signals";
 import Subjects from "../Subjects/Subjects.jsx";
@@ -36,8 +35,8 @@ const WorkbenchForm = ({
       <form class={c.form} onsubmit={handleSubmit}>
         <sl-select
           size="small"
-          class={cn(c["workbench-select"], {
-            [c["is-empty"]]: !shouldShowWorkbenchTable,
+          class={cn(c.workbenchSelect, {
+            [c.isEmpty]: !shouldShowWorkbenchTable,
           })}
           onsl-change={handleWorkbenchChange}
           placeholder="Select a workbench"
@@ -63,9 +62,9 @@ const WorkbenchForm = ({
               helpText="Must be 10 or greater."
               onInput={handleIterationsChanged}
             />
-            <div class={c["button-container"]}>
+            <div class={c.buttonContainer}>
               <sl-button
-                class={c["full-width"]}
+                class={c.fullWidth}
                 variant="danger"
                 size="small"
                 onclick={onStop}
@@ -74,7 +73,7 @@ const WorkbenchForm = ({
                 Stop
               </sl-button>
               <sl-button
-                class={c["full-width"]}
+                class={c.fullWidth}
                 variant="success"
                 size="small"
                 type="submit"

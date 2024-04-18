@@ -1,4 +1,3 @@
-import { h } from "preact";
 import ChartJS from "./init.js";
 import { makeChartConfig } from "./chartUtil";
 import { useEffect, useRef, useState } from "preact/hooks";
