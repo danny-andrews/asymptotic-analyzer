@@ -1,5 +1,6 @@
 import WebsocketServer from "./src/websocket.js";
 import { createServer } from "http";
+import { fileURLToPath } from "node:url";
 
 const addWebSocketServer = () => ({
   name: "add-web-socket-server",
@@ -8,7 +9,10 @@ const addWebSocketServer = () => ({
 
     httpServer.listen(3000);
 
-    WebsocketServer("./test/workbenches.js", httpServer);
+    WebsocketServer(
+      fileURLToPath(new URL("./test/workbenches.js", import.meta.url)),
+      httpServer
+    );
   },
 });
 

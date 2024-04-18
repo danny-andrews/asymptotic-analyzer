@@ -1,5 +1,5 @@
 import { h, Fragment } from "preact";
-import { signal, effect } from "@preact/signals";
+import { signal } from "@preact/signals";
 import { useState, useEffect } from "preact/hooks";
 import cn from "classnames";
 import c from "./Race.module.css";
@@ -7,17 +7,7 @@ import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { noop } from "../../shared.js";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
-import { iterations } from "../../signals";
-
-const addMarksToChart = (chart, marks) =>
-  marks
-    .map(({ name, n, stats }) => {
-      return {
-        datapoint: { x: n, y: stats.median, sem: stats.sem },
-        label: name,
-      };
-    })
-    .forEach((data) => addDataToChart(chart, data));
+import { iterations } from "../../signals.js";
 
 let chart = signal(null);
 
@@ -46,8 +36,11 @@ const Race = ({ workbenches, runner }) => {
     const sub = runner
       .runWorkbench(selectedWorkbench.name, iterations.value)
       .subscribe({
-        next: (marks) => {
-          addMarksToChart(chart.value, marks);
+        next: ({ name, n, stats }) => {
+          addDataToChart(chart.value, {
+            datapoint: { x: n, y: stats.median, sem: stats.sem },
+            label: name,
+          });
         },
         complete: () => {
           setIsRunning(false);

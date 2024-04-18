@@ -13,6 +13,7 @@ const Runner = () => {
   const send = (name, payload = null) => {
     socket.send(JSON.stringify({ name, payload }));
   };
+
   return {
     runWorkbench: (workbenchName, iterations) => {
       send("RUN_WORKBENCH", { workbenchName, iterations });
