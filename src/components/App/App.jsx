@@ -1,4 +1,3 @@
-import { h, Fragment } from "preact";
 import Race from "../Race/Race.jsx";
 import { fromSocketEvent } from "../../shared.js";
 

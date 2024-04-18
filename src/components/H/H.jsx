@@ -1,4 +1,3 @@
-import { h } from "preact";
 import c from "./H.module.css";
 
 const H = ({ level, as, children }) => {

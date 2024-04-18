@@ -1,4 +1,3 @@
-import { h, Fragment } from "preact";
 import { signal } from "@preact/signals";
 import { useState, useEffect } from "preact/hooks";
 import cn from "classnames";
@@ -66,7 +65,7 @@ const Race = ({ workbenches, runner }) => {
         workbenches={workbenches}
         isRunning={isRunning}
       />
-      <sl-card class={cn(c["graph-card"], { [c.hidden]: !shouldShowGraph })}>
+      <sl-card class={cn(c.graphCard, { [c.hidden]: !shouldShowGraph })}>
         <Chart
           chartSig={chart}
           hide={!shouldShowGraph}
