@@ -1,5 +1,4 @@
-import { signal } from "@preact/signals";
-import { useState, useEffect } from "preact/hooks";
+import { useRef, useState, useEffect } from "preact/hooks";
 import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
@@ -8,14 +7,12 @@ import { noop } from "../../shared.js";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
 import { iterations } from "../../signals.js";
 
-let chart = signal(null);
-
 const Race = ({ workbenches, runner }) => {
-  // TODO: Could I use an enum here?
   const [isRunning, setIsRunning] = useState(false);
   const [selectedWorkbench, setSelectedWorkbench] = useState(null);
   const [shouldShowGraph, setShouldShowGraph] = useState(false);
   const [subscription, setSubscription] = useState({ unsubscribe: noop });
+  const chartRef = useRef(null);
 
   useEffect(() => {
     return () => {
@@ -30,13 +27,15 @@ const Race = ({ workbenches, runner }) => {
     );
   };
 
-  const handleStart = () => {
-    clearChart(chart.value);
+  useEffect(() => {
+    if (!isRunning) return;
+
+    clearChart(chartRef.current);
     const sub = runner
-      .runWorkbench(selectedWorkbench.name, iterations.value)
+      .startTimeAnalysis(selectedWorkbench.name, iterations.value)
       .subscribe({
         next: ({ name, n, stats }) => {
-          addDataToChart(chart.value, {
+          addDataToChart(chartRef.current, {
             datapoint: { x: n, y: stats.median, sem: stats.sem },
             label: name,
           });
@@ -47,11 +46,14 @@ const Race = ({ workbenches, runner }) => {
       });
     setSubscription(sub);
     setShouldShowGraph(true);
+  }, [isRunning]);
+
+  const handleStart = () => {
     setIsRunning(true);
   };
 
   const handleStop = () => {
-    runner.stopWorkbench();
+    runner.stopTimeAnalysis();
     setIsRunning(false);
   };
 
@@ -65,13 +67,15 @@ const Race = ({ workbenches, runner }) => {
         workbenches={workbenches}
         isRunning={isRunning}
       />
-      <sl-card class={cn(c.graphCard, { [c.hidden]: !shouldShowGraph })}>
-        <Chart
-          chartSig={chart}
-          hide={!shouldShowGraph}
-          title={selectedWorkbench && selectedWorkbench.name}
-        />
-      </sl-card>
+      {shouldShowGraph && (
+        <sl-card class={cn(c.graphCard)}>
+          <Chart
+            ref={chartRef}
+            title={selectedWorkbench && selectedWorkbench.name}
+            yAxisTitle="Average Runtime (ms)"
+          />
+        </sl-card>
+      )}
     </div>
   );
 };

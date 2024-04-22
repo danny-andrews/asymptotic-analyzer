@@ -41,7 +41,7 @@ export const addDataToChart = (chart, { datapoint, label }) => {
   chart.update();
 };
 
-export const makeChartConfig = ({ title = "" } = {}) => ({
+export const makeChartConfig = ({ title = "", yAxisTitle = "" } = {}) => ({
   type: "scatter",
   data: {
     datasets: [],
@@ -96,7 +96,7 @@ export const makeChartConfig = ({ title = "" } = {}) => ({
       y: {
         title: {
           display: true,
-          text: "Average Runtime (ms)",
+          text: yAxisTitle,
         },
       },
     },

@@ -9,17 +9,17 @@ const Runner = () => {
   socket.addEventListener("open", () => {
     console.log("socket connected");
   });
-  const send = (name, payload = null) => {
-    socket.send(JSON.stringify({ name, payload }));
+  const send = (type, payload = null) => {
+    socket.send(JSON.stringify({ type, payload }));
   };
 
   return {
-    runWorkbench: (workbenchName, iterations) => {
-      send("RUN_WORKBENCH", { workbenchName, iterations });
-      return fromSocketEvent(socket, "NEW_MARKS", "MARKSET_COMPLETE");
+    startTimeAnalysis: (workbenchName, iterations) => {
+      send("START_TIME_ANALYSIS", { workbenchName, iterations });
+      return fromSocketEvent(socket, "NEW_TIME_MARK", "TIME_ANALYSIS_COMPLETE");
     },
-    stopWorkbench: () => {
-      send("STOP_WORKBENCH");
+    stopTimeAnalysis: () => {
+      send("STOP_TIME_ANALYSIS");
     },
   };
 };

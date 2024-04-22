@@ -1,51 +1,27 @@
+import { useEffect, useRef } from "preact/hooks";
+import { forwardRef } from "preact/compat";
 import ChartJS from "./init.js";
 import { makeChartConfig } from "./chartUtil";
-import { useEffect, useRef, useState } from "preact/hooks";
-import { throttle } from "../../shared.js";
+import { throttle, useWindowSize } from "../../shared.js";
 
-export function useWindowSize() {
-  const [size, setSize] = useState({
-    width: null,
-    height: null,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return size;
-}
-
-const Chart = ({ title, chartSig, hide }) => {
+const Chart = ({ title, yAxisTitle }, chartRef) => {
   const canvasRef = useRef(null);
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    if (chartSig.value) {
-      chartSig.value.options.plugins.title.text = title;
-      chartSig.value.update();
-    }
+    if (!chartRef.current) return;
+
+    chartRef.current.options.plugins.title.text = title;
+    chartRef.current.update();
   }, [title]);
 
   useEffect(
     throttle(() => {
-      if (chartSig.value) {
-        chartSig.value.options.aspectRatio =
-          windowSize.width / windowSize.height;
-        chartSig.value.resize();
-      }
+      if (!chartRef.current) return;
+
+      chartRef.current.options.aspectRatio =
+        windowSize.width / windowSize.height;
+      chartRef.current.resize();
     }, 200),
     [windowSize]
   );
@@ -53,19 +29,22 @@ const Chart = ({ title, chartSig, hide }) => {
   useEffect(() => {
     const chart = new ChartJS(
       canvasRef.current.getContext("2d"),
-      makeChartConfig({ title })
+      makeChartConfig({ title, yAxisTitle })
     );
 
-    chartSig.value = chart;
-  }, []);
+    chartRef.current = chart;
 
-  const style = hide ? { display: "none" } : {};
+    return () => {
+      chartRef.current.destroy();
+      chartRef.current = null;
+    };
+  }, []);
 
   return (
     <div>
-      <canvas style={style} ref={canvasRef} />
+      <canvas ref={canvasRef} />
     </div>
   );
 };
 
-export default Chart;
+export default forwardRef(Chart);
