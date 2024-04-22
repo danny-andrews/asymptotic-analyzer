@@ -1,8 +1,12 @@
 import { parentPort } from "worker_threads";
 import { asymptoticBenchmarksSingle } from "./benchmarking.js";
-import { wait } from "./shared.js";
+import { wait, handleMessages } from "./shared.js";
 
-const run = async ({
+const send = (type, payload = null) => {
+  parentPort.postMessage({ type, payload });
+};
+
+const startTimeAnalysis = async ({
   workbenchName,
   workbenchesFilepath,
   iterations,
@@ -23,17 +27,13 @@ const run = async ({
   })) {
     marksReceived++;
     await wait();
-    parentPort.postMessage({ type: "NEW_MARK", payload: mark });
+    send("NEW_TIME_MARK", mark);
     await wait();
   }
 
   if (marksReceived === inputSets.length) {
-    parentPort.postMessage({ type: "SUBJECT_COMPLETE" });
+    send("TIME_ANALYSIS_COMPLETE");
   }
 };
 
-parentPort.on("message", (data) => {
-  if (data.type === "START") {
-    run(data.payload);
-  }
-});
+handleMessages(parentPort, { START_TIME_ANALYSIS: startTimeAnalysis });

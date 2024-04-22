@@ -16,7 +16,7 @@ export const getStats = (fn, iterations) => {
   };
 };
 
-export function* asymptoticBenchmarksSingle({
+export async function* asymptoticBenchmarksSingle({
   subject,
   inputSets,
   iterations,
