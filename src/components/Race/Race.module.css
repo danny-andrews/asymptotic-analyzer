@@ -1,20 +1,18 @@
-.graph-card,
-.graph-card::part(body) {
-  width: 100%;
-  overflow: hidden;
-}
-
 .root {
-  width: 100%;
   display: flex;
-  gap: var(--sl-spacing-medium);
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
+  gap: var(--sl-spacing-medium);
 }
 
-@media (min-width: 1200px) {
-  .root {
-    flex-direction: row;
-    align-items: flex-start;
-  }
+.graphs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sl-spacing-medium);
+  width: 100%;
+}
+
+.graph,
+.graph::part(body) {
+  width: 100%;
 }

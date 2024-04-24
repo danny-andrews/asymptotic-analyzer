@@ -5,7 +5,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "vite build && ./analyze.js ./test/workbenches.js",
+    "start": "vite build && node --expose-gc ./bin/analyze.js ./test/workbenches.js",
     "build": "vite build",
     "dev": "vite"
   },
