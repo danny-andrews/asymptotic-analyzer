@@ -1,18 +1,24 @@
+import cn from "classnames";
 import c from "./WorkbenchForm.module.css";
 import { iterations } from "../../signals";
 import Subjects from "../Subjects/Subjects.jsx";
-import cn from "classnames";
 
 const WorkbenchForm = ({
   isRunning,
   selectedWorkbench,
   workbenches,
+  analysisTarget,
+  onAnalysisTargetChange,
   onStart,
   onStop,
   onWorkbenchChange,
 }) => {
   const { name: workbenchName, subjects } = selectedWorkbench || { name: "" };
   const shouldShowWorkbenchTable = Boolean(selectedWorkbench);
+
+  const handleAnalysisTargetChanged = (event) => {
+    onAnalysisTargetChange(event.target.value);
+  };
 
   const handleIterationsChanged = (event) => {
     const numIterations = Number(event.target.value);
@@ -21,6 +27,7 @@ const WorkbenchForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     if (!event.target.querySelector("[data-invalid]")) {
       onStart();
     }
@@ -50,12 +57,29 @@ const WorkbenchForm = ({
         </sl-select>
         {shouldShowWorkbenchTable && (
           <div class={c.fieldset}>
-            <Subjects class={c.subjects} subjects={subjects} />
+            <sl-radio-group
+              label="Analysis Target(s)"
+              name="analysis-target"
+              size="small"
+              value={analysisTarget}
+              onsl-change={handleAnalysisTargetChanged}
+            >
+              <sl-radio-button disabled={isRunning} value="time">
+                Time
+              </sl-radio-button>
+              <sl-radio-button disabled={isRunning} value="space">
+                Space
+              </sl-radio-button>
+              <sl-radio-button disabled={isRunning} value="time-and-space">
+                Time + Space
+              </sl-radio-button>
+            </sl-radio-group>
             <sl-input
               label="Iterations"
               size="small"
               type="number"
               value={iterations}
+              disabled={isRunning}
               noSpinButtons
               required
               min={10}
@@ -83,6 +107,7 @@ const WorkbenchForm = ({
                 Start
               </sl-button>
             </div>
+            <Subjects class={c.subjects} subjects={subjects} />
           </div>
         )}
       </form>

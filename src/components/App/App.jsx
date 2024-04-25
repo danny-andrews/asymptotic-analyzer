@@ -21,6 +21,17 @@ const Runner = () => {
     stopTimeAnalysis: () => {
       send("STOP_TIME_ANALYSIS");
     },
+    startSpaceAnalysis: (workbenchName) => {
+      send("START_SPACE_ANALYSIS", { workbenchName });
+      return fromSocketEvent(
+        socket,
+        "NEW_SPACE_MARK",
+        "SPACE_ANALYSIS_COMPLETE"
+      );
+    },
+    stopSpaceAnalysis: () => {
+      send("STOP_SPACE_ANALYSIS");
+    },
   };
 };
 

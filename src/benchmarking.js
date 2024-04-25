@@ -1,9 +1,10 @@
 import { mean, median, standardError } from "./shared.js";
+import process from "node:process";
 
 export const getStats = (fn, iterations) => {
   let durations = [];
 
-  for (let i = 1; i <= iterations; i++) {
+  for (let i = 0; i < iterations; i++) {
     const start = performance.now();
     fn(i);
     durations.push(performance.now() - start);
@@ -16,7 +17,7 @@ export const getStats = (fn, iterations) => {
   };
 };
 
-export async function* asymptoticBenchmarksSingle({
+export async function* analyzeTimeComplexity({
   subject,
   inputSets,
   iterations,
@@ -26,12 +27,39 @@ export async function* asymptoticBenchmarksSingle({
       structuredClone(inputSet.inputs)
     );
 
+    const stats = getStats((iteration) => {
+      subject(...inputs[iteration]);
+    }, iterations);
+
     yield {
       name: subject.name,
       n: inputSet.n,
-      stats: getStats((iteration) => {
-        subject(...inputs[iteration - 1]);
-      }, iterations),
+      val: stats.median,
+    };
+  }
+}
+
+export function* analyzeSpaceComplexity(subject, inputSets) {
+  const iterations = 100;
+
+  for (let inputSet of inputSets) {
+    const inputs = Array.from({ length: iterations }).map(() =>
+      structuredClone(inputSet.inputs)
+    );
+
+    let sizes = [];
+    for (let i = 0; i < iterations; i++) {
+      const before = process.memoryUsage().heapUsed;
+
+      subject(...inputs[i]);
+
+      sizes.push(process.memoryUsage().heapUsed - before);
+    }
+
+    yield {
+      name: subject.name,
+      n: inputSet.n,
+      val: median(sizes),
     };
   }
 }
