@@ -4,7 +4,6 @@ import { iterations } from "../../signals";
 import Subjects from "../Subjects/Subjects.jsx";
 
 const WorkbenchForm = ({
-  className,
   isRunning,
   selectedWorkbench,
   workbenches,
@@ -39,7 +38,7 @@ const WorkbenchForm = ({
   };
 
   return (
-    <div class={cn(c.root, className)}>
+    <div class={c.root}>
       <form class={c.form} onsubmit={handleSubmit}>
         <sl-select
           size="small"

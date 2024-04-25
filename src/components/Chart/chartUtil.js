@@ -19,7 +19,9 @@ const createDataset = ({ num, label, data }) => ({
 
 export const clearChart = (chart) => {
   if (!chart) return;
-  chart.data.datasets = [];
+  chart.data.datasets.forEach((dataset) => {
+    dataset.data = [];
+  });
   chart.update();
 };
 
@@ -41,10 +43,16 @@ export const addDataToChart = (chart, { datapoint, label }) => {
   chart.update();
 };
 
-export const makeChartConfig = ({ title = "", yAxisTitle = "" } = {}) => ({
+export const makeChartConfig = ({ title, yAxisTitle, dataLabels }) => ({
   type: "scatter",
   data: {
-    datasets: [],
+    datasets: dataLabels.map((label, index) => {
+      return createDataset({
+        label,
+        data: [],
+        num: index,
+      });
+    }),
   },
   plugins: [
     {

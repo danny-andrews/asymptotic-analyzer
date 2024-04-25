@@ -1,4 +1,5 @@
 import { useSignal, useComputed } from "@preact/signals";
+import { map, merge } from "rxjs";
 import { useRef, useState, useEffect } from "preact/hooks";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
@@ -9,7 +10,10 @@ import { iterations } from "../../signals.js";
 const Race = ({ workbenches, runner }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [selectedWorkbench, setSelectedWorkbench] = useState(null);
-  const [subscriptions, setSubscriptions] = useState([]);
+  const [subscription, setSubscription] = useState([]);
+  const subjectNames =
+    selectedWorkbench &&
+    selectedWorkbench.subjects.map((subject) => subject.name);
   const timeChartRef = useRef(null);
   const spaceChartRef = useRef(null);
   const shouldShowGraph = Boolean(selectedWorkbench);
@@ -23,7 +27,7 @@ const Race = ({ workbenches, runner }) => {
 
   useEffect(() => {
     return () => {
-      subscriptions.forEach((subscription) => subscription.unsubscribe());
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -40,54 +44,54 @@ const Race = ({ workbenches, runner }) => {
   };
 
   const handleStart = () => {
-    if (shouldRunTimeAnalysis.value) {
-      clearChart(timeChartRef.current);
-      const subscription = runner
-        .startTimeAnalysis(selectedWorkbench.name, iterations.value)
-        .subscribe({
-          next: ({ name, n, val }) => {
-            addDataToChart(timeChartRef.current, {
-              datapoint: { x: n, y: val },
-              label: name,
-            });
-          },
-          complete: () => {
-            setIsRunning(false);
-          },
-        });
-      setSubscriptions((subscriptions) => [...subscriptions, subscription]);
-    }
-
-    if (shouldRunSpaceAnalysis.value) {
-      clearChart(spaceChartRef.current);
-      const subscription = runner
-        .startSpaceAnalysis(selectedWorkbench.name)
-        .subscribe({
-          next: ({ name, n, val }) => {
-            addDataToChart(spaceChartRef.current, {
-              datapoint: { x: n, y: val },
-              label: name,
-            });
-          },
-          complete: () => {
-            setIsRunning(false);
-          },
-        });
-      setSubscriptions((subscriptions) => [...subscriptions, subscription]);
-    }
-
     setIsRunning(true);
+    clearChart(timeChartRef.current);
+    clearChart(spaceChartRef.current);
+
+    const timeAnalysisObserver = runner
+      .startTimeAnalysis(selectedWorkbench.name, iterations.value)
+      .pipe(map((mark) => ({ mark, type: "TIME" })));
+    const spaceAnalysisObserver = runner
+      .startSpaceAnalysis(selectedWorkbench.name)
+      .pipe(map((mark) => ({ mark, type: "SPACE" })));
+
+    const mergedObserver = merge(
+      ...[
+        ...(shouldRunTimeAnalysis.value ? [timeAnalysisObserver] : []),
+        ...(shouldRunSpaceAnalysis.value ? [spaceAnalysisObserver] : []),
+      ]
+    );
+
+    const subscription = mergedObserver.subscribe({
+      next: (data) => {
+        console.log(data);
+        const chart = (data.type === "TIME" ? timeChartRef : spaceChartRef)
+          .current;
+
+        const { name, n, val } = data.mark;
+
+        addDataToChart(chart, {
+          datapoint: { x: n, y: val },
+          label: name,
+        });
+      },
+      complete: () => {
+        setIsRunning(false);
+      },
+    });
+
+    setSubscription(subscription);
   };
 
   const handleStop = () => {
     runner.stopTimeAnalysis();
+    runner.stopSpaceAnalysis();
     setIsRunning(false);
   };
 
   return (
     <div class={c.root}>
       <WorkbenchForm
-        className={c.form}
         onStart={handleStart}
         onStop={handleStop}
         onWorkbenchChange={handleWorkbenchChange}
@@ -104,6 +108,7 @@ const Race = ({ workbenches, runner }) => {
               <Chart
                 ref={timeChartRef}
                 title={`${selectedWorkbench.name} - Time Complexity`}
+                dataLabels={subjectNames}
                 yAxisTitle="Median Runtime (ms)"
               />
             </sl-card>
@@ -113,6 +118,7 @@ const Race = ({ workbenches, runner }) => {
               <Chart
                 ref={spaceChartRef}
                 title={`${selectedWorkbench.name} - Auxiliary Space Complexity`}
+                dataLabels={subjectNames}
                 yAxisTitle="Median Heap Usage (bytes)"
               />
             </sl-card>
