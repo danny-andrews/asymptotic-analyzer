@@ -3,7 +3,7 @@ import {
   analyzeTimeComplexity,
   analyzeSpaceComplexity,
 } from "./benchmarking.js";
-import { handleMessages } from "./shared/index.js";
+import { handleMessages, EVENT_TYPES } from "./shared/index.js";
 
 const send = (type, payload = null) => {
   parentPort.postMessage({ type, payload });
@@ -33,10 +33,10 @@ const startTimeAnalysis = async ({
   );
 
   for await (const mark of marks) {
-    send("NEW_TIME_MARK", mark);
+    send(EVENT_TYPES.NEW_TIME_MARK, mark);
   }
 
-  send("TIME_ANALYSIS_COMPLETE");
+  send(EVENT_TYPES.TIME_ANALYSIS_COMPLETE);
 };
 
 const startSpaceAnalysis = async ({
@@ -49,13 +49,13 @@ const startSpaceAnalysis = async ({
   const marks = analyzeSpaceComplexity(subject, [...workbench.generator()]);
 
   for await (const mark of marks) {
-    send("NEW_SPACE_MARK", mark);
+    send(EVENT_TYPES.NEW_SPACE_MARK, mark);
   }
 
-  send("SPACE_ANALYSIS_COMPLETE");
+  send(EVENT_TYPES.SPACE_ANALYSIS_COMPLETE);
 };
 
 handleMessages(parentPort, {
-  START_TIME_ANALYSIS: startTimeAnalysis,
-  START_SPACE_ANALYSIS: startSpaceAnalysis,
+  [EVENT_TYPES.START_TIME_ANALYSIS]: startTimeAnalysis,
+  [EVENT_TYPES.START_SPACE_ANALYSIS]: startSpaceAnalysis,
 });

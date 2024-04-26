@@ -1,15 +1,5 @@
 import { Observable } from "rxjs";
 
-export const EVENTS = {
-  START_TIME_ANALYSIS: "START_TIME_ANALYSIS",
-  STOP_TIME_ANALYSIS: "STOP_TIME_ANALYSIS",
-  START_SPACE_ANALYSIS: "START_SPACE_ANALYSIS",
-  STOP_SPACE_ANALYSIS: "STOP_SPACE_ANALYSIS",
-  NEW_TIME_MARK: "NEW_TIME_MARK",
-  TIME_ANALYSIS_COMPLETE: "TIME_ANALYSIS_COMPLETE",
-  SPACE_ANALYSIS_COMPLETE: "SPACE_ANALYSIS_COMPLETE",
-};
-
 export const handleMessages = (source, handlers) => {
   source.on("message", (message) => {
     if (message instanceof Buffer) {

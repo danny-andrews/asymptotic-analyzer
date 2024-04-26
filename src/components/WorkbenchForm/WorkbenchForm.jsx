@@ -2,6 +2,7 @@ import { serialize } from "@shoelace-style/shoelace/dist/utilities/form.js";
 import { useSignal } from "@preact/signals";
 import c from "./WorkbenchForm.module.css";
 import Subjects from "../Subjects/Subjects.jsx";
+import { DEFAULT_ITERATIONS } from "../../shared/index.js";
 
 const WorkbenchForm = ({
   isRunning,
@@ -11,7 +12,7 @@ const WorkbenchForm = ({
   onStart,
   onStop,
 }) => {
-  const iterations = useSignal(50);
+  const iterations = useSignal(DEFAULT_ITERATIONS);
 
   const handleAnalysisTargetChanged = (event) => {
     onAnalysisTargetChange(event.target.value);

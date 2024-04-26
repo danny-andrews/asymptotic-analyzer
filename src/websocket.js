@@ -2,7 +2,12 @@ import { WebSocketServer } from "ws";
 import { Worker } from "worker_threads";
 import { fileURLToPath } from "node:url";
 import { zip } from "rxjs";
-import { handleMessages, fromWorkerEvent, noop } from "./shared/index.js";
+import {
+  handleMessages,
+  fromWorkerEvent,
+  noop,
+  EVENT_TYPES,
+} from "./shared/index.js";
 
 const getWorkbench = (workbenches, workbenchName) =>
   workbenches.find((workbench) => workbench.name === workbenchName);
@@ -27,12 +32,12 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
 
         const observable = fromWorkerEvent(
           worker,
-          "NEW_TIME_MARK",
-          "TIME_ANALYSIS_COMPLETE"
+          EVENT_TYPES.NEW_TIME_MARK,
+          EVENT_TYPES.TIME_ANALYSIS_COMPLETE
         );
 
         worker.postMessage({
-          type: "START_TIME_ANALYSIS",
+          type: EVENT_TYPES.START_TIME_ANALYSIS,
           payload: {
             workbenchName,
             workbenchesFilepath,
@@ -46,11 +51,11 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
-          send("NEW_TIME_MARK", mark);
+          send(EVENT_TYPES.NEW_TIME_MARK, mark);
         }
       },
       complete: () => {
-        send("TIME_ANALYSIS_COMPLETE");
+        send(EVENT_TYPES.TIME_ANALYSIS_COMPLETE);
       },
     });
   };
@@ -66,12 +71,12 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
 
         const observable = fromWorkerEvent(
           worker,
-          "NEW_SPACE_MARK",
-          "SPACE_ANALYSIS_COMPLETE"
+          EVENT_TYPES.NEW_SPACE_MARK,
+          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE
         );
 
         worker.postMessage({
-          type: "START_SPACE_ANALYSIS",
+          type: EVENT_TYPES.START_SPACE_ANALYSIS,
           payload: {
             workbenchName,
             workbenchesFilepath,
@@ -84,11 +89,11 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
-          send("NEW_SPACE_MARK", mark);
+          send(EVENT_TYPES.NEW_SPACE_MARK, mark);
         }
       },
       complete: () => {
-        send("SPACE_ANALYSIS_COMPLETE");
+        send(EVENT_TYPES.SPACE_ANALYSIS_COMPLETE);
       },
     });
   };
@@ -102,10 +107,10 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
   };
 
   handleMessages(ws, {
-    START_TIME_ANALYSIS: startTimeAnalysis,
-    STOP_TIME_ANALYSIS: stopTimeAnalysis,
-    START_SPACE_ANALYSIS: startSpaceAnalysis,
-    STOP_SPACE_ANALYSIS: stopSpaceAnalysis,
+    [EVENT_TYPES.START_TIME_ANALYSIS]: startTimeAnalysis,
+    [EVENT_TYPES.STOP_TIME_ANALYSIS]: stopTimeAnalysis,
+    [EVENT_TYPES.START_SPACE_ANALYSIS]: startSpaceAnalysis,
+    [EVENT_TYPES.STOP_SPACE_ANALYSIS]: stopSpaceAnalysis,
   });
 };
 

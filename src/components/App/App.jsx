@@ -1,5 +1,5 @@
 import Race from "../Race/Race.jsx";
-import { fromSocketEvent } from "../../shared/index.js";
+import { fromSocketEvent, EVENT_TYPES } from "../../shared/index.js";
 
 const { default: workbenches } = await import("/test/workbenches.js");
 
@@ -12,21 +12,21 @@ const Runner = () => {
 
   return {
     startTimeAnalysis: (workbenchName, iterations) => {
-      send("START_TIME_ANALYSIS", { workbenchName, iterations });
+      send(EVENT_TYPES.START_TIME_ANALYSIS, { workbenchName, iterations });
       return fromSocketEvent(
         socket,
-        "NEW_TIME_MARK",
-        "TIME_ANALYSIS_COMPLETE",
-        "STOP_TIME_ANALYSIS"
+        EVENT_TYPES.NEW_TIME_MARK,
+        EVENT_TYPES.TIME_ANALYSIS_COMPLETE,
+        EVENT_TYPES.STOP_TIME_ANALYSIS
       );
     },
     startSpaceAnalysis: (workbenchName) => {
-      send("START_SPACE_ANALYSIS", { workbenchName });
+      send(EVENT_TYPES.START_SPACE_ANALYSIS, { workbenchName });
       return fromSocketEvent(
         socket,
-        "NEW_SPACE_MARK",
-        "SPACE_ANALYSIS_COMPLETE",
-        "STOP_SPACE_ANALYSIS"
+        EVENT_TYPES.NEW_SPACE_MARK,
+        EVENT_TYPES.SPACE_ANALYSIS_COMPLETE,
+        EVENT_TYPES.STOP_SPACE_ANALYSIS
       );
     },
   };
