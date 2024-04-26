@@ -21,8 +21,8 @@ const getSubject = (subjects, subjectName) =>
 const startTimeAnalysis = async ({
   workbenchName,
   workbenchesFilepath,
-  iterations,
   subjectName,
+  iterations,
 }) => {
   const workbench = await getWorkbench(workbenchesFilepath, workbenchName);
   const subject = getSubject(workbench.subjects, subjectName);
@@ -43,10 +43,15 @@ const startSpaceAnalysis = async ({
   workbenchName,
   workbenchesFilepath,
   subjectName,
+  iterations,
 }) => {
   const workbench = await getWorkbench(workbenchesFilepath, workbenchName);
   const subject = getSubject(workbench.subjects, subjectName);
-  const marks = analyzeSpaceComplexity(subject, [...workbench.generator()]);
+  const marks = analyzeSpaceComplexity(
+    subject,
+    [...workbench.generator()],
+    iterations
+  );
 
   for await (const mark of marks) {
     send(EVENT_TYPES.NEW_SPACE_MARK, mark);

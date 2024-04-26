@@ -25,11 +25,7 @@ export async function* analyzeTimeComplexity(subject, inputSets, iterations) {
   }
 }
 
-export async function* analyzeSpaceComplexity(
-  subject,
-  inputSets,
-  iterations = 100
-) {
+export async function* analyzeSpaceComplexity(subject, inputSets, iterations) {
   for (let inputSet of inputSets) {
     const inputs = Array.from({ length: iterations }).map(() =>
       structuredClone(inputSet.inputs)

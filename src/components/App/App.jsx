@@ -20,8 +20,8 @@ const Runner = () => {
         EVENT_TYPES.STOP_TIME_ANALYSIS
       );
     },
-    startSpaceAnalysis: (workbenchName) => {
-      send(EVENT_TYPES.START_SPACE_ANALYSIS, { workbenchName });
+    startSpaceAnalysis: (workbenchName, iterations) => {
+      send(EVENT_TYPES.START_SPACE_ANALYSIS, { workbenchName, iterations });
       return fromSocketEvent(
         socket,
         EVENT_TYPES.NEW_SPACE_MARK,

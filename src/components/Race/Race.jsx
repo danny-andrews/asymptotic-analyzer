@@ -53,7 +53,7 @@ const Race = ({ workbenches, runner }) => {
       .startTimeAnalysis(selectedWorkbench.value.name, data.iterations)
       .pipe(map((mark) => ({ mark, chart: timeChartRef.current })));
     const spaceMarks = runner
-      .startSpaceAnalysis(selectedWorkbench.value.name)
+      .startSpaceAnalysis(selectedWorkbench.value.name, data.iterations)
       .pipe(map((mark) => ({ mark, chart: spaceChartRef.current })));
 
     const subscription = merge(

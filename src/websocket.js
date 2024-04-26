@@ -41,8 +41,8 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
           payload: {
             workbenchName,
             workbenchesFilepath,
-            iterations,
             subjectName: subject.name,
+            iterations,
           },
         });
 
@@ -60,7 +60,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     });
   };
 
-  const startSpaceAnalysis = async ({ workbenchName }) => {
+  const startSpaceAnalysis = async ({ workbenchName, iterations }) => {
     const { subjects } = getWorkbench(workbenches, workbenchName);
 
     spaceSubscription = zip(
@@ -81,6 +81,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
             workbenchName,
             workbenchesFilepath,
             subjectName: subject.name,
+            iterations,
           },
         });
 
