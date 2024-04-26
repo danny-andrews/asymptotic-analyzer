@@ -1,5 +1,6 @@
 import { Observable } from "rxjs";
-import { useState, useEffect } from "preact/hooks";
+import { useSignal } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 
 export const pipeline = (arg, ...fns) => fns.reduce((v, fn) => fn(v), arg);
 
@@ -92,17 +93,17 @@ export const standardError = (nums) =>
   standardDeviation(nums) / Math.sqrt(nums.length);
 
 export const useWindowSize = () => {
-  const [size, setSize] = useState({
+  const size = useSignal({
     width: null,
     height: null,
   });
 
   useEffect(() => {
     const handleResize = () => {
-      setSize({
+      size.value = {
         width: window.innerWidth,
         height: window.innerHeight,
-      });
+      };
     };
 
     handleResize();
@@ -113,7 +114,7 @@ export const useWindowSize = () => {
     };
   }, []);
 
-  return size;
+  return size.value;
 };
 
 export const EVENTS = {
