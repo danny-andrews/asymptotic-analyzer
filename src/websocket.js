@@ -1,7 +1,7 @@
 import { WebSocketServer } from "ws";
 import { Worker } from "worker_threads";
 import { fileURLToPath } from "node:url";
-import { merge } from "rxjs";
+import { merge, zip } from "rxjs";
 import { handleMessages, fromWorkerEvent, noop } from "./shared.js";
 
 const getWorkbench = (workbenches, workbenchName) =>
@@ -19,7 +19,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
   const startTimeAnalysis = async ({ workbenchName, iterations }) => {
     const { subjects } = getWorkbench(workbenches, workbenchName);
 
-    timeSubscription = merge(
+    timeSubscription = zip(
       ...subjects.map((subject) => {
         const worker = new Worker(
           fileURLToPath(new URL("./worker.js", import.meta.url))
@@ -44,8 +44,10 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
         return observable;
       })
     ).subscribe({
-      next: (payload) => {
-        send("NEW_TIME_MARK", payload);
+      next: (marks) => {
+        for (const mark of marks) {
+          send("NEW_TIME_MARK", mark);
+        }
       },
       complete: () => {
         send("TIME_ANALYSIS_COMPLETE");
@@ -56,7 +58,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
   const startSpaceAnalysis = async ({ workbenchName }) => {
     const { subjects } = getWorkbench(workbenches, workbenchName);
 
-    spaceSubscription = merge(
+    spaceSubscription = zip(
       ...subjects.map((subject) => {
         const worker = new Worker(
           fileURLToPath(new URL("./worker.js", import.meta.url))
@@ -80,8 +82,10 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
         return observable;
       })
     ).subscribe({
-      next: (payload) => {
-        send("NEW_SPACE_MARK", payload);
+      next: (marks) => {
+        for (const mark of marks) {
+          send("NEW_TIME_MARK", mark);
+        }
       },
       complete: () => {
         send("SPACE_ANALYSIS_COMPLETE");
