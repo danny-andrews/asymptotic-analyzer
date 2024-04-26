@@ -5,6 +5,11 @@
   gap: var(--sl-spacing-medium);
 }
 
+.container {
+  width: 100%;
+  max-width: 600px;
+}
+
 .graphs {
   display: flex;
   flex-wrap: wrap;
@@ -15,4 +20,9 @@
 .graph,
 .graph::part(body) {
   width: 100%;
+}
+
+.workbench-select:not(.is-empty)::part(combobox) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }

@@ -2,7 +2,7 @@ import { WebSocketServer } from "ws";
 import { Worker } from "worker_threads";
 import { fileURLToPath } from "node:url";
 import { zip } from "rxjs";
-import { handleMessages, fromWorkerEvent, noop } from "./shared.js";
+import { handleMessages, fromWorkerEvent, noop } from "./shared/index.js";
 
 const getWorkbench = (workbenches, workbenchName) =>
   workbenches.find((workbench) => workbench.name === workbenchName);
