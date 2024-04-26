@@ -16,7 +16,7 @@ const Race = ({ workbenches, runner }) => {
     selectedWorkbench.subjects.map((subject) => subject.name);
   const timeChartRef = useRef(null);
   const spaceChartRef = useRef(null);
-  const shouldShowGraph = Boolean(selectedWorkbench);
+  const shouldShowGraphs = Boolean(selectedWorkbench);
   const analysisTarget = useSignal("time");
   const shouldRunTimeAnalysis = useComputed(() =>
     ["time", "time-and-space"].includes(analysisTarget.value)
@@ -35,9 +35,13 @@ const Race = ({ workbenches, runner }) => {
     analysisTarget.value = newTarget;
   };
 
-  const handleWorkbenchChange = (workbenchName) => {
+  const clearCharts = () => {
     clearChart(timeChartRef.current);
     clearChart(spaceChartRef.current);
+  };
+
+  const handleWorkbenchChange = (workbenchName) => {
+    clearCharts();
     setSelectedWorkbench(
       workbenches.find(({ name }) => workbenchName === name.replaceAll(" ", ""))
     );
@@ -45,30 +49,22 @@ const Race = ({ workbenches, runner }) => {
 
   const handleStart = () => {
     setIsRunning(true);
-    clearChart(timeChartRef.current);
-    clearChart(spaceChartRef.current);
-
-    const timeAnalysisObserver = runner
+    clearCharts();
+    const timeMarks = runner
       .startTimeAnalysis(selectedWorkbench.name, iterations.value)
-      .pipe(map((mark) => ({ mark, type: "TIME" })));
-    const spaceAnalysisObserver = runner
+      .pipe(map((mark) => ({ mark, chart: timeChartRef.current })));
+    const spaceMarks = runner
       .startSpaceAnalysis(selectedWorkbench.name)
-      .pipe(map((mark) => ({ mark, type: "SPACE" })));
+      .pipe(map((mark) => ({ mark, chart: spaceChartRef.current })));
 
-    const mergedObserver = merge(
+    const subscription = merge(
       ...[
-        ...(shouldRunTimeAnalysis.value ? [timeAnalysisObserver] : []),
-        ...(shouldRunSpaceAnalysis.value ? [spaceAnalysisObserver] : []),
+        ...(shouldRunTimeAnalysis.value ? [timeMarks] : []),
+        ...(shouldRunSpaceAnalysis.value ? [spaceMarks] : []),
       ]
-    );
-
-    const subscription = mergedObserver.subscribe({
-      next: (data) => {
-        console.log(data);
-        const chart = (data.type === "TIME" ? timeChartRef : spaceChartRef)
-          .current;
-
-        const { name, n, val } = data.mark;
+    ).subscribe({
+      next: ({ mark, chart }) => {
+        const { name, n, val } = mark;
 
         addDataToChart(chart, {
           datapoint: { x: n, y: val },
@@ -84,8 +80,7 @@ const Race = ({ workbenches, runner }) => {
   };
 
   const handleStop = () => {
-    runner.stopTimeAnalysis();
-    runner.stopSpaceAnalysis();
+    subscription.unsubscribe();
     setIsRunning(false);
   };
 
@@ -101,7 +96,7 @@ const Race = ({ workbenches, runner }) => {
         workbenches={workbenches}
         isRunning={isRunning}
       />
-      {shouldShowGraph && (
+      {shouldShowGraphs && (
         <div class={c.graphs}>
           {shouldRunTimeAnalysis.value && (
             <sl-card class={c.graph}>
