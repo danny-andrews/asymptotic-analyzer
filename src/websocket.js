@@ -1,11 +1,11 @@
 import { WebSocketServer } from "ws";
 import { Worker } from "worker_threads";
 import { fileURLToPath } from "node:url";
-import { merge, zip } from "rxjs";
+import { zip } from "rxjs";
 import { handleMessages, fromWorkerEvent, noop } from "./shared.js";
 
 const getWorkbench = (workbenches, workbenchName) =>
-  workbenches.find(({ name }) => workbenchName === name);
+  workbenches.find((workbench) => workbench.name === workbenchName);
 
 const setupWebsocket = async (ws, workbenchesFilepath) => {
   const send = (type, payload = null) =>
