@@ -10,7 +10,12 @@ export const wait = (time) =>
     setTimeout(() => resolve(time), time);
   });
 
-export const fromSocketEvent = (socket, eventType, endEventType = null) =>
+export const fromSocketEvent = (
+  socket,
+  eventType,
+  endEventType = null,
+  cancelEventType = null
+) =>
   new Observable((observer) => {
     const listener = (event) => {
       const { type, payload } = JSON.parse(event.data);
@@ -23,6 +28,30 @@ export const fromSocketEvent = (socket, eventType, endEventType = null) =>
     };
 
     socket.addEventListener("message", listener);
+
+    return () => {
+      if (cancelEventType) {
+        socket.send(JSON.stringify({ type: cancelEventType }));
+      }
+
+      socket.removeEventListener("message", listener);
+    };
+  });
+
+export const fromWorkerEvent = (worker, eventType, endEventType = null) =>
+  new Observable((observer) => {
+    worker.on("message", ({ type, payload }) => {
+      if (type === eventType) {
+        observer.next(payload);
+      }
+      if (type === endEventType) {
+        observer.complete();
+      }
+    });
+
+    return () => {
+      worker.terminate();
+    };
   });
 
 export const throttle = (cb, delay) => {

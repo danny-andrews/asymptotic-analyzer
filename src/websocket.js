@@ -1,108 +1,100 @@
 import { WebSocketServer } from "ws";
 import { Worker } from "worker_threads";
 import { fileURLToPath } from "node:url";
-import { handleMessages } from "./shared.js";
+import { merge } from "rxjs";
+import { handleMessages, fromWorkerEvent, noop } from "./shared.js";
+
+const getWorkbench = (workbenches, workbenchName) =>
+  workbenches.find(({ name }) => workbenchName === name);
 
 const setupWebsocket = async (ws, workbenchesFilepath) => {
   const send = (type, payload = null) =>
     ws.send(JSON.stringify({ type, payload }));
 
-  // TODO: Use a pool here?
-  let timeWorkers = [];
-  let spaceWorkers = [];
+  let timeSubscription = { unsubscribe: noop };
+  let spaceSubscription = { unsubscribe: noop };
 
   const { default: workbenches } = await import(workbenchesFilepath);
 
   const startTimeAnalysis = async ({ workbenchName, iterations }) => {
-    const { subjects, generator } = workbenches.find(
-      ({ name }) => workbenchName === name
-    );
+    const { subjects } = getWorkbench(workbenches, workbenchName);
 
-    const inputSets = [...generator()];
-    let marksReceived = 0;
-    const totalMarks = subjects.length * inputSets.length;
+    timeSubscription = merge(
+      ...subjects.map((subject) => {
+        const worker = new Worker(
+          fileURLToPath(new URL("./worker.js", import.meta.url))
+        );
 
-    for (const subject of subjects) {
-      const worker = new Worker(
-        fileURLToPath(new URL("./worker.js", import.meta.url))
-      );
-      timeWorkers.push(worker);
-      handleMessages(worker, {
-        NEW_TIME_MARK: (payload) => {
-          marksReceived++;
-          send("NEW_TIME_MARK", payload);
-          if (marksReceived === totalMarks) {
-            send("TIME_ANALYSIS_COMPLETE");
-          }
-        },
-        TIME_ANALYSIS_COMPLETE: () => {
-          worker.terminate();
-        },
-      });
+        const observable = fromWorkerEvent(
+          worker,
+          "NEW_TIME_MARK",
+          "TIME_ANALYSIS_COMPLETE"
+        );
 
-      worker.postMessage({
-        type: "START_TIME_ANALYSIS",
-        payload: {
-          workbenchName,
-          workbenchesFilepath,
-          iterations,
-          subjectName: subject.name,
-        },
-      });
-    }
+        worker.postMessage({
+          type: "START_TIME_ANALYSIS",
+          payload: {
+            workbenchName,
+            workbenchesFilepath,
+            iterations,
+            subjectName: subject.name,
+          },
+        });
+
+        return observable;
+      })
+    ).subscribe({
+      next: (payload) => {
+        send("NEW_TIME_MARK", payload);
+      },
+      complete: () => {
+        send("TIME_ANALYSIS_COMPLETE");
+      },
+    });
   };
 
   const startSpaceAnalysis = async ({ workbenchName }) => {
-    const { subjects, generator } = workbenches.find(
-      ({ name }) => workbenchName === name
-    );
+    const { subjects } = getWorkbench(workbenches, workbenchName);
 
-    const inputSets = [...generator()];
-    let marksReceived = 0;
-    const totalMarks = subjects.length * inputSets.length;
+    spaceSubscription = merge(
+      ...subjects.map((subject) => {
+        const worker = new Worker(
+          fileURLToPath(new URL("./worker.js", import.meta.url))
+        );
 
-    for (const subject of subjects) {
-      const worker = new Worker(
-        fileURLToPath(new URL("./worker.js", import.meta.url))
-      );
-      spaceWorkers.push(worker);
+        const observable = fromWorkerEvent(
+          worker,
+          "NEW_SPACE_MARK",
+          "SPACE_ANALYSIS_COMPLETE"
+        );
 
-      handleMessages(worker, {
-        NEW_SPACE_MARK: (payload) => {
-          marksReceived++;
-          send("NEW_SPACE_MARK", payload);
-          if (marksReceived === totalMarks) {
-            send("SPACE_ANALYSIS_COMPLETE");
-          }
-        },
-        SPACE_ANALYSIS_COMPLETE: () => {
-          worker.terminate();
-        },
-      });
+        worker.postMessage({
+          type: "START_SPACE_ANALYSIS",
+          payload: {
+            workbenchName,
+            workbenchesFilepath,
+            subjectName: subject.name,
+          },
+        });
 
-      worker.postMessage({
-        type: "START_SPACE_ANALYSIS",
-        payload: {
-          workbenchName,
-          workbenchesFilepath,
-          subjectName: subject.name,
-        },
-      });
-    }
+        return observable;
+      })
+    ).subscribe({
+      next: (payload) => {
+        send("NEW_SPACE_MARK", payload);
+      },
+      complete: () => {
+        send("SPACE_ANALYSIS_COMPLETE");
+      },
+    });
   };
 
   const stopTimeAnalysis = () => {
-    for (let worker of timeWorkers) {
-      worker.terminate();
-    }
-    timeWorkers = [];
+    timeSubscription.unsubscribe();
   };
 
   const stopSpaceAnalysis = () => {
-    for (let worker of spaceWorkers) {
-      worker.terminate();
-    }
-    spaceWorkers = [];
+    spaceSubscription.unsubscribe();
   };
 
   handleMessages(ws, {
@@ -114,9 +106,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
 };
 
 export default async (workbenchesFilepath, server) => {
-  const wsServer = new WebSocketServer({ server });
-
-  wsServer.on("connection", (ws) => {
+  new WebSocketServer({ server }).on("connection", (ws) => {
     setupWebsocket(ws, workbenchesFilepath);
   });
 };

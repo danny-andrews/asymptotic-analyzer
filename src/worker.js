@@ -9,33 +9,34 @@ const send = (type, payload = null) => {
   parentPort.postMessage({ type, payload });
 };
 
+const getWorkbench = async (workbenchesFilepath, workbenchName) => {
+  const { default: workbenches } = await import(workbenchesFilepath);
+
+  return workbenches.find((workbench) => workbench.name === workbenchName);
+};
+
+const getSubject = (subjects, subjectName) =>
+  subjects.find((subject) => subject.name === subjectName);
+
 const startTimeAnalysis = async ({
   workbenchName,
   workbenchesFilepath,
   iterations,
   subjectName,
 }) => {
-  const { default: workbenches } = await import(workbenchesFilepath);
-  const { subjects, generator } = workbenches.find(
-    ({ name }) => workbenchName === name
-  );
-  const subject = subjects.find((subject) => subject.name === subjectName);
-  const inputSets = [...generator()];
-
-  let marksReceived = 0;
-
-  for await (const mark of analyzeTimeComplexity({
+  const workbench = await getWorkbench(workbenchesFilepath, workbenchName);
+  const subject = getSubject(workbench.subjects, subjectName);
+  const marks = analyzeTimeComplexity(
     subject,
-    inputSets,
-    iterations,
-  })) {
-    marksReceived++;
+    [...workbench.generator()],
+    iterations
+  );
+
+  for await (const mark of marks) {
     send("NEW_TIME_MARK", mark);
   }
 
-  if (marksReceived === inputSets.length) {
-    send("TIME_ANALYSIS_COMPLETE");
-  }
+  send("TIME_ANALYSIS_COMPLETE");
 };
 
 const startSpaceAnalysis = async ({
@@ -43,22 +44,15 @@ const startSpaceAnalysis = async ({
   workbenchesFilepath,
   subjectName,
 }) => {
-  const { default: workbenches } = await import(workbenchesFilepath);
-  const { subjects, generator } = workbenches.find(
-    ({ name }) => workbenchName === name
-  );
-  const subject = subjects.find((subject) => subject.name === subjectName);
-  const inputSets = [...generator()];
+  const workbench = await getWorkbench(workbenchesFilepath, workbenchName);
+  const subject = getSubject(workbench.subjects, subjectName);
+  const marks = analyzeSpaceComplexity(subject, [...workbench.generator()]);
 
-  let marksReceived = 0;
-
-  for (const mark of analyzeSpaceComplexity(subject, inputSets)) {
-    marksReceived++;
+  for await (const mark of marks) {
     send("NEW_SPACE_MARK", mark);
-    if (marksReceived === inputSets.length) {
-      send("SPACE_ANALYSIS_COMPLETE");
-    }
   }
+
+  send("SPACE_ANALYSIS_COMPLETE");
 };
 
 handleMessages(parentPort, {
