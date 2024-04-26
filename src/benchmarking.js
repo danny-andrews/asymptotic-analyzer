@@ -1,4 +1,4 @@
-import { median } from "./shared.js";
+import { median } from "./shared/index.js";
 import process from "node:process";
 
 export async function* analyzeTimeComplexity(subject, inputSets, iterations) {

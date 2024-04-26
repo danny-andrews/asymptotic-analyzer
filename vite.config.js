@@ -39,6 +39,6 @@ export default {
   esbuild: {
     logOverride: { "this-is-undefined-in-esm": "silent" },
     jsx: "automatic",
-    jsxImportSource: "preact"
+    jsxImportSource: "preact",
   },
 };

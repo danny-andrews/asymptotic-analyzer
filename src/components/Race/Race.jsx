@@ -1,12 +1,12 @@
 import { useSignal, useComputed } from "@preact/signals";
 import { map, merge } from "rxjs";
 import { useRef, useEffect } from "preact/hooks";
+import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
-import { iterations } from "../../signals.js";
-import { noop } from "../../shared.js";
+import { noop } from "../../shared/index.js";
 
 const Race = ({ workbenches, runner }) => {
   const timeChartRef = useRef(null);
@@ -15,6 +15,9 @@ const Race = ({ workbenches, runner }) => {
   const selectedWorkbench = useSignal(null);
   const analysisSubscription = useSignal({ unsubscribe: noop });
   const analysisTarget = useSignal("time");
+  const workbenchName = useComputed(() =>
+    selectedWorkbench.value ? selectedWorkbench.value.name : ""
+  );
   const subjectNames = useComputed(
     () =>
       selectedWorkbench.value &&
@@ -43,18 +46,11 @@ const Race = ({ workbenches, runner }) => {
     clearChart(spaceChartRef.current);
   };
 
-  const handleWorkbenchChange = (workbenchName) => {
-    clearCharts();
-    selectedWorkbench.value = workbenches.find(
-      ({ name }) => workbenchName === name.replaceAll(" ", "")
-    );
-  };
-
-  const handleStart = () => {
+  const handleStart = (data) => {
     isRunning.value = true;
     clearCharts();
     const timeMarks = runner
-      .startTimeAnalysis(selectedWorkbench.value.name, iterations.value)
+      .startTimeAnalysis(selectedWorkbench.value.name, data.iterations)
       .pipe(map((mark) => ({ mark, chart: timeChartRef.current })));
     const spaceMarks = runner
       .startSpaceAnalysis(selectedWorkbench.value.name)
@@ -87,18 +83,46 @@ const Race = ({ workbenches, runner }) => {
     isRunning.value = false;
   };
 
+  const handleWorkbenchChange = (event) => {
+    const workbenchName = event.target.value;
+
+    clearCharts();
+    selectedWorkbench.value = workbenches.find(
+      ({ name }) => workbenchName === name.replaceAll(" ", "")
+    );
+  };
+
   return (
     <div class={c.root}>
-      <WorkbenchForm
-        onStart={handleStart}
-        onStop={handleStop}
-        onWorkbenchChange={handleWorkbenchChange}
-        onAnalysisTargetChange={handleAnalysisTargetChange}
-        analysisTarget={analysisTarget.value}
-        selectedWorkbench={selectedWorkbench.value}
-        workbenches={workbenches}
-        isRunning={isRunning.value}
-      />
+      <div class={c.container}>
+        <sl-select
+          size="small"
+          class={cn(c.workbenchSelect, {
+            [c.isEmpty]: !shouldShowGraphs.value,
+          })}
+          onsl-change={handleWorkbenchChange}
+          placeholder="Select a workbench"
+          value={workbenchName.value.replaceAll(" ", "")}
+          name="workbench"
+          disabled={isRunning}
+        >
+          {workbenches.map(({ name }) => (
+            <sl-option value={name.replaceAll(" ", "")}>{name}</sl-option>
+          ))}
+        </sl-select>
+        {selectedWorkbench.value && (
+          <WorkbenchForm
+            onStart={handleStart}
+            onStop={handleStop}
+            onWorkbenchChange={handleWorkbenchChange}
+            onAnalysisTargetChange={handleAnalysisTargetChange}
+            analysisTarget={analysisTarget.value}
+            selectedWorkbench={selectedWorkbench.value}
+            workbenches={workbenches}
+            isRunning={isRunning.value}
+          />
+        )}
+      </div>
       {shouldShowGraphs.value && (
         <div class={c.graphs}>
           {shouldRunTimeAnalysis.value && (

@@ -1,5 +1,5 @@
 import Race from "../Race/Race.jsx";
-import { fromSocketEvent } from "../../shared.js";
+import { fromSocketEvent } from "../../shared/index.js";
 
 const { default: workbenches } = await import("/test/workbenches.js");
 
