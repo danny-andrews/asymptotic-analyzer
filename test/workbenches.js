@@ -11,7 +11,7 @@ export const range = ({ start, length, step = 1 }) =>
 
 // Fancy generator via fast-check.
 const arrGenerator = (n) =>
-  generate(fc.array(fc.nat(n), { minLength: n, maxLength: n }));
+  generate(fc.array(fc.integer(), { minLength: n, maxLength: n }));
 
 // Regular function generator.
 const arrForN = (n) =>
@@ -33,7 +33,7 @@ export default [
     name: "Array Reverse",
     subjects: Object.values(reverseSubjects),
     generator: function* () {
-      for (let n of range({ start: 0, length: 10, step: 1_000 })) {
+      for (let n of range({ start: 0, length: 10, step: 4_000 })) {
         yield { n, inputs: [arrGenerator(n)] };
       }
     },
