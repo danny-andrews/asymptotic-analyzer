@@ -27,3 +27,8 @@ sl-tab-group {
   border: 1px solid var(--border-color);
   border-radius: var(--sl-border-radius-small);
 }
+
+sl-radio-group::part(form-control-label),
+sl-input::part(form-control-label) {
+  margin-bottom: var(--sl-spacing-2x-small)
+}
