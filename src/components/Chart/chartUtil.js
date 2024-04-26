@@ -46,13 +46,13 @@ export const addDataToChart = (chart, { datapoint, label }) => {
 export const makeChartConfig = ({ title, yAxisTitle, dataLabels }) => ({
   type: "scatter",
   data: {
-    datasets: dataLabels.map((label, index) => {
-      return createDataset({
+    datasets: dataLabels.map((label, index) =>
+      createDataset({
         label,
         data: [],
         num: index,
-      });
-    }),
+      })
+    ),
   },
   plugins: [
     {
