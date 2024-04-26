@@ -84,7 +84,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
-          send("NEW_TIME_MARK", mark);
+          send("NEW_SPACE_MARK", mark);
         }
       },
       complete: () => {
