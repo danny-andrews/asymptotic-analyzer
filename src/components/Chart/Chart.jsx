@@ -13,7 +13,7 @@ const Chart = ({ title, yAxisTitle, dataLabels }, chartRef) => {
 
     chartRef.current.options.plugins.title.text = title;
     chartRef.current.update();
-  }, [title]);
+  }, [title, dataLabels]);
 
   useEffect(
     throttle(() => {
@@ -38,7 +38,7 @@ const Chart = ({ title, yAxisTitle, dataLabels }, chartRef) => {
       chartRef.current.destroy();
       chartRef.current = null;
     };
-  }, []);
+  }, [dataLabels]);
 
   return (
     <div>
