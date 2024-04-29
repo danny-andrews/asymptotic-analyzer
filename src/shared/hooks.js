@@ -3,8 +3,8 @@ import { useEffect } from "preact/hooks";
 
 export const useWindowSize = () => {
   const size = useSignal({
-    width: null,
-    height: null,
+    width: window.innerWidth,
+    height: window.innerHeight,
   });
 
   useEffect(() => {
