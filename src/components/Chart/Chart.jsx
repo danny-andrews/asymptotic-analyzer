@@ -4,7 +4,7 @@ import ChartJS from "./init.js";
 import { makeChartConfig } from "./chartUtil";
 import { throttle, useWindowSize } from "../../shared/index.js";
 
-const Chart = ({ title, yAxisTitle, dataLabels }, chartRef) => {
+const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }, chartRef) => {
   const canvasRef = useRef(null);
   const windowSize = useWindowSize();
 
@@ -31,7 +31,7 @@ const Chart = ({ title, yAxisTitle, dataLabels }, chartRef) => {
   useEffect(() => {
     const chart = new ChartJS(
       canvasRef.current.getContext("2d"),
-      makeChartConfig({ title, yAxisTitle, dataLabels })
+      makeChartConfig({ title, yAxisTitle, dataLabels, formatTooltip })
     );
 
     chartRef.current = chart;

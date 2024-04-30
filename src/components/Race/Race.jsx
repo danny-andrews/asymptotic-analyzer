@@ -6,7 +6,7 @@ import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
-import { noop } from "../../shared/index.js";
+import { noop, formatBytes } from "../../shared/index.js";
 
 const Race = ({ workbenches, runner }) => {
   const timeChartRef = useRef(null);
@@ -54,7 +54,15 @@ const Race = ({ workbenches, runner }) => {
       .pipe(map((mark) => ({ mark, chart: timeChartRef.current })));
     const spaceMarks = runner
       .startSpaceAnalysis(selectedWorkbench.value.name, data.iterations)
-      .pipe(map((mark) => ({ mark, chart: spaceChartRef.current })));
+      .pipe(
+        map((mark) => ({
+          mark: {
+            ...mark,
+            val: mark.val / 1000,
+          },
+          chart: spaceChartRef.current,
+        }))
+      );
 
     const subscription = merge(
       ...[
@@ -131,6 +139,9 @@ const Race = ({ workbenches, runner }) => {
                 ref={timeChartRef}
                 title={`${selectedWorkbench.value.name} - Time Complexity`}
                 dataLabels={subjectNames.value}
+                formatTooltip={({ dataset, parsed }) =>
+                  `${dataset.label}: (${parsed.x}, ${roundTo(3, parsed.y)})`
+                }
                 yAxisTitle="Median Runtime (ms)"
               />
             </sl-card>
@@ -139,9 +150,14 @@ const Race = ({ workbenches, runner }) => {
             <sl-card class={c.graph}>
               <Chart
                 ref={spaceChartRef}
-                title={`${selectedWorkbench.value.name} - Auxiliary Space Complexity`}
+                title={`${selectedWorkbench.value.name} - (Auxiliary) Space Complexity`}
                 dataLabels={subjectNames.value}
-                yAxisTitle="Median Heap Usage (bytes)"
+                formatTooltip={({ dataset, parsed }) =>
+                  `${dataset.label}: (${parsed.x}, ${formatBytes(
+                    parsed.y * 1000
+                  )})`
+                }
+                yAxisTitle="Median Heap Usage (kB)"
               />
             </sl-card>
           )}

@@ -33,7 +33,12 @@ export const addDataToChart = (chart, { datapoint, label }) => {
   chart.update();
 };
 
-export const makeChartConfig = ({ title, yAxisTitle, dataLabels }) => ({
+export const makeChartConfig = ({
+  title,
+  yAxisTitle,
+  dataLabels,
+  formatTooltip,
+}) => ({
   type: "scatter",
   data: {
     datasets: dataLabels.map((label, index) =>
@@ -64,8 +69,7 @@ export const makeChartConfig = ({ title, yAxisTitle, dataLabels }) => ({
       },
       tooltip: {
         callbacks: {
-          label: ({ dataset, parsed }) =>
-            `${dataset.label}: (${parsed.x}, ${roundTo(3, parsed.y)})`,
+          label: formatTooltip,
         },
       },
       legend: {
