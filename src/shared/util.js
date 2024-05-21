@@ -25,11 +25,11 @@ export const formatBytes = (bytes) => {
   const bytePrefixes = ["", "kilo", "mega", "giga", "tera", "peta"];
   const index = Math.max(
     0,
-    Math.min(Math.floor(Math.log10(bytes) / 3), bytePrefixes.length - 1)
+    Math.min(Math.floor(Math.log10(bytes) / 3), bytePrefixes.length - 1),
   );
   const unit = bytePrefixes[index] + "byte";
   const valueToFormat = parseFloat(
-    (bytes / Math.pow(1000, index)).toPrecision(3)
+    (bytes / Math.pow(1000, index)).toPrecision(3),
   );
 
   return new Intl.NumberFormat("en", {
@@ -38,3 +38,5 @@ export const formatBytes = (bytes) => {
     unitDisplay: "short",
   }).format(valueToFormat);
 };
+
+export const roundTo = (num, precision) => Number(num.toFixed(precision));

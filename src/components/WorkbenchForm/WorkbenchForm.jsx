@@ -1,8 +1,6 @@
 import { serialize } from "@shoelace-style/shoelace/dist/utilities/form.js";
-import { useSignal } from "@preact/signals";
 import c from "./WorkbenchForm.module.css";
 import Subjects from "../Subjects/Subjects.jsx";
-import { DEFAULT_ITERATIONS } from "../../shared/index.js";
 
 const WorkbenchForm = ({
   isRunning,
@@ -12,14 +10,8 @@ const WorkbenchForm = ({
   onStart,
   onStop,
 }) => {
-  const iterations = useSignal(DEFAULT_ITERATIONS);
-
   const handleAnalysisTargetChanged = (event) => {
     onAnalysisTargetChange(event.target.value);
-  };
-
-  const handleIterationsChanged = (event) => {
-    iterations.value = Number(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -50,19 +42,6 @@ const WorkbenchForm = ({
             Time + Space
           </sl-radio-button>
         </sl-radio-group>
-        <sl-input
-          name="iterations"
-          label="Iterations"
-          size="small"
-          type="number"
-          value={iterations}
-          disabled={isRunning}
-          noSpinButtons
-          required
-          min={10}
-          helpText="Must be 10 or greater."
-          onInput={handleIterationsChanged}
-        />
         <div class={c.buttonContainer}>
           <sl-button
             class={c.fullWidth}

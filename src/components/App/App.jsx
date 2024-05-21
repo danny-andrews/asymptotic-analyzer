@@ -11,22 +11,22 @@ const Runner = () => {
   };
 
   return {
-    startTimeAnalysis: (workbenchName, iterations) => {
-      send(EVENT_TYPES.START_TIME_ANALYSIS, { workbenchName, iterations });
+    startTimeAnalysis: (workbenchName) => {
+      send(EVENT_TYPES.START_TIME_ANALYSIS, { workbenchName });
       return fromSocketEvent(
         socket,
         EVENT_TYPES.NEW_TIME_MARK,
         EVENT_TYPES.TIME_ANALYSIS_COMPLETE,
-        EVENT_TYPES.STOP_TIME_ANALYSIS
+        EVENT_TYPES.STOP_TIME_ANALYSIS,
       );
     },
-    startSpaceAnalysis: (workbenchName, iterations) => {
-      send(EVENT_TYPES.START_SPACE_ANALYSIS, { workbenchName, iterations });
+    startSpaceAnalysis: (workbenchName) => {
+      send(EVENT_TYPES.START_SPACE_ANALYSIS, { workbenchName });
       return fromSocketEvent(
         socket,
         EVENT_TYPES.NEW_SPACE_MARK,
         EVENT_TYPES.SPACE_ANALYSIS_COMPLETE,
-        EVENT_TYPES.STOP_SPACE_ANALYSIS
+        EVENT_TYPES.STOP_SPACE_ANALYSIS,
       );
     },
   };

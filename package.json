@@ -12,12 +12,7 @@
   "bin": {
     "analyze": "bin/analyze.js"
   },
-  "files": [
-    "index.js",
-    "src/",
-    "bin/",
-    "dist/"
-  ],
+  "files": ["index.js", "src/", "bin/", "dist/"],
   "dependencies": {
     "@preact/signals": "^1.1.1",
     "@shoelace-style/shoelace": "^2.15.0",

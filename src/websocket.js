@@ -21,19 +21,19 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
 
   const { default: workbenches } = await import(workbenchesFilepath);
 
-  const startTimeAnalysis = async ({ workbenchName, iterations }) => {
+  const startTimeAnalysis = async ({ workbenchName }) => {
     const { subjects } = getWorkbench(workbenches, workbenchName);
 
     timeSubscription = zip(
       ...subjects.map((subject) => {
         const worker = new Worker(
-          fileURLToPath(new URL("./worker.js", import.meta.url))
+          fileURLToPath(new URL("./worker.js", import.meta.url)),
         );
 
         const observable = fromWorkerEvent(
           worker,
           EVENT_TYPES.NEW_TIME_MARK,
-          EVENT_TYPES.TIME_ANALYSIS_COMPLETE
+          EVENT_TYPES.TIME_ANALYSIS_COMPLETE,
         );
 
         worker.postMessage({
@@ -42,12 +42,11 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
             workbenchName,
             workbenchesFilepath,
             subjectName: subject.name,
-            iterations,
           },
         });
 
         return observable;
-      })
+      }),
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
@@ -60,19 +59,19 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     });
   };
 
-  const startSpaceAnalysis = async ({ workbenchName, iterations }) => {
+  const startSpaceAnalysis = async ({ workbenchName }) => {
     const { subjects } = getWorkbench(workbenches, workbenchName);
 
     spaceSubscription = zip(
       ...subjects.map((subject) => {
         const worker = new Worker(
-          fileURLToPath(new URL("./worker.js", import.meta.url))
+          fileURLToPath(new URL("./worker.js", import.meta.url)),
         );
 
         const observable = fromWorkerEvent(
           worker,
           EVENT_TYPES.NEW_SPACE_MARK,
-          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE
+          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE,
         );
 
         worker.postMessage({
@@ -81,12 +80,11 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
             workbenchName,
             workbenchesFilepath,
             subjectName: subject.name,
-            iterations,
           },
         });
 
         return observable;
-      })
+      }),
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
