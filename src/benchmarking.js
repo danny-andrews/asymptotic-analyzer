@@ -1,39 +1,92 @@
-import { median } from "./shared/index.js";
-import process from "node:process";
+import { mean, median } from "./shared/index.js";
 
-export async function* analyzeTimeComplexity(subject, inputSets, iterations) {
+const warmup = (subject, duration, generateInputs) => {
+  const startTime = performance.now();
+  let iterations = 0;
+
+  while (performance.now() - startTime <= duration) {
+    const inputs = generateInputs();
+    subject(...inputs);
+    iterations++;
+  }
+
+  return {
+    duration: performance.now() - startTime,
+    iterations,
+  };
+};
+
+export function sample(subject, iterations, generateInputs) {
+  let totalDuration = 0;
+
+  for (let i = 0; i < iterations; i++) {
+    const inputs = generateInputs();
+    const startTime = performance.now();
+    subject(...inputs);
+    totalDuration += performance.now() - startTime;
+  }
+
+  return totalDuration;
+}
+
+export const benchmarkTime = (subject, options = {}) => {
+  const {
+    maximumDuration = 3000,
+    warmupDuration = 300,
+    generateInputs = () => {},
+  } = options;
+
+  const SAMPLE_SIZE = 50;
+  const averageDurations = [];
+  const { iterations, duration } = warmup(
+    subject,
+    warmupDuration,
+    generateInputs,
+  );
+  const msPerIteration = duration / iterations;
+  const iterationsPerSample = Math.max(
+    Math.floor(maximumDuration / msPerIteration / SAMPLE_SIZE),
+    1,
+  );
+
+  const startTime = performance.now();
+
+  while (performance.now() - startTime < maximumDuration) {
+    const duration = sample(subject, iterationsPerSample, generateInputs);
+    averageDurations.push(duration / iterationsPerSample);
+  }
+
+  return {
+    mean: mean(averageDurations),
+  };
+};
+
+export async function* analyzeTimeComplexity(subject, inputSets) {
   for (let inputSet of inputSets) {
-    const inputs = Array.from({ length: iterations }).map(() =>
-      structuredClone(inputSet.inputs)
-    );
-
-    const durations = [];
-
-    for (let i = 0; i < iterations; i++) {
-      const start = performance.now();
-
-      subject(...inputs[i]);
-
-      durations.push(performance.now() - start);
-    }
+    const stats = benchmarkTime(subject, {
+      generateInputs: () => structuredClone(inputSet.inputs),
+    });
 
     yield {
       name: subject.name,
       n: inputSet.n,
-      val: median(durations),
+      val: stats.mean,
+      ...stats,
     };
   }
 }
 
-export async function* analyzeSpaceComplexity(subject, inputSets, iterations) {
+export async function* analyzeSpaceComplexity(subject, inputSets) {
+  const ITERATIONS = 100;
+
   for (let inputSet of inputSets) {
-    const inputs = Array.from({ length: iterations }).map(() =>
-      structuredClone(inputSet.inputs)
+    const inputs = Array.from({ length: ITERATIONS }).map(() =>
+      structuredClone(inputSet.inputs),
     );
 
     const sizes = [];
 
-    for (let i = 0; i < iterations; i++) {
+    for (let i = 0; i < ITERATIONS; i++) {
       const before = process.memoryUsage().heapUsed;
 
       subject(...inputs[i]);

@@ -6,7 +6,7 @@ import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
-import { noop, formatBytes } from "../../shared/index.js";
+import { noop, formatBytes, roundTo } from "../../shared/index.js";
 
 const Race = ({ workbenches, runner }) => {
   const timeChartRef = useRef(null);
@@ -16,19 +16,19 @@ const Race = ({ workbenches, runner }) => {
   const analysisSubscription = useSignal({ unsubscribe: noop });
   const analysisTarget = useSignal("time");
   const workbenchName = useComputed(() =>
-    selectedWorkbench.value ? selectedWorkbench.value.name : ""
+    selectedWorkbench.value ? selectedWorkbench.value.name : "",
   );
   const subjectNames = useComputed(
     () =>
       selectedWorkbench.value &&
-      selectedWorkbench.value.subjects.map((subject) => subject.name)
+      selectedWorkbench.value.subjects.map((subject) => subject.name),
   );
   const shouldShowGraphs = useComputed(() => Boolean(selectedWorkbench.value));
   const shouldRunTimeAnalysis = useComputed(() =>
-    ["time", "time-and-space"].includes(analysisTarget.value)
+    ["time", "time-and-space"].includes(analysisTarget.value),
   );
   const shouldRunSpaceAnalysis = useComputed(() =>
-    ["space", "time-and-space"].includes(analysisTarget.value)
+    ["space", "time-and-space"].includes(analysisTarget.value),
   );
 
   useEffect(() => {
@@ -46,14 +46,14 @@ const Race = ({ workbenches, runner }) => {
     clearChart(spaceChartRef.current);
   };
 
-  const handleStart = (data) => {
+  const handleStart = () => {
     isRunning.value = true;
     clearCharts();
     const timeMarks = runner
-      .startTimeAnalysis(selectedWorkbench.value.name, data.iterations)
+      .startTimeAnalysis(selectedWorkbench.value.name)
       .pipe(map((mark) => ({ mark, chart: timeChartRef.current })));
     const spaceMarks = runner
-      .startSpaceAnalysis(selectedWorkbench.value.name, data.iterations)
+      .startSpaceAnalysis(selectedWorkbench.value.name)
       .pipe(
         map((mark) => ({
           mark: {
@@ -61,14 +61,14 @@ const Race = ({ workbenches, runner }) => {
             val: mark.val / 1000,
           },
           chart: spaceChartRef.current,
-        }))
+        })),
       );
 
     const subscription = merge(
       ...[
         ...(shouldRunTimeAnalysis.value ? [timeMarks] : []),
         ...(shouldRunSpaceAnalysis.value ? [spaceMarks] : []),
-      ]
+      ],
     ).subscribe({
       next: ({ mark, chart }) => {
         const { name, n, val } = mark;
@@ -96,7 +96,7 @@ const Race = ({ workbenches, runner }) => {
 
     clearCharts();
     selectedWorkbench.value = workbenches.find(
-      ({ name }) => workbenchName === name.replaceAll(" ", "")
+      ({ name }) => workbenchName === name.replaceAll(" ", ""),
     );
   };
 
@@ -140,7 +140,7 @@ const Race = ({ workbenches, runner }) => {
                 title={`${selectedWorkbench.value.name} - Time Complexity`}
                 dataLabels={subjectNames.value}
                 formatTooltip={({ dataset, parsed }) =>
-                  `${dataset.label}: (${parsed.x}, ${roundTo(3, parsed.y)})`
+                  `${dataset.label}: (${parsed.x}, ${roundTo(parsed.y, 3)})`
                 }
                 yAxisTitle="Median Runtime (ms)"
               />
@@ -154,7 +154,7 @@ const Race = ({ workbenches, runner }) => {
                 dataLabels={subjectNames.value}
                 formatTooltip={({ dataset, parsed }) =>
                   `${dataset.label}: (${parsed.x}, ${formatBytes(
-                    parsed.y * 1000
+                    parsed.y * 1000,
                   )})`
                 }
                 yAxisTitle="Median Heap Usage (kB)"

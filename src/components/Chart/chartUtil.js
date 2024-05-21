@@ -1,5 +1,3 @@
-const roundTo = (precision, num) => Number(num.toFixed(precision));
-
 const CHART_COLORS = [
   "rgb(80, 227, 133)",
   "rgb(102, 170, 255",
@@ -42,7 +40,7 @@ export const makeChartConfig = ({
   type: "scatter",
   data: {
     datasets: dataLabels.map((label, index) =>
-      createDataset({ label, data: [], num: index })
+      createDataset({ label, data: [], num: index }),
     ),
   },
   plugins: [
