@@ -1,15 +1,3 @@
-.button-container {
-  display: flex;
-  gap: var(--sl-spacing-x-small);
-  flex-wrap: wrap;
-}
-
-@media (min-width: 900px) {
-  .button-container {
-    flex-wrap: nowrap;
-  }
-}
-
 .full-width {
   width: 100%;
 }

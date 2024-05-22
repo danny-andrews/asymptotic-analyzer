@@ -1,0 +1,23 @@
+@import "@shoelace-style/shoelace/dist/themes/dark.css";
+
+:host,
+.sl-theme-dark {
+  --default-border-color: var(--sl-color-neutral-400);
+  --border-color: var(--default-border-color);
+}
+
+:host,
+.sl-theme-dark {
+  --sl-input-border-color: var(--border-color);
+  --sl-input-border-color-hover: var(--sl-color-neutral-600);
+  --sl-input-border-color-focus: var(--sl-color-primary-700);
+  --sl-input-border-color-disabled: var(--sl-color-neutral-400);
+}
+
+.sl-theme-dark sl-card {
+  --border-color: var(--default-border-color);
+}
+
+.sl-theme-dark sl-radio-button::part(button) {
+  --border-color: var(--default-border-color);
+}

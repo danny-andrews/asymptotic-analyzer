@@ -42,28 +42,26 @@ const WorkbenchForm = ({
             Time + Space
           </sl-radio-button>
         </sl-radio-group>
-        <div class={c.buttonContainer}>
+        <Subjects class={c.subjects} subjects={selectedWorkbench.subjects} />
+        {isRunning ? (
           <sl-button
             class={c.fullWidth}
             variant="danger"
             size="small"
             onclick={onStop}
-            disabled={!isRunning}
           >
             Stop
           </sl-button>
+        ) : (
           <sl-button
             class={c.fullWidth}
             variant="success"
             size="small"
             type="submit"
-            loading={isRunning}
-            disabled={isRunning}
           >
             Start
           </sl-button>
-        </div>
-        <Subjects class={c.subjects} subjects={selectedWorkbench.subjects} />
+        )}
       </div>
     </form>
   );
