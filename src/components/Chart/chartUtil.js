@@ -10,6 +10,8 @@ const CHART_COLORS = [
 const createDataset = ({ num, label, data }) => ({
   borderColor: CHART_COLORS[num],
   backgroundColor: CHART_COLORS[num],
+  pointRadius: 4,
+  pointHoverRadius: 5,
   showLine: true,
   label,
   data,
