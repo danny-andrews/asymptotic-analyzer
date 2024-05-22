@@ -71,7 +71,6 @@ export async function* analyzeTimeComplexity(subject, inputSets) {
       name: subject.name,
       n: inputSet.n,
       val: stats.mean,
-      ...stats,
     };
   }
 }
@@ -80,18 +79,18 @@ export async function* analyzeSpaceComplexity(subject, inputSets) {
   const ITERATIONS = 100;
 
   for (let inputSet of inputSets) {
-    const inputs = Array.from({ length: ITERATIONS }).map(() =>
-      structuredClone(inputSet.inputs),
-    );
+    const inputs = Array(ITERATIONS)
+      .fill()
+      .map(() => structuredClone(inputSet.inputs));
 
-    const sizes = [];
+    const sizes = Array(ITERATIONS);
 
     for (let i = 0; i < ITERATIONS; i++) {
       const before = process.memoryUsage().heapUsed;
 
       subject(...inputs[i]);
 
-      sizes.push(process.memoryUsage().heapUsed - before);
+      sizes[i] = process.memoryUsage().heapUsed - before;
     }
 
     yield {
