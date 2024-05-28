@@ -14,21 +14,24 @@ const Subjects = memo(({ subjects }) => {
   }, [subjects]);
 
   return (
-    <sl-tab-group class={c.root} ref={rootRef}>
-      {subjects.map((subject) => (
-        <sl-tab key={subject.name} slot="nav" panel={subject.name}>
-          {subject.name}
-        </sl-tab>
-      ))}
+    <div>
+      <div class={c.label}>Subjects</div>
+      <sl-tab-group class={c.root} ref={rootRef}>
+        {subjects.map((subject) => (
+          <sl-tab key={subject.name} slot="nav" panel={subject.name}>
+            {subject.name}
+          </sl-tab>
+        ))}
 
-      {subjects.map((subject) => (
-        <sl-tab-panel key={subject.name} name={subject.name}>
-          <pre>
-            <code>{subject.toString()}</code>
-          </pre>
-        </sl-tab-panel>
-      ))}
-    </sl-tab-group>
+        {subjects.map((subject) => (
+          <sl-tab-panel key={subject.name} name={subject.name}>
+            <pre>
+              <code>{subject.toString()}</code>
+            </pre>
+          </sl-tab-panel>
+        ))}
+      </sl-tab-group>
+    </div>
   );
 });
 

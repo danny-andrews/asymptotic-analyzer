@@ -6,11 +6,11 @@ body {
   color: var(--sl-color-neutral-700);
   font-family: var(--sl-font-sans);
   background: var(--sl-color-neutral-50);
-  min-height: 100vh;
+  height: 100vh;
 }
 
 main {
-  padding: var(--sl-spacing-small);
+  height: 100%;
 }
 
 /* Shoelace Component Overrides */

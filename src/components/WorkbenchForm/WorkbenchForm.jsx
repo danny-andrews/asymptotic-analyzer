@@ -23,46 +23,44 @@ const WorkbenchForm = ({
   };
 
   return (
-    <form onsubmit={handleSubmit}>
-      <div class={c.fieldset}>
-        <sl-radio-group
-          label="Analysis Target(s)"
-          name="analysis-target"
+    <form class={c.form} onsubmit={handleSubmit}>
+      <sl-radio-group
+        label="Analysis Target(s)"
+        name="analysis-target"
+        size="small"
+        value={analysisTarget}
+        onsl-change={handleAnalysisTargetChanged}
+      >
+        <sl-radio-button disabled={isRunning} value="time">
+          Time
+        </sl-radio-button>
+        <sl-radio-button disabled={isRunning} value="space">
+          Space
+        </sl-radio-button>
+        <sl-radio-button disabled={isRunning} value="time-and-space">
+          Time + Space
+        </sl-radio-button>
+      </sl-radio-group>
+      <Subjects subjects={selectedWorkbench.subjects} />
+      {isRunning ? (
+        <sl-button
+          class={c.fullWidth}
+          variant="danger"
           size="small"
-          value={analysisTarget}
-          onsl-change={handleAnalysisTargetChanged}
+          onclick={onStop}
         >
-          <sl-radio-button disabled={isRunning} value="time">
-            Time
-          </sl-radio-button>
-          <sl-radio-button disabled={isRunning} value="space">
-            Space
-          </sl-radio-button>
-          <sl-radio-button disabled={isRunning} value="time-and-space">
-            Time + Space
-          </sl-radio-button>
-        </sl-radio-group>
-        <Subjects class={c.subjects} subjects={selectedWorkbench.subjects} />
-        {isRunning ? (
-          <sl-button
-            class={c.fullWidth}
-            variant="danger"
-            size="small"
-            onclick={onStop}
-          >
-            Stop
-          </sl-button>
-        ) : (
-          <sl-button
-            class={c.fullWidth}
-            variant="success"
-            size="small"
-            type="submit"
-          >
-            Start
-          </sl-button>
-        )}
-      </div>
+          Stop
+        </sl-button>
+      ) : (
+        <sl-button
+          class={c.fullWidth}
+          variant="success"
+          size="small"
+          type="submit"
+        >
+          Start
+        </sl-button>
+      )}
     </form>
   );
 };

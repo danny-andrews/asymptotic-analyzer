@@ -2,31 +2,10 @@
   width: 100%;
 }
 
-.label {
-  font-size: var(--sl-input-label-font-size-small);
-  margin-bottom: var(--sl-spacing-3x-small);
+.form {
+  padding-top: var(--sl-spacing-small);
 }
 
-.subjects {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sl-spacing-x-small);
-}
-
-.fieldset > * + * {
+.form > * + * {
   margin-top: var(--sl-spacing-small);
-}
-
-.fieldset {
-  padding: var(--sl-spacing-small);
-  border: 1px solid var(--border-color);
-  border-radius: var(--sl-border-radius-small);
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: 0;
-}
-
-.workbench-select:not(.is-empty)::part(combobox) {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
