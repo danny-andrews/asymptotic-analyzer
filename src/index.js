@@ -7,4 +7,4 @@ import javascript from "highlight.js/lib/languages/javascript";
 
 hljs.registerLanguage("javascript", javascript);
 
-render(h(App), document.body);
+render(h(App, null), document.body);

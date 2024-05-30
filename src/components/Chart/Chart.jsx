@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import { forwardRef } from "preact/compat";
 import ChartJS from "./init.js";
-import { makeChartConfig } from "./chartUtil";
+import { makeChartConfig } from "./chartUtil.js";
 import { throttle, useWindowSize } from "../../shared/index.js";
 
 const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }, chartRef) => {
