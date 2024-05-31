@@ -4,7 +4,7 @@ import { useRef, useEffect } from "preact/hooks";
 import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
-import Chart from "../Chart/Chart.jsx";
+import Chart from "../Chart/Chart.tsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
 import { noop, formatBytes, roundTo } from "../../shared/index.js";
 

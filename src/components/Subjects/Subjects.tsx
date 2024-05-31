@@ -2,8 +2,13 @@ import { memo } from "preact/compat";
 import { useRef, useEffect } from "preact/hooks";
 import hljs from "highlight.js/lib/core";
 import c from "./Subjects.module.css";
+import type { Subject } from "../../types.js";
 
-const Subjects = memo(({ subjects }) => {
+type PropTypes = {
+  subjects: Subject[],
+};
+
+const Subjects = memo(({ subjects }: PropTypes) => {
   const rootRef = useRef(null);
 
   useEffect(() => {

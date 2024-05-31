@@ -1,6 +1,6 @@
 import { serialize } from "@shoelace-style/shoelace/dist/utilities/form.js";
 import c from "./WorkbenchForm.module.css";
-import Subjects from "../Subjects/Subjects.jsx";
+import Subjects from "../Subjects/Subjects.tsx";
 
 const WorkbenchForm = ({
   isRunning,
@@ -23,7 +23,7 @@ const WorkbenchForm = ({
   };
 
   return (
-    <form class={c.form} onsubmit={handleSubmit}>
+    <form class={c.form} onSubmit={handleSubmit}>
       <sl-radio-group
         label="Analysis Target(s)"
         name="analysis-target"

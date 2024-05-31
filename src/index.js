@@ -1,4 +1,4 @@
-import "./components/index.js";
+import "./components/index.ts";
 import "./styles/app.css";
 import App from "./components/App/App.jsx";
 import { render, h } from "preact";

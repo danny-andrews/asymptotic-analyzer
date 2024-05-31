@@ -1,6 +1,7 @@
 import Race from "../Race/Race.jsx";
 import { fromSocketEvent, EVENT_TYPES } from "../../shared/index.js";
 
+// @ts-ignore
 const { default: workbenches } = await import("/test/workbenches.js");
 
 const Runner = () => {

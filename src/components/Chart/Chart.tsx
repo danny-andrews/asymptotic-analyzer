@@ -3,8 +3,18 @@ import { forwardRef } from "preact/compat";
 import ChartJS from "./init.js";
 import { makeChartConfig } from "./chartUtil.js";
 import { throttle, useWindowSize } from "../../shared/index.js";
+import type { ChartTypeRegistry, TooltipItem } from "chart.js";
 
-const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }, chartRef) => {
+type PropTypes = {
+  title: string,
+  yAxisTitle: string,
+  dataLabels: string[],
+  formatTooltip: (tooltipItem: TooltipItem<"line">) => string
+};
+
+type ChartRef = { current: ChartJS<"line", ChartTypeRegistry["line"]['defaultDataPoint'], unknown> };
+
+const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }: PropTypes, chartRef: ChartRef) => {
   const canvasRef = useRef(null);
   const windowSize = useWindowSize();
 
@@ -31,9 +41,11 @@ const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }, chartRef) => {
   useEffect(() => {
     const chart = new ChartJS(
       canvasRef.current.getContext("2d"),
+      // @ts-ignore
       makeChartConfig({ title, yAxisTitle, dataLabels, formatTooltip })
     );
 
+    // @ts-ignore
     chartRef.current = chart;
 
     return () => {
