@@ -1,0 +1,16 @@
+{
+  "include": ["src/**/*", "test/**/*"],
+  "compilerOptions": {
+    "checkJs": true,
+    "lib": ["ES2017"],
+    "target": "ES2017",
+    "module": "nodenext",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "skipLibCheck": true,
+    "noErrorTruncation": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}

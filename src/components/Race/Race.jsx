@@ -4,7 +4,7 @@ import { useRef, useEffect } from "preact/hooks";
 import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
-import Chart from "../Chart/Chart.jsx";
+import Chart from "../Chart/Chart.tsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
 import { noop, formatBytes, roundTo } from "../../shared/index.js";
 
@@ -16,19 +16,19 @@ const Race = ({ workbenches, runner }) => {
   const analysisSubscription = useSignal({ unsubscribe: noop });
   const analysisTarget = useSignal("time");
   const workbenchName = useComputed(() =>
-    selectedWorkbench.value ? selectedWorkbench.value.name : "",
+    selectedWorkbench.value ? selectedWorkbench.value.name : ""
   );
   const subjectNames = useComputed(
     () =>
       selectedWorkbench.value &&
-      selectedWorkbench.value.subjects.map((subject) => subject.name),
+      selectedWorkbench.value.subjects.map((subject) => subject.name)
   );
   const shouldShowGraphs = useComputed(() => Boolean(selectedWorkbench.value));
   const shouldRunTimeAnalysis = useComputed(() =>
-    ["time", "time-and-space"].includes(analysisTarget.value),
+    ["time", "time-and-space"].includes(analysisTarget.value)
   );
   const shouldRunSpaceAnalysis = useComputed(() =>
-    ["space", "time-and-space"].includes(analysisTarget.value),
+    ["space", "time-and-space"].includes(analysisTarget.value)
   );
 
   useEffect(() => {
@@ -61,14 +61,14 @@ const Race = ({ workbenches, runner }) => {
             val: mark.val / 1000,
           },
           chart: spaceChartRef.current,
-        })),
+        }))
       );
 
     const subscription = merge(
       ...[
         ...(shouldRunTimeAnalysis.value ? [timeMarks] : []),
         ...(shouldRunSpaceAnalysis.value ? [spaceMarks] : []),
-      ],
+      ]
     ).subscribe({
       next: ({ mark, chart }) => {
         const { name, n, val } = mark;
@@ -96,7 +96,7 @@ const Race = ({ workbenches, runner }) => {
 
     clearCharts();
     selectedWorkbench.value = workbenches.find(
-      ({ name }) => workbenchName === name.replaceAll(" ", ""),
+      ({ name }) => workbenchName === name.replaceAll(" ", "")
     );
   };
 
@@ -112,7 +112,7 @@ const Race = ({ workbenches, runner }) => {
           placeholder="Select a workbench"
           value={workbenchName.value.replaceAll(" ", "")}
           name="workbench"
-          disabled={isRunning}
+          disabled={isRunning.value}
         >
           {workbenches.map(({ name }) => (
             <sl-option value={name.replaceAll(" ", "")}>{name}</sl-option>
@@ -122,11 +122,9 @@ const Race = ({ workbenches, runner }) => {
           <WorkbenchForm
             onStart={handleStart}
             onStop={handleStop}
-            onWorkbenchChange={handleWorkbenchChange}
             onAnalysisTargetChange={handleAnalysisTargetChange}
             analysisTarget={analysisTarget.value}
             selectedWorkbench={selectedWorkbench.value}
-            workbenches={workbenches}
             isRunning={isRunning.value}
           />
         )}
@@ -154,7 +152,7 @@ const Race = ({ workbenches, runner }) => {
                 dataLabels={subjectNames.value}
                 formatTooltip={({ dataset, parsed }) =>
                   `${dataset.label}: (${parsed.x}, ${formatBytes(
-                    parsed.y * 1000,
+                    parsed.y * 1000
                   )})`
                 }
                 yAxisTitle="Median Heap Usage (kB)"

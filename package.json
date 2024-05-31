@@ -7,12 +7,18 @@
   "scripts": {
     "start": "vite build && ./bin/analyze.js ./test/workbenches.js",
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "check": "tsc --noEmit --allowImportingTsExtensions"
   },
   "bin": {
     "analyze": "bin/analyze.js"
   },
-  "files": ["index.js", "src/", "bin/", "dist/"],
+  "files": [
+    "index.js",
+    "src/",
+    "bin/",
+    "dist/"
+  ],
   "dependencies": {
     "@preact/signals": "^1.1.1",
     "@shoelace-style/shoelace": "^2.15.0",
@@ -29,6 +35,9 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "@types/node": "^20.12.13",
+    "typescript": "^5.4.5",
+    "typescript-plugin-css-modules": "^5.1.0",
     "vite": "^3.1.0"
   }
 }

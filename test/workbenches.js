@@ -6,7 +6,7 @@ import { generate } from "../index.js";
 
 export const range = ({ start, length, step = 1 }) =>
   Array(length)
-    .fill()
+    .fill(null)
     .map((_, num) => (num + start) * step);
 
 // Fancy generator via fast-check.
@@ -16,7 +16,7 @@ const arrGenerator = (n) =>
 // Regular function generator.
 const arrForN = (n) =>
   Array(n)
-    .fill()
+    .fill(null)
     .map(() => Math.floor(Math.random() * 100_000));
 
 export default [
