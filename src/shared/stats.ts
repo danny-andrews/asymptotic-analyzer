@@ -1,4 +1,4 @@
-export const median = (nums) => {
+export const median = (nums: number[]) => {
   nums.sort((a, b) => a - b);
   const n = nums.length;
   if (n === 1) return nums[0];
@@ -6,12 +6,12 @@ export const median = (nums) => {
   return (nums[Math.floor(n / 2)] + nums[Math.ceil(n / 2)]) / 2;
 };
 
-export const mean = (nums) =>
+export const mean = (nums: number[]) =>
   nums.reduce((sum, num) => sum + num, 0) / nums.length;
 
-export const sum = (nums) => nums.reduce((sum, num) => sum + num, 0);
+export const sum = (nums: number[]) => nums.reduce((sum, num) => sum + num, 0);
 
-export const standardDeviation = (nums) => {
+export const standardDeviation = (nums: number[]) => {
   const n = nums.length;
   const sampleMean = mean(nums);
 
@@ -20,7 +20,7 @@ export const standardDeviation = (nums) => {
   );
 };
 
-export const standardError = (nums) =>
+export const standardError = (nums: number[]) =>
   standardDeviation(nums) / Math.sqrt(nums.length);
 
 export class P2QuantileEstimator {
@@ -30,7 +30,7 @@ export class P2QuantileEstimator {
   #ns = Array(5);
   #q = Array(5);
 
-  constructor(desiredQuantile) {
+  constructor(desiredQuantile: number) {
     if (desiredQuantile <= 0 || desiredQuantile >= 1) {
       throw new Error("Quantile must be between 0 and 1.");
     }
@@ -45,7 +45,7 @@ export class P2QuantileEstimator {
     ];
   }
 
-  add(number) {
+  add(number: number) {
     if (this.#size < 5) {
       this.#q[this.#size] = number;
       this.#size++;
@@ -94,7 +94,7 @@ export class P2QuantileEstimator {
     return this.#q[2];
   }
 
-  #adjust(i) {
+  #adjust(i: number) {
     const d = this.#ns[i] - this.#n[i];
 
     if (
@@ -112,7 +112,7 @@ export class P2QuantileEstimator {
     }
   }
 
-  #parabolic(i, d) {
+  #parabolic(i: number, d: number) {
     const q = this.#q;
     const n = this.#n;
     const b1 = d / (n[i + 1] - n[i - 1]);
@@ -122,7 +122,7 @@ export class P2QuantileEstimator {
     return q[i] + b1 * (b2 + b3);
   }
 
-  #linear(i, d) {
+  #linear(i: number, d: number) {
     const q = this.#q;
     const n = this.#n;
 
@@ -136,7 +136,7 @@ export class OnlineStats {
   #sampleSize = 0;
   #total = 0;
 
-  addData(number) {
+  addData(number: number) {
     this.#sampleSize++;
     const newMean = this.#mean + (number - this.#mean) / this.#sampleSize;
     this.#s += (number - this.#mean) * (number - newMean);
@@ -173,7 +173,9 @@ export class OnlineStats {
   }
 }
 
-export const linearRegression = (data) => {
+type Point = [x: number, y: number];
+
+export const linearRegression = (data: Point[]) => {
   let slope = 0;
   let intercept = 0;
 
@@ -195,9 +197,9 @@ export const linearRegression = (data) => {
   slope = numerator / denominator;
   intercept = meanY - slope * meanX;
 
-  const predict = (x) => slope * x + intercept;
-  const ssr = sum(data.map(([x, y]) => (y - predict(y)) ** 2));
-  const sst = sum(data.map(([x], y) => (y - meanY) ** 2));
+  const predict = (x: number) => slope * x + intercept;
+  const ssr = sum(data.map(([, y]) => (y - predict(y)) ** 2));
+  const sst = sum(data.map(([, y]) => (y - meanY) ** 2));
 
   const error = sum(data.map(([x, y]) => (predict(x) - y) ** 2)) / n;
   const r2 = 1 - ssr / sst;

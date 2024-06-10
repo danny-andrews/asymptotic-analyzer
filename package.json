@@ -7,7 +7,7 @@
   "scripts": {
     "start": "vite build && ./bin/analyze.js ./test/workbenches.js",
     "build": "vite build",
-    "dev": "vite",
+    "dev": "bunx --bun vite",
     "check": "tsc --noEmit --allowImportingTsExtensions"
   },
   "bin": {
@@ -31,11 +31,12 @@
     "highlight.js": "^11.6.0",
     "preact": "^10.11.0",
     "pure-rand": "^5.0.0",
-    "rxjs": "^7.3.0",
+    "rxjs": "^7.8.1",
     "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.13",
+    "@types/ws": "^8.5.10",
     "typescript": "^5.4.5",
     "typescript-plugin-css-modules": "^5.1.0",
     "vite": "^3.1.0"

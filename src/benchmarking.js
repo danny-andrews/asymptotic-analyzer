@@ -41,12 +41,12 @@ export const benchmarkTime = (subject, options = {}) => {
   const { iterations, duration } = warmup(
     subject,
     warmupDuration,
-    generateInputs,
+    generateInputs
   );
   const msPerIteration = duration / iterations;
   const iterationsPerSample = Math.max(
     Math.floor(maximumDuration / msPerIteration / SAMPLE_SIZE),
-    1,
+    1
   );
 
   const startTime = performance.now();

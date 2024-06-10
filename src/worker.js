@@ -3,7 +3,7 @@ import {
   analyzeTimeComplexity,
   analyzeSpaceComplexity,
 } from "./benchmarking.js";
-import { handleMessages, EVENT_TYPES } from "./shared/index.js";
+import { handleMessages, EVENT_TYPES } from "./shared/index.ts";
 
 const send = (type, payload = null) => {
   parentPort.postMessage({ type, payload });

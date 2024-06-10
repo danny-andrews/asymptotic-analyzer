@@ -1,6 +1,16 @@
-import { serialize } from "@shoelace-style/shoelace/dist/utilities/form.js";
+import type { ChangeEvent } from "preact/compat";
 import c from "./WorkbenchForm.module.css";
 import Subjects from "../Subjects/Subjects.tsx";
+import type { Workbench, AnalysisTarget } from "../../types/index.ts";
+
+type PropTypes = {
+  isRunning: boolean;
+  selectedWorkbench: Workbench;
+  analysisTarget: AnalysisTarget;
+  onAnalysisTargetChange: (target: AnalysisTarget) => void;
+  onStart: () => void;
+  onStop: () => void;
+}
 
 const WorkbenchForm = ({
   isRunning,
@@ -9,16 +19,16 @@ const WorkbenchForm = ({
   onAnalysisTargetChange,
   onStart,
   onStop,
-}) => {
-  const handleAnalysisTargetChanged = (event) => {
-    onAnalysisTargetChange(event.target.value);
+}: PropTypes) => {
+  const handleAnalysisTargetChanged = (event: ChangeEvent<HTMLInputElement>) => {
+    onAnalysisTargetChange(event.currentTarget.value as AnalysisTarget);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!event.target.querySelector("[data-invalid]")) {
-      onStart(serialize(event.target));
+    if (!event.currentTarget.querySelector("[data-invalid]")) {
+      onStart();
     }
   };
 

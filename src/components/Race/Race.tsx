@@ -5,25 +5,32 @@ import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.tsx";
-import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
-import { noop, formatBytes, roundTo } from "../../shared/index.js";
+import { addDataToChart, clearChart } from "../Chart/chartUtil.ts";
+import { noop, formatBytes, roundTo } from "../../shared/index.ts";
+import type { Workbench, Workbenches, Runner, AnalysisTarget, LineChart } from "../../types/index.ts";
+import type { SlInputEvent } from "@shoelace-style/shoelace";
 
-const Race = ({ workbenches, runner }) => {
-  const timeChartRef = useRef(null);
-  const spaceChartRef = useRef(null);
+type PropTypes = {
+  workbenches: Workbenches;
+  runner: Runner;
+};
+
+const Race = ({ workbenches, runner }: PropTypes) => {
+  const timeChartRef = useRef<LineChart>(null);
+  const spaceChartRef = useRef<LineChart>(null);
   const isRunning = useSignal(false);
-  const selectedWorkbench = useSignal(null);
+  const selectedWorkbench = useSignal<Workbench | null>(null);
   const analysisSubscription = useSignal({ unsubscribe: noop });
-  const analysisTarget = useSignal("time");
+  const analysisTarget = useSignal<AnalysisTarget>("time");
   const workbenchName = useComputed(() =>
     selectedWorkbench.value ? selectedWorkbench.value.name : ""
   );
   const subjectNames = useComputed(
     () =>
-      selectedWorkbench.value &&
+      selectedWorkbench.value === null ? [] :
       selectedWorkbench.value.subjects.map((subject) => subject.name)
   );
-  const shouldShowGraphs = useComputed(() => Boolean(selectedWorkbench.value));
+  const shouldShowGraphs = useComputed(() => selectedWorkbench.value !== null);
   const shouldRunTimeAnalysis = useComputed(() =>
     ["time", "time-and-space"].includes(analysisTarget.value)
   );
@@ -37,16 +44,23 @@ const Race = ({ workbenches, runner }) => {
     };
   }, []);
 
-  const handleAnalysisTargetChange = (newTarget) => {
+  const handleAnalysisTargetChange = (newTarget: AnalysisTarget) => {
     analysisTarget.value = newTarget;
   };
 
   const clearCharts = () => {
-    clearChart(timeChartRef.current);
-    clearChart(spaceChartRef.current);
+    if(timeChartRef.current) {
+      clearChart(timeChartRef.current);
+    }
+
+    if(spaceChartRef.current) {
+      clearChart(spaceChartRef.current);
+    }
   };
 
   const handleStart = () => {
+    if(selectedWorkbench.value === null) return;
+
     isRunning.value = true;
     clearCharts();
     const timeMarks = runner
@@ -71,6 +85,8 @@ const Race = ({ workbenches, runner }) => {
       ]
     ).subscribe({
       next: ({ mark, chart }) => {
+        if(!chart) return;
+
         const { name, n, val } = mark;
 
         addDataToChart(chart, {
@@ -91,13 +107,16 @@ const Race = ({ workbenches, runner }) => {
     isRunning.value = false;
   };
 
-  const handleWorkbenchChange = (event) => {
-    const workbenchName = event.target.value;
+  const handleWorkbenchChange = (event: SlInputEvent) => {
+    if(event.target === null) return;
+    const target = event.target as HTMLSelectElement;
+
+    const workbenchName = target.value;
 
     clearCharts();
     selectedWorkbench.value = workbenches.find(
       ({ name }) => workbenchName === name.replaceAll(" ", "")
-    );
+    ) || null;
   };
 
   return (
@@ -129,7 +148,7 @@ const Race = ({ workbenches, runner }) => {
           />
         )}
       </div>
-      {shouldShowGraphs.value && (
+      {selectedWorkbench.value !== null && (
         <div class={c.graphs}>
           {shouldRunTimeAnalysis.value && (
             <sl-card class={c.graph}>

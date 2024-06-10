@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "preact/hooks";
+import { MutableRef, useEffect, useRef } from "preact/hooks";
 import { forwardRef } from "preact/compat";
-import ChartJS from "./init.js";
-import { makeChartConfig } from "./chartUtil.js";
-import { throttle, useWindowSize } from "../../shared/index.js";
-import type { ChartTypeRegistry, TooltipItem } from "chart.js";
+import ChartJS from "./init.ts";
+import { makeChartConfig } from "./chartUtil.ts";
+import { throttle, useWindowSize } from "../../shared/index.ts";
+import type { TooltipItem } from "chart.js";
+import type { LineChart } from "../../types/index.ts";
 
 type PropTypes = {
   title: string,
@@ -12,24 +13,22 @@ type PropTypes = {
   formatTooltip: (tooltipItem: TooltipItem<"line">) => string
 };
 
-type ChartRef = { current: ChartJS<"line", ChartTypeRegistry["line"]['defaultDataPoint'], unknown> };
-
-const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }: PropTypes, chartRef: ChartRef) => {
-  const canvasRef = useRef(null);
+const Chart = forwardRef<LineChart, PropTypes>(({ title, yAxisTitle, dataLabels, formatTooltip }, ref: MutableRef<LineChart | null>) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const windowSize = useWindowSize();
 
   const adjustSize = () => {
-    if (!chartRef.current) return;
+    if (!ref.current) return;
 
-    chartRef.current.options.aspectRatio = windowSize.width / windowSize.height;
-    chartRef.current.resize();
+    ref.current.options.aspectRatio = windowSize.width / windowSize.height;
+    ref.current.resize();
   };
 
   useEffect(() => {
-    if (!chartRef.current) return;
+    if (!ref.current || !ref.current.options.plugins || !ref.current.options.plugins.title) return;
 
-    chartRef.current.options.plugins.title.text = title;
-    chartRef.current.update();
+    ref.current.options.plugins.title.text = title;
+    ref.current.update();
   }, [title, dataLabels]);
 
   useEffect(() => {
@@ -39,18 +38,22 @@ const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }: PropTypes, char
   useEffect(throttle(adjustSize, 200), [windowSize]);
 
   useEffect(() => {
+    if(canvasRef.current === null) return;
+    const context = canvasRef.current.getContext("2d");
+    if(context === null) return;
+
     const chart = new ChartJS(
-      canvasRef.current.getContext("2d"),
+      context,
       // @ts-ignore
       makeChartConfig({ title, yAxisTitle, dataLabels, formatTooltip })
-    );
+    ) as LineChart;
 
-    // @ts-ignore
-    chartRef.current = chart;
+    ref.current = chart;
 
     return () => {
-      chartRef.current.destroy();
-      chartRef.current = null;
+      if(ref.current) {
+        ref.current.destroy();
+      }
     };
   }, [dataLabels]);
 
@@ -59,6 +62,6 @@ const Chart = ({ title, yAxisTitle, dataLabels, formatTooltip }: PropTypes, char
       <canvas ref={canvasRef} />
     </div>
   );
-};
+});
 
-export default forwardRef(Chart);
+export default Chart;

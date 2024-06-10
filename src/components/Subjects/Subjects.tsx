@@ -2,19 +2,23 @@ import { memo } from "preact/compat";
 import { useRef, useEffect } from "preact/hooks";
 import hljs from "highlight.js/lib/core";
 import c from "./Subjects.module.css";
-import type { Subject } from "../../types.js";
+import type { Subject } from "../../types/index.ts";
+import type { SlTabGroup } from "@shoelace-style/shoelace";
 
 type PropTypes = {
   subjects: Subject[],
 };
 
 const Subjects = memo(({ subjects }: PropTypes) => {
-  const rootRef = useRef(null);
+  const rootRef = useRef<SlTabGroup>(null);
 
   useEffect(() => {
+    if(rootRef.current === null) return;
+
     for (let element of rootRef.current.querySelectorAll("pre code")) {
       hljs.highlightElement(element);
     }
+
     rootRef.current.show(subjects[0].name);
   }, [subjects]);
 
