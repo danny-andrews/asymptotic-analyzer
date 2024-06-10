@@ -1,13 +1,14 @@
 {
   "include": ["src/**/*", "test/**/*"],
   "compilerOptions": {
-    "checkJs": true,
-    "lib": ["ES2017"],
+    // "checkJs": true,
+    "lib": ["ES2021", "DOM.Iterable", "WebWorker"],
     "target": "ES2017",
     "module": "nodenext",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "skipLibCheck": true,
+    "strict": true,
     "noErrorTruncation": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "allowImportingTsExtensions": true,

@@ -1,7 +1,17 @@
 import { Observable } from "rxjs";
+import type WebSocketNode from "ws";
+import type { Worker } from "worker_threads";
 
-export const handleMessages = (source, handlers) => {
-  source.on("message", (message) => {
+type Message<T> = {
+  type: string;
+  payload: T;
+};
+
+export const handleMessages = <T>(
+  source: WebSocketNode,
+  handlers: { [type: string]: Function }
+) => {
+  source.on("message", (message: Message<T>) => {
     if (message instanceof Buffer) {
       message = JSON.parse(message.toString());
     }
@@ -14,15 +24,15 @@ export const handleMessages = (source, handlers) => {
   });
 };
 
-export const fromSocketEvent = (
-  socket,
-  eventType,
-  endEventType = null,
-  cancelEventType = null
-) =>
-  new Observable((observer) => {
-    const listener = (event) => {
-      const { type, payload } = JSON.parse(event.data);
+export const fromSocketEvent = <T>(
+  socket: WebSocket,
+  eventType: string,
+  endEventType: string | null = null,
+  cancelEventType: string | null = null
+): Observable<T> =>
+  new Observable<T>((observer) => {
+    const listener = (event: MessageEvent<string>) => {
+      const { type, payload }: Message<T> = JSON.parse(event.data);
       if (type === eventType) {
         observer.next(payload);
       }
@@ -42,8 +52,12 @@ export const fromSocketEvent = (
     };
   });
 
-export const fromWorkerEvent = (worker, eventType, endEventType = null) =>
-  new Observable((observer) => {
+export const fromWorkerEvent = <T>(
+  worker: Worker,
+  eventType: string,
+  endEventType: string | null = null
+): Observable<T> =>
+  new Observable<T>((observer) => {
     worker.on("message", ({ type, payload }) => {
       if (type === eventType) {
         observer.next(payload);

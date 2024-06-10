@@ -1,3 +1,6 @@
+import type { Chart, Point } from "chart.js";
+import type { LineChart } from "../../types/index.ts";
+
 const CHART_COLORS = [
   "rgb(80, 227, 133)",
   "rgb(102, 170, 255",
@@ -7,7 +10,13 @@ const CHART_COLORS = [
   "rgb(255, 151, 65)",
 ];
 
-const createDataset = ({ num, label, data }) => ({
+type Dataset = {
+  num: number;
+  label: string;
+  data: Point[];
+};
+
+const createDataset = ({ num, label, data }: Dataset) => ({
   borderColor: CHART_COLORS[num],
   backgroundColor: CHART_COLORS[num],
   pointRadius: 4,
@@ -17,7 +26,7 @@ const createDataset = ({ num, label, data }) => ({
   data,
 });
 
-export const clearChart = (chart) => {
+export const clearChart = (chart: LineChart) => {
   if (!chart) return;
 
   chart.data.datasets.forEach((dataset) => {
@@ -26,11 +35,27 @@ export const clearChart = (chart) => {
   chart.update();
 };
 
-export const addDataToChart = (chart, { datapoint, label }) => {
-  chart.data.datasets
-    .find((dataset) => dataset.label === label)
-    .data.push(datapoint);
+export const addDataToChart = (
+  chart: LineChart,
+  { datapoint, label }: { datapoint: Point; label: string }
+) => {
+  if (!chart.data.datasets) return;
+
+  const existingDataset = chart.data.datasets.find(
+    (dataset) => dataset.label === label
+  );
+  if (existingDataset) {
+    existingDataset.data.push(datapoint);
+  }
+
   chart.update();
+};
+
+type ConfigOptions = {
+  title: string;
+  yAxisTitle: string;
+  dataLabels: string[];
+  formatTooltip: () => void;
 };
 
 export const makeChartConfig = ({
@@ -38,17 +63,20 @@ export const makeChartConfig = ({
   yAxisTitle,
   dataLabels,
   formatTooltip,
-}) => ({
+}: ConfigOptions) => ({
   type: "scatter",
   data: {
     datasets: dataLabels.map((label, index) =>
-      createDataset({ label, data: [], num: index }),
+      createDataset({ label, data: [], num: index })
     ),
   },
   plugins: [
     {
-      beforeInit: function (chart) {
+      beforeInit: function (chart: Chart<"line">) {
+        if (!chart.legend) return;
+        // @ts-ignore
         const original = chart.legend.fit.bind(chart.legend);
+        // @ts-ignore
         chart.legend.fit = function () {
           original();
           this.height += 8;

@@ -7,7 +7,7 @@ import {
   fromWorkerEvent,
   noop,
   EVENT_TYPES,
-} from "./shared/index.js";
+} from "./shared/index.ts";
 
 const getWorkbench = (workbenches, workbenchName) =>
   workbenches.find((workbench) => workbench.name === workbenchName);
@@ -27,13 +27,13 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     timeSubscription = zip(
       ...subjects.map((subject) => {
         const worker = new Worker(
-          fileURLToPath(new URL("./worker.js", import.meta.url)),
+          fileURLToPath(new URL("./worker.js", import.meta.url))
         );
 
         const observable = fromWorkerEvent(
           worker,
           EVENT_TYPES.NEW_TIME_MARK,
-          EVENT_TYPES.TIME_ANALYSIS_COMPLETE,
+          EVENT_TYPES.TIME_ANALYSIS_COMPLETE
         );
 
         worker.postMessage({
@@ -46,7 +46,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
         });
 
         return observable;
-      }),
+      })
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
@@ -65,13 +65,13 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
     spaceSubscription = zip(
       ...subjects.map((subject) => {
         const worker = new Worker(
-          fileURLToPath(new URL("./worker.js", import.meta.url)),
+          fileURLToPath(new URL("./worker.js", import.meta.url))
         );
 
         const observable = fromWorkerEvent(
           worker,
           EVENT_TYPES.NEW_SPACE_MARK,
-          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE,
+          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE
         );
 
         worker.postMessage({
@@ -84,7 +84,7 @@ const setupWebsocket = async (ws, workbenchesFilepath) => {
         });
 
         return observable;
-      }),
+      })
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
