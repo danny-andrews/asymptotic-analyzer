@@ -1,0 +1,13 @@
+{
+  "include": ["**/*"],
+  "compilerOptions": {
+    "lib": ["ES2021", "DOM.Iterable"],
+    "target": "ES2017",
+    "module": "nodenext",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "skipLibCheck": true,
+    "strict": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  }
+}
