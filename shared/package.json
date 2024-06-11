@@ -1,0 +1,18 @@
+{
+  "name": "asymptotic-analyzer-shared",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@preact/signals": "^1.1.1",
+    "preact": "^10.11.0",
+    "rxjs": "^7.8.1",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.13",
+    "@types/ws": "^8.5.10"
+  }
+}

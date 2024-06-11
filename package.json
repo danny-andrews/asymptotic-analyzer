@@ -5,40 +5,25 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "vite build && ./bin/analyze.js ./test/workbenches.js",
-    "build": "vite build",
-    "dev": "bunx --bun vite",
-    "check": "tsc --noEmit --allowImportingTsExtensions"
+    "check": "npm run check --workspaces",
+    "dev": "concurrently \"npm:dev --workspace=client\" \"npm:dev --workspace=server\""
   },
   "bin": {
     "analyze": "bin/analyze.js"
   },
-  "files": [
-    "index.js",
-    "src/",
-    "bin/",
-    "dist/"
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
   ],
   "dependencies": {
-    "@preact/signals": "^1.1.1",
-    "@shoelace-style/shoelace": "^2.15.0",
-    "chart.js": "^4.4.2",
-    "classnames": "^2.5.1",
     "common-tags": "^1.8.2",
     "esbuild": "^0.15.7",
-    "express": "^4.18.1",
-    "fast-check": "^2.17.0",
-    "highlight.js": "^11.6.0",
-    "preact": "^10.11.0",
-    "pure-rand": "^5.0.0",
-    "rxjs": "^7.8.1",
-    "ws": "^8.13.0"
+    "express": "^4.18.1"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
-    "@types/ws": "^8.5.10",
-    "typescript": "^5.4.5",
-    "typescript-plugin-css-modules": "^5.1.0",
-    "vite": "^3.1.0"
+    "concurrently": "^8.2.2",
+    "swc": "^1.0.11",
+    "typescript": "^5.4.5"
   }
 }
