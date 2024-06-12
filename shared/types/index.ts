@@ -9,11 +9,11 @@ export type Workbench = {
 
 export type Workbenches = Workbench[];
 
-export type Subject = (...args: any[]) => any;
+export type Subject = (...args: any[]) => unknown;
 
 // export type Subject<R, I extends any[]> = (...args: I) => R;
 
-export type InputSet = { n: number; inputs: any[] };
+export type InputSet = { n: number; inputs: unknown[] };
 
 export type AnalysisTarget = "time" | "space" | "time-and-space";
 

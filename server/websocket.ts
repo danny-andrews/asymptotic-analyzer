@@ -16,9 +16,9 @@ const getWorkbench = (workbenches: Workbenches, workbenchName: string) =>
 
 const setupWebsocket = async (
   ws: WebSocketNode,
-  workbenchesFilepath: string
+  workbenchesFilepath: string,
 ) => {
-  const send = (type: string, payload: Object | null = null) =>
+  const send = (type: string, payload: object | null = null) =>
     ws.send(JSON.stringify({ type, payload }));
 
   let timeSubscription = { unsubscribe: noop };
@@ -37,13 +37,13 @@ const setupWebsocket = async (
     timeSubscription = zip(
       ...workbench.subjects.map((subject) => {
         const worker = new Worker(
-          fileURLToPath(new URL("./worker.js", import.meta.url))
+          fileURLToPath(new URL("./worker.js", import.meta.url)),
         );
 
         const observable = fromWorkerEvent<Mark>(
           worker,
           EVENT_TYPES.NEW_TIME_MARK,
-          EVENT_TYPES.TIME_ANALYSIS_COMPLETE
+          EVENT_TYPES.TIME_ANALYSIS_COMPLETE,
         );
 
         worker.postMessage({
@@ -56,7 +56,7 @@ const setupWebsocket = async (
         });
 
         return observable;
-      })
+      }),
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
@@ -80,13 +80,13 @@ const setupWebsocket = async (
     spaceSubscription = zip(
       ...workbench.subjects.map((subject) => {
         const worker = new Worker(
-          fileURLToPath(new URL("./worker.js", import.meta.url))
+          fileURLToPath(new URL("./worker.js", import.meta.url)),
         );
 
         const observable = fromWorkerEvent<Mark>(
           worker,
           EVENT_TYPES.NEW_SPACE_MARK,
-          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE
+          EVENT_TYPES.SPACE_ANALYSIS_COMPLETE,
         );
 
         worker.postMessage({
@@ -99,7 +99,7 @@ const setupWebsocket = async (
         });
 
         return observable;
-      })
+      }),
     ).subscribe({
       next: (marks) => {
         for (const mark of marks) {
@@ -141,5 +141,5 @@ httpServer.listen(3000);
 
 WSServer(
   fileURLToPath(new URL("./test/workbenches.js", import.meta.url)),
-  httpServer
+  httpServer,
 );

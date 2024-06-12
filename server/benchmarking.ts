@@ -1,10 +1,10 @@
 import { mean, median } from "../shared/index.js";
 import { Mark } from "../shared/types/index.js";
 
-const warmup = <R, I extends any[]>(
+const warmup = <R, I extends unknown[]>(
   subject: (...args: I) => R,
   duration: number,
-  generateInputs: () => I
+  generateInputs: () => I,
 ) => {
   const startTime = performance.now();
   let iterations = 0;
@@ -21,10 +21,10 @@ const warmup = <R, I extends any[]>(
   };
 };
 
-export const sample = <R, I extends any[]>(
+export const sample = <R, I extends unknown[]>(
   subject: (...args: I) => R,
   iterations: number,
-  generateInputs: () => I
+  generateInputs: () => I,
 ) => {
   let totalDuration = 0;
 
@@ -44,9 +44,9 @@ type BenchmarkingOptions<I> = {
   generateInputs: () => I;
 };
 
-export const benchmarkTime = <R, I extends any[]>(
+export const benchmarkTime = <R, I extends unknown[]>(
   subject: (...args: I) => R,
-  options: BenchmarkingOptions<I>
+  options: BenchmarkingOptions<I>,
 ) => {
   const {
     maximumDuration = 3000,
@@ -59,12 +59,12 @@ export const benchmarkTime = <R, I extends any[]>(
   const { iterations, duration } = warmup(
     subject,
     warmupDuration,
-    generateInputs
+    generateInputs,
   );
   const msPerIteration = duration / iterations;
   const iterationsPerSample = Math.max(
     Math.floor(maximumDuration / msPerIteration / SAMPLE_SIZE),
-    1
+    1,
   );
 
   const startTime = performance.now();
@@ -79,11 +79,11 @@ export const benchmarkTime = <R, I extends any[]>(
   };
 };
 
-export async function* analyzeTimeComplexity<R, I extends any[]>(
+export async function* analyzeTimeComplexity<R, I extends unknown[]>(
   subject: (...args: I) => R,
-  inputSets: I
+  inputSets: I,
 ): AsyncGenerator<Mark, void, void> {
-  for (let inputSet of inputSets) {
+  for (const inputSet of inputSets) {
     const stats = benchmarkTime(subject, {
       generateInputs: () => structuredClone(inputSet.inputs),
     });
@@ -96,13 +96,13 @@ export async function* analyzeTimeComplexity<R, I extends any[]>(
   }
 }
 
-export async function* analyzeSpaceComplexity<R, I extends any[]>(
+export async function* analyzeSpaceComplexity<R, I extends unknown[]>(
   subject: (...args: I) => R,
-  inputSets: I
+  inputSets: I,
 ) {
   const ITERATIONS = 100;
 
-  for (let inputSet of inputSets) {
+  for (const inputSet of inputSets) {
     const inputs = Array(ITERATIONS)
       .fill(null)
       .map(() => structuredClone(inputSet.inputs));

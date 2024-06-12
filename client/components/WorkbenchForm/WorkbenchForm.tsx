@@ -10,7 +10,7 @@ type PropTypes = {
   onAnalysisTargetChange: (target: AnalysisTarget) => void;
   onStart: () => void;
   onStop: () => void;
-}
+};
 
 const WorkbenchForm = ({
   isRunning,
@@ -20,7 +20,9 @@ const WorkbenchForm = ({
   onStart,
   onStop,
 }: PropTypes) => {
-  const handleAnalysisTargetChanged = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleAnalysisTargetChanged = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     onAnalysisTargetChange(event.currentTarget.value as AnalysisTarget);
   };
 

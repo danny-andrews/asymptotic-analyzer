@@ -16,7 +16,7 @@ export const standardDeviation = (nums: number[]) => {
   const sampleMean = mean(nums);
 
   return Math.sqrt(
-    nums.reduce((sum, num) => sum + (num - sampleMean) ** 2) / (n - 1)
+    nums.reduce((sum, num) => sum + (num - sampleMean) ** 2) / (n - 1),
   );
 };
 

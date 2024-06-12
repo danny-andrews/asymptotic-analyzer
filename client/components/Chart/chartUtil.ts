@@ -37,12 +37,12 @@ export const clearChart = (chart: LineChart) => {
 
 export const addDataToChart = (
   chart: LineChart,
-  { datapoint, label }: { datapoint: Point; label: string }
+  { datapoint, label }: { datapoint: Point; label: string },
 ) => {
   if (!chart.data.datasets) return;
 
   const existingDataset = chart.data.datasets.find(
-    (dataset) => dataset.label === label
+    (dataset) => dataset.label === label,
   );
   if (existingDataset) {
     existingDataset.data.push(datapoint);
@@ -67,16 +67,16 @@ export const makeChartConfig = ({
   type: "scatter",
   data: {
     datasets: dataLabels.map((label, index) =>
-      createDataset({ label, data: [], num: index })
+      createDataset({ label, data: [], num: index }),
     ),
   },
   plugins: [
     {
       beforeInit: function (chart: Chart<"line">) {
         if (!chart.legend) return;
-        // @ts-ignore
+        // @ts-expect-error FIXME
         const original = chart.legend.fit.bind(chart.legend);
-        // @ts-ignore
+        // @ts-expect-error FIXME
         chart.legend.fit = function () {
           original();
           this.height += 8;
