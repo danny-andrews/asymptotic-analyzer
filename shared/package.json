@@ -3,7 +3,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "check": "tsc --noEmit"
+    "check:types": "tsc --noEmit"
   },
   "dependencies": {
     "@preact/signals": "^1.1.1",

@@ -11,9 +11,8 @@ export type Workbenches = Workbench[];
 
 export type Subject = (...args: any[]) => unknown;
 
-// export type Subject<R, I extends any[]> = (...args: I) => R;
-
-export type InputSet = { n: number; inputs: unknown[] };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type InputSet = { n: number; inputs: any[] };
 
 export type AnalysisTarget = "time" | "space" | "time-and-space";
 
