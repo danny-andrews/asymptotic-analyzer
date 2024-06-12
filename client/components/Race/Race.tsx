@@ -6,14 +6,9 @@ import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
-import { noop, formatBytes, roundTo } from "../../../shared/index.js";
-import type {
-  Workbench,
-  Workbenches,
-  Runner,
-  AnalysisTarget,
-  LineChart,
-} from "../../../shared/types/index.js";
+import { noop, formatBytes, roundTo } from "../../../core/index.js";
+import type { Workbench, Workbenches } from "../../../core/types.js";
+import type { Runner, AnalysisTarget, LineChart } from "../../shared/types.js";
 import type { SlInputEvent } from "@shoelace-style/shoelace";
 
 type PropTypes = {

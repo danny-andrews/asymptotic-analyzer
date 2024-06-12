@@ -1,5 +1,5 @@
-import { mean, median } from "../shared/index.js";
-import { Mark, InputSet } from "../shared/types/index.js";
+import { mean, median } from "../core/index.js";
+import type { Mark, InputSet } from "../core/types.js";
 
 const warmup = <R>(
   subject: (...args: any[]) => R,

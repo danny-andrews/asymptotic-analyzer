@@ -3,8 +3,9 @@ import { forwardRef } from "preact/compat";
 import type { TooltipItem } from "chart.js";
 import ChartJS from "./init.js";
 import { makeChartConfig } from "./chartUtil.js";
-import { throttle, useWindowSize } from "../../../shared/index.js";
-import type { LineChart } from "../../../shared/types/index.js";
+import { throttle } from "../../../core/index.js";
+import { useWindowSize } from "../../shared/hooks.js";
+import type { LineChart } from "../../shared/types.js";
 
 type PropTypes = {
   title: string;

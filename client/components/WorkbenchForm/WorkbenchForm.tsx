@@ -1,7 +1,8 @@
 import type { ChangeEvent } from "preact/compat";
 import c from "./WorkbenchForm.module.css";
 import Subjects from "../Subjects/Subjects.jsx";
-import type { Workbench, AnalysisTarget } from "../../../shared/types/index.js";
+import type { Workbench } from "../../../core/types.js";
+import type { AnalysisTarget } from "../../shared/types.js";
 
 type PropTypes = {
   isRunning: boolean;

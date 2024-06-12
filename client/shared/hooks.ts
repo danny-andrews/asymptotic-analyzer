@@ -1,10 +1,8 @@
 import { Signal, useSignal, computed } from "@preact/signals";
 import { useEffect } from "preact/hooks";
-import { fromSocketEvent } from "./reactivity.js";
-import { EVENT_TYPES } from "./constants.js";
-
+import { EVENT_TYPES, fromSocketEvent } from "../../core/index.js";
 import type { Observable } from "rxjs";
-import type { Mark } from "./types/index.js";
+import type { Mark } from "../../core/types.js";
 
 type Size = {
   width: number;
