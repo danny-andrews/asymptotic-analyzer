@@ -5,9 +5,9 @@ export const wait = (time: number) =>
     setTimeout(() => resolve(time), time);
   });
 
-export const throttle = <R, A extends any[]>(
+export const throttle = <R, A extends unknown[]>(
   cb: (...args: A) => R,
-  delay: number
+  delay: number,
 ): ((...args: A) => R | undefined) => {
   let wait = false;
 
@@ -28,11 +28,11 @@ export const formatBytes = (bytes: number) => {
   const bytePrefixes = ["", "kilo", "mega", "giga", "tera", "peta"];
   const index = Math.max(
     0,
-    Math.min(Math.floor(Math.log10(bytes) / 3), bytePrefixes.length - 1)
+    Math.min(Math.floor(Math.log10(bytes) / 3), bytePrefixes.length - 1),
   );
   const unit = bytePrefixes[index] + "byte";
   const valueToFormat = parseFloat(
-    (bytes / Math.pow(1000, index)).toPrecision(3)
+    (bytes / Math.pow(1000, index)).toPrecision(3),
   );
 
   return new Intl.NumberFormat("en", {

@@ -7,7 +7,13 @@ import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
 import { addDataToChart, clearChart } from "../Chart/chartUtil.js";
 import { noop, formatBytes, roundTo } from "../../../shared/index.js";
-import type { Workbench, Workbenches, Runner, AnalysisTarget, LineChart } from "../../../shared/types/index.js";
+import type {
+  Workbench,
+  Workbenches,
+  Runner,
+  AnalysisTarget,
+  LineChart,
+} from "../../../shared/types/index.js";
 import type { SlInputEvent } from "@shoelace-style/shoelace";
 
 type PropTypes = {
@@ -23,19 +29,19 @@ const Race = ({ workbenches, runner }: PropTypes) => {
   const analysisSubscription = useSignal({ unsubscribe: noop });
   const analysisTarget = useSignal<AnalysisTarget>("time");
   const workbenchName = useComputed(() =>
-    selectedWorkbench.value ? selectedWorkbench.value.name : ""
+    selectedWorkbench.value ? selectedWorkbench.value.name : "",
   );
-  const subjectNames = useComputed(
-    () =>
-      selectedWorkbench.value === null ? [] :
-      selectedWorkbench.value.subjects.map((subject) => subject.name)
+  const subjectNames = useComputed(() =>
+    selectedWorkbench.value === null
+      ? []
+      : selectedWorkbench.value.subjects.map((subject) => subject.name),
   );
   const shouldShowGraphs = useComputed(() => selectedWorkbench.value !== null);
   const shouldRunTimeAnalysis = useComputed(() =>
-    ["time", "time-and-space"].includes(analysisTarget.value)
+    ["time", "time-and-space"].includes(analysisTarget.value),
   );
   const shouldRunSpaceAnalysis = useComputed(() =>
-    ["space", "time-and-space"].includes(analysisTarget.value)
+    ["space", "time-and-space"].includes(analysisTarget.value),
   );
 
   useEffect(() => {
@@ -49,17 +55,17 @@ const Race = ({ workbenches, runner }: PropTypes) => {
   };
 
   const clearCharts = () => {
-    if(timeChartRef.current) {
+    if (timeChartRef.current) {
       clearChart(timeChartRef.current);
     }
 
-    if(spaceChartRef.current) {
+    if (spaceChartRef.current) {
       clearChart(spaceChartRef.current);
     }
   };
 
   const handleStart = () => {
-    if(selectedWorkbench.value === null) return;
+    if (selectedWorkbench.value === null) return;
 
     isRunning.value = true;
     clearCharts();
@@ -75,17 +81,17 @@ const Race = ({ workbenches, runner }: PropTypes) => {
             val: mark.val / 1000,
           },
           chart: spaceChartRef.current,
-        }))
+        })),
       );
 
     const subscription = merge(
       ...[
         ...(shouldRunTimeAnalysis.value ? [timeMarks] : []),
         ...(shouldRunSpaceAnalysis.value ? [spaceMarks] : []),
-      ]
+      ],
     ).subscribe({
       next: ({ mark, chart }) => {
-        if(!chart) return;
+        if (!chart) return;
 
         const { name, n, val } = mark;
 
@@ -108,15 +114,16 @@ const Race = ({ workbenches, runner }: PropTypes) => {
   };
 
   const handleWorkbenchChange = (event: SlInputEvent) => {
-    if(event.target === null) return;
+    if (event.target === null) return;
     const target = event.target as HTMLSelectElement;
 
     const workbenchName = target.value;
 
     clearCharts();
-    selectedWorkbench.value = workbenches.find(
-      ({ name }) => workbenchName === name.replaceAll(" ", "")
-    ) || null;
+    selectedWorkbench.value =
+      workbenches.find(
+        ({ name }) => workbenchName === name.replaceAll(" ", ""),
+      ) || null;
   };
 
   return (
@@ -171,7 +178,7 @@ const Race = ({ workbenches, runner }: PropTypes) => {
                 dataLabels={subjectNames.value}
                 formatTooltip={({ dataset, parsed }) =>
                   `${dataset.label}: (${parsed.x}, ${formatBytes(
-                    parsed.y * 1000
+                    parsed.y * 1000,
                   )})`
                 }
                 yAxisTitle="Median Heap Usage (kB)"

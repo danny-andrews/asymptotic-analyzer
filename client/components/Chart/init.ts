@@ -20,7 +20,7 @@ Chart.register(
   PointElement,
   ScatterController,
   Title,
-  Tooltip
+  Tooltip,
 );
 
 Chart.defaults.color = "rgb(182, 182, 190)";

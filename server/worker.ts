@@ -1,4 +1,4 @@
-import { parentPort, MessagePort } from "node:worker_threads";
+import { parentPort } from "node:worker_threads";
 import {
   analyzeTimeComplexity,
   analyzeSpaceComplexity,
@@ -6,7 +6,7 @@ import {
 import { handleWorkerMessages, EVENT_TYPES } from "../shared/index.js";
 import type { Workbench, Subject } from "../shared/types/index.js";
 
-const send = (type: string, payload: Object | null = null) => {
+const send = (type: string, payload: object | null = null) => {
   if (parentPort) {
     parentPort.postMessage({ type, payload });
   }
@@ -14,12 +14,12 @@ const send = (type: string, payload: Object | null = null) => {
 
 const getWorkbench = async (
   workbenchesFilepath: string,
-  workbenchName: string
+  workbenchName: string,
 ) => {
   const { default: workbenches } = await import(workbenchesFilepath);
 
   return workbenches.find(
-    (workbench: Workbench) => workbench.name === workbenchName
+    (workbench: Workbench) => workbench.name === workbenchName,
   );
 };
 

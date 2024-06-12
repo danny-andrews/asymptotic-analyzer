@@ -1,10 +1,11 @@
 import { mean, median } from "../shared/index.js";
-import { Mark } from "../shared/types/index.js";
+import { Mark, InputSet } from "../shared/types/index.js";
 
-const warmup = <R, I extends any[]>(
-  subject: (...args: I) => R,
+const warmup = <R>(
+  subject: (...args: any[]) => R,
   duration: number,
-  generateInputs: () => I
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  generateInputs: () => any[],
 ) => {
   const startTime = performance.now();
   let iterations = 0;
@@ -21,10 +22,11 @@ const warmup = <R, I extends any[]>(
   };
 };
 
-export const sample = <R, I extends any[]>(
-  subject: (...args: I) => R,
+export const sample = <R>(
+  subject: (...args: any[]) => R,
   iterations: number,
-  generateInputs: () => I
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  generateInputs: () => any[],
 ) => {
   let totalDuration = 0;
 
@@ -38,15 +40,16 @@ export const sample = <R, I extends any[]>(
   return totalDuration;
 };
 
-type BenchmarkingOptions<I> = {
+type BenchmarkingOptions = {
   maximumDuration?: number;
   warmupDuration?: number;
-  generateInputs: () => I;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  generateInputs: () => any[];
 };
 
-export const benchmarkTime = <R, I extends any[]>(
+export const benchmarkTime = <R, I extends unknown[]>(
   subject: (...args: I) => R,
-  options: BenchmarkingOptions<I>
+  options: BenchmarkingOptions,
 ) => {
   const {
     maximumDuration = 3000,
@@ -59,12 +62,12 @@ export const benchmarkTime = <R, I extends any[]>(
   const { iterations, duration } = warmup(
     subject,
     warmupDuration,
-    generateInputs
+    generateInputs,
   );
   const msPerIteration = duration / iterations;
   const iterationsPerSample = Math.max(
     Math.floor(maximumDuration / msPerIteration / SAMPLE_SIZE),
-    1
+    1,
   );
 
   const startTime = performance.now();
@@ -79,11 +82,11 @@ export const benchmarkTime = <R, I extends any[]>(
   };
 };
 
-export async function* analyzeTimeComplexity<R, I extends any[]>(
+export async function* analyzeTimeComplexity<R, I extends unknown[]>(
   subject: (...args: I) => R,
-  inputSets: I
+  inputSets: InputSet[],
 ): AsyncGenerator<Mark, void, void> {
-  for (let inputSet of inputSets) {
+  for (const inputSet of inputSets) {
     const stats = benchmarkTime(subject, {
       generateInputs: () => structuredClone(inputSet.inputs),
     });
@@ -96,13 +99,13 @@ export async function* analyzeTimeComplexity<R, I extends any[]>(
   }
 }
 
-export async function* analyzeSpaceComplexity<R, I extends any[]>(
-  subject: (...args: I) => R,
-  inputSets: I
+export async function* analyzeSpaceComplexity<R>(
+  subject: (...args: any[]) => R,
+  inputSets: InputSet[],
 ) {
   const ITERATIONS = 100;
 
-  for (let inputSet of inputSets) {
+  for (const inputSet of inputSets) {
     const inputs = Array(ITERATIONS)
       .fill(null)
       .map(() => structuredClone(inputSet.inputs));

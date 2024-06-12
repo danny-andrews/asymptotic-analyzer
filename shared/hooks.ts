@@ -56,7 +56,7 @@ export const useWebSocket = (url: string): Signal<WebSocket | null> => {
 };
 
 const Runner = (socket: WebSocket) => {
-  const send = (type: string, payload: any = null) => {
+  const send = (type: string, payload: object | null = null) => {
     socket.send(JSON.stringify({ type, payload }));
   };
 
@@ -67,7 +67,7 @@ const Runner = (socket: WebSocket) => {
         socket,
         EVENT_TYPES.NEW_TIME_MARK,
         EVENT_TYPES.TIME_ANALYSIS_COMPLETE,
-        EVENT_TYPES.STOP_TIME_ANALYSIS
+        EVENT_TYPES.STOP_TIME_ANALYSIS,
       );
     },
     startSpaceAnalysis(workbenchName: string): Observable<Mark> {
@@ -76,7 +76,7 @@ const Runner = (socket: WebSocket) => {
         socket,
         EVENT_TYPES.NEW_SPACE_MARK,
         EVENT_TYPES.SPACE_ANALYSIS_COMPLETE,
-        EVENT_TYPES.STOP_SPACE_ANALYSIS
+        EVENT_TYPES.STOP_SPACE_ANALYSIS,
       );
     },
   };

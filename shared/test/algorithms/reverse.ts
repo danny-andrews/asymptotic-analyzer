@@ -9,7 +9,7 @@ const reverse = <T>(arr: T[]) => {
 };
 
 const reverseInPlace = <T>(arr: T[]) => {
-  let n = arr.length;
+  const n = arr.length;
 
   for (let i = 0; i < (n - 1) / 2; i++) {
     const j = n - i - 1;

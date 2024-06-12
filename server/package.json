@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --outDir dist",
-    "check": "tsc --noEmit",
+    "check:types": "tsc --noEmit",
     "dev": "npm run build && npm run start",
     "start": "node dist/server/websocket.js"
   },

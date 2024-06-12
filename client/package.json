@@ -4,7 +4,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "check": "tsc --noEmit"
+    "check:types": "tsc --noEmit"
   },
   "files": [
     "dist/"

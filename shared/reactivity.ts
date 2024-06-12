@@ -9,7 +9,8 @@ type Message<T> = {
 
 export const handleSocketMessages = <T>(
   source: WebSocketNode,
-  handlers: { [type: string]: Function }
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  handlers: { [type: string]: Function },
 ) => {
   source.on("message", (message: Message<T>) => {
     message = JSON.parse(message.toString());
@@ -24,7 +25,8 @@ export const handleSocketMessages = <T>(
 
 export const handleWorkerMessages = (
   source: MessagePort,
-  handlers: { [type: string]: Function }
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  handlers: { [type: string]: Function },
 ) => {
   source.on("message", (event) => {
     if (handlers[event.type] === undefined) {
@@ -39,7 +41,7 @@ export const fromSocketEvent = <T>(
   socket: WebSocket,
   eventType: string,
   endEventType: string | null = null,
-  cancelEventType: string | null = null
+  cancelEventType: string | null = null,
 ): Observable<T> =>
   new Observable<T>((observer) => {
     const listener = (event: MessageEvent<string>) => {
@@ -66,7 +68,7 @@ export const fromSocketEvent = <T>(
 export const fromWorkerEvent = <T>(
   worker: Worker,
   eventType: string,
-  endEventType: string | null = null
+  endEventType: string | null = null,
 ): Observable<T> =>
   new Observable<T>((observer) => {
     worker.on("message", ({ type, payload }) => {

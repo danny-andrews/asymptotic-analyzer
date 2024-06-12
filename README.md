@@ -30,7 +30,7 @@ type Workbench = {
 
 type Subject = (...args: any[]) => any;
 
-type InputSet = { n: Number, inputs: any[] };
+type InputSet = { n: Number; inputs: any[] };
 ```
 
 Here's a simple example:

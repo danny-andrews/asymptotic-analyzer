@@ -6,16 +6,18 @@ import type { Subject } from "../../../shared/types/index.js";
 import type { SlTabGroup } from "@shoelace-style/shoelace";
 
 type PropTypes = {
-  subjects: Subject[],
+  subjects: Subject[];
 };
 
 const Subjects = memo(({ subjects }: PropTypes) => {
   const rootRef = useRef<SlTabGroup>(null);
 
   useEffect(() => {
-    if(rootRef.current === null) return;
+    if (rootRef.current === null) return;
 
-    for (let element of rootRef.current.querySelectorAll<HTMLElement>("pre code")) {
+    for (const element of rootRef.current.querySelectorAll<HTMLElement>(
+      "pre code",
+    )) {
       hljs.highlightElement(element);
     }
 
