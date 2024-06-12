@@ -1,5 +1,5 @@
 import type { Chart, Point } from "chart.js";
-import type { LineChart } from "../../../shared/types/index.js";
+import type { LineChart } from "../../shared/types.js";
 
 const CHART_COLORS = [
   "rgb(80, 227, 133)",

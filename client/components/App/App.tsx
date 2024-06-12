@@ -1,8 +1,8 @@
 import Race from "../Race/Race.jsx";
-import { useRunner } from "../../../shared/index.js";
+import { useRunner } from "../../shared/hooks.js";
 
 const { default: workbenches } = await import(
-  "../../../shared/test/workbenches.js"
+  "../../../core/test/workbenches.js"
 );
 
 const App = () => {

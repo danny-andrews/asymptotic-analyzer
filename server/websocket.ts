@@ -8,8 +8,8 @@ import {
   fromWorkerEvent,
   noop,
   EVENT_TYPES,
-} from "../shared/index.js";
-import type { Workbenches, Mark } from "../shared/types/index.js";
+} from "../core/index.js";
+import type { Workbenches, Mark } from "../core/types.js";
 
 const getWorkbench = (workbenches: Workbenches, workbenchName: string) =>
   workbenches.find((workbench) => workbench.name === workbenchName);
