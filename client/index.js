@@ -1,4 +1,4 @@
-import "./components/index.ts";
+import "./components/shoelace.ts";
 import "./styles/app.css";
 import App from "./components/App/App.tsx";
 import { render, h } from "preact";

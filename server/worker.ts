@@ -3,8 +3,8 @@ import {
   analyzeTimeComplexity,
   analyzeSpaceComplexity,
 } from "./benchmarking.js";
-import { handleWorkerMessages, EVENT_TYPES } from "../shared/index.js";
-import type { Workbench, Subject } from "../shared/types/index.js";
+import { handleWorkerMessages, EVENT_TYPES } from "../core/index.js";
+import type { Workbench, Subject } from "../core/types.js";
 
 const send = (type: string, payload: object | null = null) => {
   if (parentPort) {
