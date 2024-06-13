@@ -39,7 +39,7 @@ const Chart = forwardRef<LineChart, PropTypes>(
 
       ref.current.options.plugins.title.text = title;
       ref.current.update();
-    }, [title, dataLabels]);
+    }, [title]);
 
     useEffect(() => {
       setTimeout(adjustSize);
@@ -48,6 +48,8 @@ const Chart = forwardRef<LineChart, PropTypes>(
     useEffect(throttle(adjustSize, 200), [windowSize]);
 
     useEffect(() => {
+      console.log(canvasRef.current, "rendering chart");
+
       if (canvasRef.current === null) return;
       const context = canvasRef.current.getContext("2d");
       if (context === null) return;
@@ -63,9 +65,10 @@ const Chart = forwardRef<LineChart, PropTypes>(
       return () => {
         if (ref.current) {
           ref.current.destroy();
+          ref.current = null;
         }
       };
-    }, [dataLabels]);
+    }, []);
 
     return (
       <div>

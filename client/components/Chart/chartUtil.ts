@@ -72,7 +72,7 @@ export const makeChartConfig = ({
   },
   plugins: [
     {
-      beforeInit: function (chart: Chart<"line">) {
+      beforeInit: function (chart: LineChart) {
         if (!chart.legend) return;
         // @ts-expect-error FIXME
         const original = chart.legend.fit.bind(chart.legend);

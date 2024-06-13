@@ -7,7 +7,6 @@ const { default: workbenches } = await import(
 
 const App = () => {
   const runner = useRunner("ws://localhost:3000");
-  console.log("runner", runner.value);
 
   return (
     <main>

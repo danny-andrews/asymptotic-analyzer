@@ -39,9 +39,7 @@ export const useWebSocket = (url: string): Signal<WebSocket | null> => {
 
   useEffect(() => {
     const ws = new WebSocket(url);
-    console.log("hi", url);
     ws.addEventListener("open", () => {
-      console.log("socket open", url);
       socket.value = ws;
     });
 
