@@ -1,4 +1,4 @@
-import type { Chart, Point } from "chart.js";
+import type { Point } from "chart.js";
 import type { LineChart } from "../../shared/types.js";
 
 const CHART_COLORS = [
