@@ -37,6 +37,7 @@ const WorkbenchForm = ({
 
   return (
     <form class={c.form} onSubmit={handleSubmit}>
+      <Subjects subjects={selectedWorkbench.subjects} />
       <sl-radio-group
         label="Analysis Target(s)"
         name="analysis-target"
@@ -54,26 +55,25 @@ const WorkbenchForm = ({
           Time + Space
         </sl-radio-button>
       </sl-radio-group>
-      <Subjects subjects={selectedWorkbench.subjects} />
-      {isRunning ? (
-        <sl-button
-          class={c.fullWidth}
-          variant="danger"
-          size="small"
-          onclick={onStop}
-        >
-          Stop
-        </sl-button>
-      ) : (
-        <sl-button
-          class={c.fullWidth}
-          variant="success"
-          size="small"
-          type="submit"
-        >
-          Start
-        </sl-button>
-      )}
+      <sl-button
+        class={c.fullWidth}
+        variant="danger"
+        size="small"
+        onclick={onStop}
+        disabled={!isRunning}
+      >
+        Stop
+      </sl-button>
+      <sl-button
+        class={c.fullWidth}
+        variant="success"
+        size="small"
+        type="submit"
+        loading={isRunning}
+        disabled={isRunning}
+      >
+        Start
+      </sl-button>
     </form>
   );
 };

@@ -4,6 +4,13 @@
     "lib": ["es2021", "DOM.Iterable"],
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "camelCase"
+        }
+      }
+    ]
   }
 }

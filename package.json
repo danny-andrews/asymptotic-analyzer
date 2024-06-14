@@ -9,7 +9,7 @@
     "check:types": "npm run check:types --workspaces",
     "check:format": "prettier . --check",
     "check:lint": "eslint .",
-    "dev": "concurrently \"npm:dev --workspace=client\" \"npm:dev --workspace=server\""
+    "dev": "concurrently \"npm:dev --workspace=server\" \"npm:dev --workspace=client\""
   },
   "bin": {
     "analyze": "bin/analyze.js"

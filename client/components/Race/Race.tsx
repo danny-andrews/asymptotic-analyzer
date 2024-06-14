@@ -1,7 +1,6 @@
 import { useSignal, useComputed } from "@preact/signals";
 import { map, merge } from "rxjs";
 import { useRef, useEffect } from "preact/hooks";
-import cn from "classnames";
 import c from "./Race.module.css";
 import WorkbenchForm from "../WorkbenchForm/WorkbenchForm.jsx";
 import Chart from "../Chart/Chart.jsx";
@@ -31,7 +30,6 @@ const Race = ({ workbenches, runner }: PropTypes) => {
       ? []
       : selectedWorkbench.value.subjects.map((subject) => subject.name),
   );
-  const shouldShowGraphs = useComputed(() => selectedWorkbench.value !== null);
   const shouldRunTimeAnalysis = useComputed(() =>
     ["time", "time-and-space"].includes(analysisTarget.value),
   );
@@ -125,10 +123,6 @@ const Race = ({ workbenches, runner }: PropTypes) => {
     <div class={c.root}>
       <div class={c.container}>
         <sl-select
-          size="small"
-          class={cn(c.workbenchSelect, {
-            [c.isEmpty]: !shouldShowGraphs.value,
-          })}
           onsl-change={handleWorkbenchChange}
           placeholder="Select a workbench"
           value={workbenchName.value.replaceAll(" ", "")}
