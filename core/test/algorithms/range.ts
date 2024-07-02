@@ -16,7 +16,7 @@ export const forLoop = (start: number, length: number, step = 1) => {
   const result = Array(length);
 
   for (let i = 0; i < length; i++) {
-    result.push((i + start) * step);
+    result[i] = (i + start) * step;
   }
 
   return result;
